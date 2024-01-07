@@ -1,0 +1,30 @@
+<?php defined('SYSPATH') or die('No direct script access.');
+/**
+Настройка системы: ввод и просмотр разных параметров.
+
+*/
+class Controller_Setting extends Controller_Template { 
+
+	public function before()
+	{
+			
+			parent::before();
+			$session = Session::instance();
+			//echo Debug::vars('9controller', $_POST, $_GET);
+			
+	}
+	
+	
+	public function action_index()
+	{
+		$_SESSION['menu_active']='door';
+		$content = View::factory('setting/list');
+        $this->template->content = $content;
+	}
+	 
+	 
+	 
+	
+	
+
+}

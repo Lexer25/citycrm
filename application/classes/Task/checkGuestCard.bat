@@ -1,0 +1,1 @@
+C:\xampp\php\php.exe c:\xampp\htdocs\citycrm\modules\minion\minion --task=checkGuestCard

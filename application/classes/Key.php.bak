@@ -1,0 +1,109 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+/*
+25.12.2023
+Класс Keyk - инфомрация об идентификаторе 
+*/
+
+class Keyk
+{
+	public $id_cardddddddddd;
+	public $id_card;
+	public $timestart;
+	public $timeend;
+	public $status;
+	public $is_active;
+	public $flag;
+	public $id_cardtype;
+	public $createdat;
+	
+	private $id_pep = 0;// id_pep гостя
+	
+	
+	public function __construct($id_pep = null)
+	{
+		if(!is_null($id_pep)){
+		$sql='select * from card c
+			where c.id_pep='.$id_pep;
+		
+	/* 	$query= Arr::flatten(DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->as_array()
+		); */
+		
+		$query= Arr::flatten(DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->as_array()
+		);
+		
+		
+				//echo Debug::vars('29', $query); exit;
+		$this->id_pep=$id_pep;
+		$this->id_card=Arr::get($query, 'ID_CARD');
+		$this->timestart=Arr::get($query, 'TIMESTART');
+		$this->timeend=Arr::get($query, 'TIMEEND');
+		$this->status=Arr::get($query, 'STATUS');
+		$this->is_active=Arr::get($query, 'ACTIVE');
+		$this->flag=Arr::get($query, 'FLAG');
+		$this->id_cardtype=Arr::get($query, 'ID_CARDTYPE');
+		$this->createdat=Arr::get($query, 'CREATEDAT');
+		
+		
+		$this->id_cardddddddddd='555';
+		}
+	}
+	
+	
+	/*
+	возвращает количество идентификаторов указанного типа
+	*/
+	public function getTypeCount($type)
+	{
+		$sql='select  count(c.id_card) from card c
+		where c.id_pep='.$this->id_pep.'
+		and c.id_cardtype='.$type;
+		return DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->get('COUNT');
+	}
+	
+	/*
+	возвращает список идентификаторов указанного типа
+	*/
+	public function getTypeCardList($type)
+	{
+		$sql='select  c.id_card from card c
+		where c.id_pep='.$this->id_pep.'
+		and c.id_cardtype='.$type;
+		return DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'));
+				
+	}
+	
+	
+	/*
+	возвращает информацию по указанному идентификатору
+	*/
+	public function getCarInfo($card)
+	{
+		$sql='select c.id_card
+			, c.id_pep
+			, c.timestart
+			, c.timeend
+			, c.note
+			, c.flag
+			, c."ACTIVE" as is_active
+			, c.status
+			, c.id_cardtype
+			, c.createdat
+			from card c
+			where c.id_card=\''.$card.'\'';
+		//	echo Debug::vars('96', $sql); exit;
+		return DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'));
+		
+		$this->id_cardddddddddd = $card;
+	
+				
+	}
+	
+}

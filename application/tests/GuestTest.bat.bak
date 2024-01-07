@@ -1,0 +1,68 @@
+<?php
+ 
+Class GuestTest extends Unittest_TestCase
+{
+    
+// C:\xampp\htdocs\citycrm\application\tests>c:\xampp\php\phpunit.bat GuestTest.php					
+			
+	public function testAddGuest()//проверка добавления гостя
+	{
+		$guest=new Guest();
+			//$guest->tabnum=$tabnum;
+			//$guest->delOnTabNum();
+			//echo Debug::vars('219', $guest->actionResult,  $guest->actionDesc); exit;
+			//$arrAlert[]=array('actionResult'=>$guest->actionResult, 'actionDesc'=>$guest->actionDesc);
+					$guest->name='nameTest';
+					$guest->patronymic='patronymic';
+					$guest->surname='surname';
+					$guest->numdoc='numdoc';
+					$guest->datedoc='1.02.2003';
+					$guest->note='notetest';
+					$guest->org=2;
+					$guest->addGuest();//добавляю ФИО и заметки
+					Log::instance()->add(Log::DEBUG, Debug::vars($guest->id_pep, $guest->actionResult));
+					$this->assertEquals(0, $guest->actionResult);
+					
+					$tabnum='testTabNum33333333';
+					$guest->tabnum=$tabnum;
+					$guest->setTabNum($tabnum);//табельный номер
+				
+
+				
+	}
+
+	public function testCheckOnTabNum1()//проверка наличия пипла по табельному номеру. Указанный табельный номер должен быть
+	{
+		$tabnum='testTabNum33333333';
+		$guest=new Guest();
+		$guest->tabnum=$tabnum;
+		$guest->checkOnTabNum();
+		$this->assertEquals(0, $guest->actionResult);
+	}
+
+
+	public function testDelOnTabNum()//удаление пипла по табельному номеру
+	{
+		$tabnum='testTabNum33333333';
+		$guest=new Guest();
+		$guest->tabnum=$tabnum;
+		$guest->delOnTabNum();
+		$this->assertEquals(0, $guest->actionResult);
+	}
+
+
+
+	
+	public function testCheckOnTabNum2()//проверка наличия пипла по табельному номеру. указанного табельного номеры быть не должно
+	{
+		$tabnum='testTabNum33333333';
+		$guest=new Guest();
+		$guest->tabnum=$tabnum;
+		$guest->checkOnTabNum();
+		$this->assertEquals(1, $guest->actionResult);
+	}
+
+
+	
+
+}

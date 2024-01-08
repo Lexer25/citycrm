@@ -6,8 +6,8 @@ return array(
 
 	// Enable these packages in the API browser.  TRUE for all packages, or a string of comma seperated packages, using 'None' for a class with no @package
 	// Example: 'api_packages' => 'Kohana,Kohana/Database,Kohana/ORM,None',
-		//'api_packages' => true,
-		'api_packages' => 'Kohana/Database',
+		'api_packages' => true,
+		//'api_packages' => 'Kohana/Database',
 
 	// Enables Disqus comments on the API and User Guide pages
 	//'show_comments' => Kohana::$environment === Kohana::PRODUCTION,
@@ -35,10 +35,10 @@ return array(
 		'kohana' => array(
 
 			// Whether this modules userguide pages should be shown
-				'enabled' => false,
+				'enabled' => FALSE,
 
 			// The name that should show up on the userguide index page
-			'name1' => 'Kohana',
+			'name' => 'Kohana',
 
 			// A short description of this module, shown on the index page
 			'description' => 'Documentation for Kohana core/system.',
@@ -50,7 +50,7 @@ return array(
 		'userguide' => array(
 
 			// Whether this modules userguide pages should be shown
-				'enabled' => true,
+				'enabled' => FALSE,
 			
 			// The name that should show up on the userguide index page
 			'name' => 'Userguide',
@@ -62,6 +62,7 @@ return array(
 			'copyright' => '&copy; 2008–2012 Kohana Team',
 		),
 		
+	
 		
 		
 		

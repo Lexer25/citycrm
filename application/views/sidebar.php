@@ -11,9 +11,8 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
 			<?php echo HTML::anchor('/', HTML::image('images/icon_home.png') . __('home')); ?>
 		</li>
 
-		<?php if (Auth::instance()->logged_in('admin') || Auth::instance()->logged_in('owner') ) : ?>
-           
-		<?php
+		<?php if (Auth::instance()->logged_in('admin') || Auth::instance()->logged_in('owner') ) { 
+		
 			if(Arr::get($configModule, 'org'))
 			{ ?>
 				<li>
@@ -76,7 +75,7 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
             </li>
 
 			<?php }
-				endif;?>
+		}?>
 			
 			<?php 
 			if(Arr::get($configModule, 'event'))
@@ -88,7 +87,8 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
 						<li><? echo HTML::anchor ('eventlog/alarm', __('eventlog.alarmlog')); ?></li>
 						<li><? echo HTML::anchor ('eventlog/index', __('eventlog.full')); ?></li>
 					</ul>
-				
+					 </ul>
+				 </li>
 			<?php 
 			};
 			if(Arr::get($configModule, 'event'))
@@ -142,9 +142,9 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
 			</li>
 		<?php };?>
 	</ul>
+	
 	<br class="clear"/>
-
-		<div id="calendar"></div>
+	<div id="calendar"></div>
 
 
 </div>

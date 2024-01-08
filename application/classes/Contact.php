@@ -1,10 +1,11 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /*
 25.12.2023
-Класс Гость - его свойства и методы
+Класс Contact - люди и их свойства.
+Класс в целом похож на Guest, но имеются существенные отличия.
 */
 
-class Guest
+class Contact
 {
 	public $idOrgGuest=2;//id_org организации, используемой в качестве гостевой
 	private $idOrgGuestParamName='idOrgGuest';//название параметра в таблице setting БД СКУД
@@ -391,7 +392,6 @@ class Guest
 			$query = DB::query(Database::DELETE, $sql)
 				->execute(Database::instance('fb'));
 			$this->actionResult=0;
-			//$this->actionDesc = __('guest.delOnIdPepOk', array(':id_pep'=>$this->id_pep));
 			return 0;
 			
 				
@@ -399,6 +399,61 @@ class Guest
 			Log::instance()->add(Log::DEBUG, $e->getMessage());
 			$this->actionResult=3;
 			//$this->actionDesc=__('guest.delOnIdPepErr', array(':id_pep'=>$this->id_pep));
+			return 3;
+			
+		}	
+	}
+	
+	
+	/*
+		07.01.2024
+		Делаю пипла НЕ активным по его id_pep
+	*/
+	public function setNotActiveOnIdPep()
+	{
+		
+		$sql='update people p
+					set p."ACTIVE"=0
+					where p.id_pep='. $this->id_pep;
+			//echo Debug::vars('307', $sql); exit;
+		try {
+			DB::query(Database::UPDATE,$sql)	
+				->execute(Database::instance('fb'));
+			$this->actionResult=0;
+			return 0;
+			
+				
+		} catch (Exception $e) {
+			Log::instance()->add(Log::DEBUG, $e->getMessage());
+			$this->actionResult=3;
+			
+			return 3;
+			
+		}	
+	}
+	
+	
+	/*
+		07.01.2024
+		Делаю пипла АКТИВНЫМ по его id_pep
+	*/
+	public function setIsActiveOnIdPep()
+	{
+		
+		$sql='update people p
+					set p."ACTIVE"=1
+					where p.id_pep='. $this->id_pep;
+			
+		try {
+			DB::query(Database::UPDATE,$sql)	
+				->execute(Database::instance('fb'));
+			
+			return 0;
+			
+				
+		} catch (Exception $e) {
+			Log::instance()->add(Log::DEBUG, $e->getMessage());
+				
 			return 3;
 			
 		}	
@@ -532,6 +587,9 @@ class Guest
 		}	
 		
 	}
+	
+	
+	
 	
 	
 	

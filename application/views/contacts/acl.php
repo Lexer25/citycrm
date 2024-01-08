@@ -91,7 +91,7 @@
 </script>
 
 <?php 
-echo Debug::vars('89', $contact);
+//echo Debug::vars('89', $contact);
 //echo Debug::vars('90', $contact_acl);
 
 if ($alert) { ?>

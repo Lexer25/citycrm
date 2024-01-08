@@ -11,7 +11,7 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
 			<?php echo HTML::anchor('/', HTML::image('images/icon_home.png') . __('home')); ?>
 		</li>
 
-		<?php if (Auth::instance()->logged_in('admin') || Auth::instance()->logged_in('owner') ) : ?>
+		<?php if (Auth::instance()->logged_in('admin') || Auth::instance()->logged_in('owner') ) { ?>
            
 		<?php
 			if(Arr::get($configModule, 'org'))
@@ -67,7 +67,7 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
 						<li><? echo HTML::anchor ('guests/guest', __('sidebar.guestslist')); ?></li>
 						<?php if (Auth::instance()->logged_in('admin')) { ?>
 						<li><? echo HTML::anchor ('guests/archive', __('sidebar.archive')); ?></li>
-						<li><? echo HTML::anchor ('guests/edit/0', __('sidebar.addguest')); ?></li>
+						<li><? //echo HTML::anchor ('guests/edit/0', __('sidebar.addguest')); ?></li>
 						<li><? echo HTML::anchor ('guests/issue', __('sidebar.addguest')); ?></li>
 						<li><? echo HTML::anchor ('guests/config', __('sidebar.config')); ?></li>
 						<?php } ?>
@@ -76,7 +76,7 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
             </li>
 
 			<?php }
-				endif;?>
+		}?>
 			
 			<?php 
 			if(Arr::get($configModule, 'event'))
@@ -88,7 +88,8 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
 						<li><? echo HTML::anchor ('eventlog/alarm', __('eventlog.alarmlog')); ?></li>
 						<li><? echo HTML::anchor ('eventlog/index', __('eventlog.full')); ?></li>
 					</ul>
-				
+					 </ul>
+				 </li>
 			<?php 
 			};
 			if(Arr::get($configModule, 'event'))
@@ -142,9 +143,9 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
 			</li>
 		<?php };?>
 	</ul>
+	
 	<br class="clear"/>
-
-		<div id="calendar"></div>
+	<div id="calendar"></div>
 
 
 </div>

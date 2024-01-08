@@ -34,7 +34,7 @@
 	</div>
 
 	<?php
-		echo Debug::vars('19', $org_tree);
+		//echo Debug::vars('19', $org_tree);
 		echo '<br><div class="content">'.$org_tree.'</div>';
 	?>
 	<br class="clear"/>
@@ -50,18 +50,21 @@
 						-->
 						<?php
 
-						if ($col1['ID_ORG'])		echo '<th style="width: 50px">' . __('companies.id') . '</th>';
-						if ($col1['NAME'])			echo '<th>' . __('companies.name') . '</th>';
-						if ($col1['DIVCODE'])		echo '<th>' . __('companies.code') . '</th>';
-						if ($col1['PARENT'])		echo '<th>' . __('companies.parent') . '</th>';
+						echo '<th>' . __('companies.id') . '</th>';
+						echo '<th>' . __('companies.name') . '</th>';
+						echo '<th>' . __('companies.countChildren') . '</th>';
+						echo '<th>' . __('companies.code') . '</th>';
+						echo '<th>' . __('companies.parent') . '</th>';
 						//if ($col1['ACCESSNAME'])	echo '<th>' . __('companies.access') . '</th>';
 						echo '<th>' . __('companies.action') . '</th>';
 						?>
 					</tr>
 				</thead>
 				<tbody>
-					<?php foreach ($companies as $c) { ?>
-					<?php //echo "<hr><pre>"; print_r($c); echo "</pre><hr>"; ?>
+					<?php foreach ($companies as $c) {
+						$company=new Company(Arr::get($c,'ID_ORG'));
+						?>
+					
 					<tr>
 						<!--
 						<td>
@@ -77,7 +80,9 @@
 								echo '<td>' . HTML::anchor('companies/view/' . $c['ID_ORG'], iconv('CP1251', 'UTF-8', $c['NAME']));
 							//echo '<td>' . iconv('CP1251', 'UTF-8', $c['NAME']) . '</td>';
 						}
+						echo '<td>' . count($company->getChildIdOrg()) . '</td>';
 						if ($col1['DIVCODE'])		echo '<td>' . iconv('CP1251', 'UTF-8', $c['DIVCODE']) . '</td>';
+						
 						if ($col1['PARENT'])		echo '<td>' . HTML::anchor('companies/edit/' . $c['PARENTID'], iconv('CP1251', 'UTF-8', $c['PARENT'])) . '</td>';
 						//if ($col1['ACCESSNAME'])	echo '<td>' . iconv('CP1251', 'UTF-8', $c['ACCESSNAME']) . '</td>';
 						
@@ -86,7 +91,7 @@
 						else
 							echo '<td>' . HTML::anchor('companies/view/' . $c['ID_ORG'], HTML::image('images/icon_view.png', array('title' => __('tip.view'), 'class' => 'help')));
 						if (Auth::instance()->logged_in('admin') || $c['SUMODELETE'] > 0 || true) { ?>
-							<a href="javascript:" onclick1="if (confirm('<?php echo __('companies.confirmdelete'); ?>')) location.href='<?php //echo URL::base() . 'companies/delete/' . $c['ID_ORG']; ?>';">
+							<a href="javascript:" onclick="if (confirm('<?php echo __('companies.confirmdelete'); ?>')) location.href='<?php echo URL::base() . 'companies/delete/' . $c['ID_ORG']; ?>';">
 								<?php echo HTML::image('images/icon_delete.png', array('title' => __('tip.delete'), 'class' => 'help')); ?>
 							</a>
 						<?php	

@@ -6,6 +6,10 @@ class Model_Contact extends Model
 	public $peopleIsActive = 1;
 	
 	
+	
+	
+	
+	
 	public function getCountByOrg($org)
 	{
 		$sql = 'SELECT COUNT (*) FROM people WHERE id_org = ' . $org;
@@ -441,12 +445,12 @@ class Model_Contact extends Model
 		0 - не удалять, делать ACTIVE=0. Карты удаляются
 		1- удалять строку.
 	*/
-	public function delete($id)
+	public function _delete($id)
 	{
 		
-		//echo Debug::vars('428', ConfigType::howDeletePeople(), $id); exit;
+		echo Debug::vars('428', ConfigType::howDeletePeople(), $id); exit;
 		switch(ConfigType::howDeletePeople()){
-			case 0:
+			case 0:// удаляю карту, активность пипла ставлю 0.
 				$sql='delete from card c
 				where c.id_pep='. $id;
 			DB::query(Database::DELETE,$sql)	
@@ -460,8 +464,11 @@ class Model_Contact extends Model
 			break;
 			case 1:
 				$sql='DELETE FROM people WHERE id_pep ='. $id;
-				DB::query(Database::DELETE,$sql)			
-				->execute(Database::instance('fb'));
+				/* DB::query(Database::DELETE,$sql)			
+				->execute(Database::instance('fb')); */
+			break;
+			default:
+			
 			break;
 		}
 	}

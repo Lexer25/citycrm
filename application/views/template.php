@@ -35,9 +35,9 @@
   
 </head>
 <body>
-<?php include Kohana::find_file('views', 'header'); ?>
+
 	<div class="content_wrapper">
-		
+<?php include Kohana::find_file('views', 'header'); ?>		
 		<br>
 		<br>
 		<?php include Kohana::find_file('views', 'sidebar'); ?>

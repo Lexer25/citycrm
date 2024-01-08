@@ -47,7 +47,7 @@ class Controller_Companies extends Controller_Template
 		
 		$count_q = Model::factory('Company')->getCountUser(Arr::get(Auth::instance()->get_user(), 'ID_PEP'), $parent_org, $filter);// сколько всего организаций для авторизованного пользователя?
 		
-		echo Debug::vars('test', $count_q, Arr::get(Auth::instance()->get_user(), 'ID_PEP')); exit;
+		//echo Debug::vars('test', $count_q, Arr::get(Auth::instance()->get_user(), 'ID_PEP')); exit;
 		$pagination = new Pagination(array(
 			'uri_segment' => 2,
 			'total_items' => $count_q,
@@ -241,13 +241,24 @@ class Controller_Companies extends Controller_Template
 		$parent = Arr::get($_POST, 'parent');
 		$group	= Arr::get($_POST, 'group');
 
-		$company = Model::factory('company');
+		//$company = Model::factory('company');
+		
 
 		if ($id == 0) {
-			$id = $company->save($name, $code, $access, $parent, $group);
-			$this->session->set('alert', __('company.saved'));
+			$company = new Company();
+			$company->name=$name;
+			$company->parent= ($parent == '')? 1 : $parent;
+			if($company->addOrg()==0) {
+				$this->session->set('alert', __('company.saved'));
+			}
 		} else {
-			$company->update($id, $name, $parent, $code, $access, $group);
+			$company = new Company($id);
+			$company->id_org=$id;
+			$company->name=$name;
+			//$company->divcode=$code;
+			$company->id_parent= ($parent == '')? 1 : $parent;
+			
+			$company->updateOrg();
 			$this->session->set('alert', __('company.updated'));
 		}
 
@@ -257,9 +268,37 @@ class Controller_Companies extends Controller_Template
 	
 	public function action_delete()
 	{
-		$id=$this->request->param('id');
-		Model::factory('Company')->delete($id);
-		$this->session->set('alert', __('company.deleted'));
+		$id_org=$this->request->param('id');
+		
+		
+		$delCompany = new Company($id_org);
+		$alert='123 '.$id_org;
+		//получить список дочерних организаций.
+		$childrenList=$delCompany->getChildIdOrg();
+		//echo Debug::vars('278',$id_org, $childrenList); exit;
+		if($childrenList){
+			//каждой организации меняю родителя на новый
+			$alert.=' 281';
+			foreach ($childrenList as $key=>$value){
+				$alert.=' 283';
+				$updCompany=new Company(Arr::get($value, 'ID_ORG'));
+				$updCompany->id_parent = $delCompany->id_parent;
+				$alert.=' '.$updCompany->id_org;
+				
+				if($updCompany->setIdParentOrg() == 0) {
+					$alert.=__('remove id_org=:id_org<br>', array(':id_org'=>$updCompany->id_org));
+				} else {
+					
+					$alert.=__('NOT remove id_org=:id_org<br>', array(':id_org'=>$updCompany->id_org));
+				};
+				
+			}
+			
+		}
+		//для всех контактов удаляемой организации меняю организацию на 1
+		$delCompany->setNewOrgForPeople($delCompany->id_parent);
+		$this->session->set('alert', $alert);
+		echo Debug::vars('293', $alert); exit;
 		$this->redirect('companies');
 	}
 	

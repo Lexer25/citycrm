@@ -132,7 +132,7 @@ where ssa.id_org='. $id_org;
 		//echo Debug::vars('125', Arr::get(Auth::instance()->get_user(), 'ID_ORG'));
 		//echo Debug::vars('125', Auth::instance());
 		$id_org_control=Arr::get(Auth::instance()->get_user(), 'ID_ORGCTRL');
-		echo Debug::vars('135', Auth::instance()->get_user(), $id_org_control); exit;
+		//echo Debug::vars('135', Auth::instance()->get_user(), $id_org_control); exit;
 		if(is_null($filter))//если фильтра нет, то надо выбрать все организации для этого пользователя
 		{
 		$sql = 'select o.id_org, o.name, o.divcode from organization o
@@ -484,17 +484,17 @@ where ssa.id_org='. $id_org;
 		$result = $query->current();//получил id вставляемой организации
 		
 		try{
-		$sql=__('INSERT INTO organization (id_org, name, id_parent, divcode, id_def_accessname) VALUES (:id, \':name\', :parent, \':code\', null)',
+		$sql=__('INSERT INTO organization (id_org, name, id_parent, divcode, id_def_accessname) VALUES (:id, \':name\', :parent, null, null)',
 			array(
 				':id'		=> $result['GEN_ID'],
 				':name'		=> $name,
-				':parent'	=> $parent,
-				':code'		=> $code,
+				':parent'	=> ($parent == '')? 1 : $parent ,
+				//':divcode'	=> ($code == '')? null : $code,
 				//':group'	=> $group == 0 ? null : $group,
 				':access'	=> $access));
 				
 		
-		//echo Debug::vars('490', $sql); exit;
+		//echo Debug::vars('490', $parent,($parent == '')? null : $parent,  $sql); exit;
 		$query=DB::query(Database::INSERT, iconv('UTF-8', 'CP1251',$sql))
 			
 			->execute(Database::instance('fb'));
@@ -557,7 +557,7 @@ where ssa.id_org='. $id_org;
 			->execute(Database::instance('fb'));
 	}
 	
-	public function delete($id)
+	public function _delete($id)
 	{
 		$query = DB::query(Database::DELETE,
 			'DELETE FROM organization WHERE id_org = :id')

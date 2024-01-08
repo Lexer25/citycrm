@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"> 
+<!DOCTYPE HTML> 
 <html> 
 <head> 
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
@@ -14,7 +14,7 @@
 	<?php //echo HTML::style('static/css/modal.css'); ?>
  
 	
-	<link rel="stylesheet" href="static/css/themes/blue/style.css" type="text/css" media="print, projection, screen" />
+	<link rel="stylesheet" href="static/css/themes/blue/style_.css" type="text/css" media="print, projection, screen" />
 	
 	
 	<!--[if IE]>
@@ -35,9 +35,9 @@
   
 </head>
 <body>
-<?php include Kohana::find_file('views', 'header'); ?>
+
 	<div class="content_wrapper">
-		
+<?php include Kohana::find_file('views', 'header'); ?>		
 		<br>
 		<br>
 		<?php include Kohana::find_file('views', 'sidebar'); ?>

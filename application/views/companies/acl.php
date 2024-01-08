@@ -162,7 +162,7 @@ if ($alert) { ?>
 			&nbsp;&nbsp;
 			<input type="button" value="<?php echo __('button.cancel'); ?>" onclick="document.forms[0].reset()" />
 			&nbsp;&nbsp;
-			<input type="button" value="<?php echo __('button.backtolist'); ?>" onclick="location.href='<?php echo URL::base(); ?>companys'" />
+			<input type="button" value="<?php echo __('button.backtolist'); ?>" onclick="location.href='<?php echo URL::base(); ?>companies'" />
 		</form>
 	</div>
 </div>

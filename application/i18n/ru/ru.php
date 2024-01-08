@@ -304,6 +304,14 @@ return array
 	'contact.saved'					=> 'Контакт сохранен',
 	'contact.updated'				=> 'Контакт обновлен',
 	'contact.deleted'				=> 'Контакт удален',
+	'contact.setNotActiveOK'		=> 'Контакт :surname :name :patronymic отмечен как неактивный',
+	'contact.setNotActiveErr'		=> 'Ошибка при попытке пометить контакт :surname :name :patronymic как неактивный',
+	'contact.setIsActiveOK'			=> 'Контакт :surname :name :patronymic помечен как активный',
+	'contact.setIsActiveErr'		=> 'Ошибка при попытке пометить контакт :surname :name :patronymic как АКТИВНЫЙ',
+	
+	'contacts.compareacl'			=>'Категория доступа',
+	
+	
 	'contact.email'					=> 'Адрес электронной почты',
 	'contact.company'				=> 'Организация',
 	'contact.common'				=> 'Свойства',
@@ -316,7 +324,7 @@ return array
 	'contact.new'					=> 'Новый контакт',
 	'contact.acl'					=> 'Категории доступа',
 	'contact.grz'					=> 'Государтсвенный регистрационный знак',
-	'contact.grz_model'					=> 'Марка, модель',
+	'contact.grz_model'				=> 'Марка, модель',
 	
 	
 	'guests'						=> 'Гости',
@@ -393,6 +401,7 @@ return array
 	'cards.saved'					=> 'Карта создана',
 	'cards.updated'					=> 'Карта обновлена',
 	'cards.deleted'					=> 'Карта удалена',
+	'cards.deletedOk'				=> 'Карта удалена успешно',
 	'card.emptyid'					=> 'Введите код карты',
 	'card.emptystarttime'			=> 'Укажите дату начала действия карты',
 	'card.wrongendtime'				=> 'Дата окончания не может быть раньше даты начала',
@@ -456,6 +465,10 @@ return array
 	'acl.contact_view'				=> 'Просмотр контактов',
 	'acl.contact_edit'				=> 'Редактирование контактов',
 	'acl.saved'						=> 'Права доступа сохранены',
+	
+	'acl.equalDefaultOrg'			=>'По умолчанию',
+	'acl.moreTheDefaultOrg'			=>'Отличается',
+	'acl.lessTheDefaultOrg'			=>'Отличается',
 
 	'load.date'						=> 'Дата',
 	'load.device'					=> 'Точка прохода',

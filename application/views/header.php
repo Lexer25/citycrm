@@ -9,7 +9,7 @@
 	<div id="logo"><img src="images/logo2.png" alt="logo"/></div>
 	<div id="search">
 		<?php 
-		//echo  __('system.version'). Kohana::config('config_newcrm.version.major').'.'.Kohana::config('config_newcrm.version.minor'); 
+		
 		echo  __('system.version'). Arr::get(Kohana::$config->load('config_newcrm')->version, 'minor').'.'.Arr::get(Kohana::$config->load('config_newcrm')->version, 'major'); 
 
 		

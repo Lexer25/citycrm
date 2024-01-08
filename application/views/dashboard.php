@@ -13,7 +13,7 @@ if (Auth::instance()->logged_in('admin') || Auth::instance()->logged_in('owner')
 	if(Arr::get($configModule, 'settings')) echo '<li>' . HTML::anchor('settings', HTML::image('images/shortcut/setting.png') . '<br />' . __('settings')) . '</li>';
 	if(Arr::get($configModule, 'stat')) echo '<li>' . HTML::anchor('stats', HTML::image('images/shortcut/stat.png') . '<br />' . __('stat')) . '</li></ul>';
 };
-
+echo '</ul>';
 
 if (false)
 {

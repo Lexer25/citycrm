@@ -6,11 +6,7 @@
 			$('#error1').show();
 			$('#name').focus();
 			return false;
-		} else if ($('#code').val() == '') {
-			$('#error2').show();
-			$('#code').focus();
-			return false;
-		}
+		} 
 	}
 </script>
 <?php 
@@ -63,13 +59,15 @@ if ($alert) { ?>
 				<span class="error" id="error1" style="color: red; display: none;"><?php echo __('company.emptyname'); ?></span>
 			</p>
 			<br />
+			
 			<p>
 				<label for="code"><?php echo __('company.code'); ?></label>
 				<br />
-				<input type="text" id="code" name="code" size="50" value="<?php echo iconv('CP1251', 'UTF-8', $company['DIVCODE']); ?>" />
+				<input type="text" id="code" name="code" size="50" disabled value="<?php echo iconv('CP1251', 'UTF-8', $company['DIVCODE']); ?>" />
 				<br />
 				<span class="error" id="error2" style="color: red; display: none;"><?php echo __('company.emptycode'); ?></span>
 			</p>
+			
 			<br />
 			<p>
 				<?php echo Form::label('parent', __('company.parent')); 
@@ -95,8 +93,10 @@ if ($alert) { ?>
 			&nbsp;&nbsp;
 			<input type="button" value="<?php echo __('button.backtolist'); ?>" onclick="location.href='<?php echo URL::base(); ?>companies'" />
 			&nbsp;&nbsp;
-			<input type="button" value="<?php echo __('button.addpeople'); ?>" onclick="location.href='<?php echo URL::base().'contacts/edit/0?id_org='.Arr::get($company, 'ID_ORG', 1);?>'" />
-				
+			<?php
+				if($company){ ?>
+						<input type="button" value="<?php echo __('button.addpeople'); ?>" onclick="location.href='<?php echo URL::base().'contacts/edit/0?id_org='.Arr::get($company, 'ID_ORG', 1);?>'" />
+				<?php } ?>
 			
 			
 		</form>

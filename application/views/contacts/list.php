@@ -42,6 +42,7 @@
 	</div>
 	<br class="clear"/>
 	<div class="content">
+	
 		<?php if (count($people) > 0) { ?>
 		<form id="form_data" name="form_data" action="" method="post">
 			<table class="data" width="100%" cellpadding="0" cellspacing="0">
@@ -52,13 +53,14 @@
 							<input type="checkbox" id="check_all" name="check_all"/>
 						</th>
 						-->
-						<th style="width:15%"><?php echo __('contacts.id_pep'); ?></th>
-						<th style="width:15%"><?php echo __('contacts.is_active'); ?></th>
-						<th style="width:15%"><?php echo __('contacts.code'); ?></th>
-						<th style="width:45%"><?php echo __('contacts.name'); ?></th>
+						<?php if(Kohana::$config->load('config_newcrm')->get('contactListIdView')) echo '<th>'.__('contacts.id_pep').'</th>'?>
+						<th><?php echo __('contact.active'); ?></th>
+						<th><?php echo __('contacts.compareacl'); ?></th>
+						<?php if(Kohana::$config->load('config_newcrm')->get('contactListTabNumView')) echo '<th>'.__('contacts.code').'</th>'?>
+						<th><?php echo __('contacts.name'); ?></th>
 						<?php if ($showphone == 1) echo '<th>' . __('contacts.phone') . '</th>'; ?>
-						<th style="width:30%"><?php echo __('contacts.company'); ?></th>
-						<th style="width:10%"><?php echo __('contacts.action'); ?></th>
+						<th><?php echo __('contacts.company'); ?></th>
+						<th><?php echo __('contacts.action'); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -69,9 +71,28 @@
 							<input type="checkbox" />
 						</td>
 						-->
-						<td><?php echo iconv('CP1251', 'UTF-8', Arr::get($pep,'ID_PEP')); ?></td>
-						<td><?php echo iconv('CP1251', 'UTF-8', Arr::get($pep,'IS_ACTIVE')); ?></td>
-						<td><?php echo iconv('CP1251', 'UTF-8', $pep['TABNUM']); ?></td>
+						<?php if(Kohana::$config->load('config_newcrm')->get('contactListIdView')) echo '<td>'.Arr::get($pep,'ID_PEP').'</td>'?>
+						
+						<td><?php echo Arr::get($pep,'IS_ACTIVE')? 'Да':'Нет'; ?></td>
+						
+						<td><?php switch(Model::factory('contact')->check_acl(Arr::get($pep,'ID_PEP'))){
+
+							case 0:
+								echo __('acl.equalDefaultOrg');//совпадает с умолчательной
+							break;
+
+							case 1:
+								echo '<b>'.__('acl.moreTheDefaultOrg').'</b>';//отличается, больше чем в умолчательной
+							break;
+
+							case 2:
+								echo '<b>'.__('acl.lessTheDefaultOrg').'</b>';// отличается, меньше чем в умолчательной
+							break;
+						}							
+						
+						
+						if(Kohana::$config->load('config_newcrm')->get('contactListTabNumView')) echo '<td>'.Arr::get($pep,'TABNUM').'</td>'?>
+						
 						<td><?php 
 							if (Auth::instance()->logged_in('admin') || $pep['CANEDIT'] == 1)
 								echo HTML::anchor('contacts/edit/' . $pep['ID_PEP'], iconv('CP1251', 'UTF-8', $pep['NAME'] . ' ' . $pep['SURNAME']));
@@ -80,13 +101,7 @@
 							//echo iconv('CP1251', 'UTF-8', $pep['NAME'] . ' ' . $pep['SURNAME']); 
 						
 						?></td>
-						<?php 
-						if ($showphone == 1) {
-							$p = $pep['PHONEWORK'];
-							if ($p == '(   )    -  -   (    )') $p = '';
-							echo '<td nowrap="nowrap">' . str_replace(' (    )', '', $p) . '</td>';
-						}
-						?>
+
 						<td><?php 
 							if (Auth::instance()->logged_in('admin') || $pep['CANEDIT'] == 1)
 								echo HTML::anchor('companies/edit/' . $pep['ID_ORG'], iconv('CP1251', 'UTF-8', Arr::get($pep,'ONAME', 'orgname'))); 

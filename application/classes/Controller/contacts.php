@@ -123,8 +123,6 @@ class Controller_Contacts extends Controller_Template
 		//определяю режим показа: 
 		// is_active = 0, что означает работу с удаленными сотрудниками.
 		
-		
-		
 		if(Session::instance()->get('viewDeletePeopleOnly') == 1) {
 			$contacts ->peopleIsActive=0;
 			//Session::instance()->set('viewDeletePeopleOnly', 0);
@@ -132,6 +130,7 @@ class Controller_Contacts extends Controller_Template
 			$contacts ->peopleIsActive=1;
 		}
 		
+		//количество пиплов, доступные текущему авторизованному пользователю
 		$q = $contacts->getCountUser(Arr::get(Auth::instance()->get_user(), 'ID_ORG'), iconv('UTF-8', 'CP1251', $filter));
 		
 		$pagination = new Pagination(array(
@@ -219,7 +218,7 @@ class Controller_Contacts extends Controller_Template
 
 	
 	
-	public function action__edit()
+	public function action_edit()
 	{
 		$id=$this->request->param('id');
 		$force_org=$this->request->query('id_org');//наличие этого параметра означает, что надо выбрать именно указанную организацию
@@ -261,7 +260,7 @@ class Controller_Contacts extends Controller_Template
 	
 
 	
-	public function action___history()
+	public function action_history()
 	{
 		$id=$this->request->param('id');
 		$contact = Model::factory('Contact')->getContact($id);//Получаю контакт по его id
@@ -274,19 +273,70 @@ class Controller_Contacts extends Controller_Template
 			->bind('id', $id);
 	}
 	
-	public function action___delete()
+	/*
+	Удаление сотрудника 
+	
+	*/
+	
+	public function action_delete()
 	{
-		$id=$this->request->param('id');
+		/* $id=$this->request->param('id');
 		Model::factory('Contact')->delete($id);
 		Session::instance()->set('alert', __('contact.deleted'));
 		$this->redirect('contacts');
+		 */
+		$id_pep=$this->request->param('id');
+		$key=new Keyk();
+		$contact=new Contact($id_pep);
+		$alert='';
+		/* удаляю карту сотрудника*/
+		if($key->delCardForPeople($id_pep) == 0){
+			$alert=__('cards.deletedOk', array(':name'=>iconv('CP1251', 'UTF-8',$contact->name),':surname'=>iconv('CP1251', 'UTF-8',$contact->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$contact->patronymic)));
+			
+		} else {
+			
+			// карта не удалена, но такого быть не может
+		
+		}
+		
+		/* делаю сотрудника неактивным*/
+		if($contact->setNotActiveOnIdPep()){
+			$alert.='<br>'.__('contact.setNotActiveOK', array(':name'=>iconv('CP1251', 'UTF-8',$contact->name),':surname'=>iconv('CP1251', 'UTF-8',$contact->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$contact->patronymic)));
+				
+		} else {
+			$alert.='<br>'.__('contact.setNotActiveErr', array(':name'=>iconv('CP1251', 'UTF-8',$contact->name),':surname'=>iconv('CP1251', 'UTF-8',$contact->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$contact->patronymic)));
+	
+		}
+		
+		Session::instance()->set('alert',$alert);
+		$this->redirect('contacts');
 	}
 	
-	public function action___restore()
+	/*
+	7.01.2024
+	Сделать неактивного пипла активным
+	
+	*/
+	public function action_restore()
 	{
-		$id=$this->request->param('id');
-		Model::factory('Contact')->restore($id);
+		$id_pep=$this->request->param('id');
+		/* Model::factory('Contact')->restore($id);
 		Session::instance()->set('alert', __('contact.restore'));
+		$this->redirect('contacts'); */
+		$contact=new Contact($id_pep);
+		
+		/* делаю сотрудника АКТИВНЫМ*/
+		if($contact->setIsActiveOnIdPep()==0){
+			$alert=__('contact.setIsActiveOK', array(':name'=>iconv('CP1251', 'UTF-8',$contact->name),':surname'=>iconv('CP1251', 'UTF-8',$contact->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$contact->patronymic)));
+				
+		} else {
+			$alert=__('contact.setIsActiveErr', array(':name'=>iconv('CP1251', 'UTF-8',$contact->name),':surname'=>iconv('CP1251', 'UTF-8',$contact->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$contact->patronymic)));
+	
+		}
+		
+		
+		
+		Session::instance()->set('alert',$alert);
 		$this->redirect('contacts');
 	}
 	
@@ -322,7 +372,7 @@ class Controller_Contacts extends Controller_Template
 	is_active = 0, что означает работу с удаленными сотрудниками.
 	is_active = 1, что означает работу с неудаленными сотрудниками.
 	*/
-	public function action___deletedList()
+	public function action_deletedList()
 	{
 		$this->session->set('viewDeletePeopleOnly', '1');
 		$this->redirect('contacts');
@@ -334,7 +384,7 @@ class Controller_Contacts extends Controller_Template
 	is_active = 0, что означает работу с удаленными сотрудниками.
 	is_active = 1, что означает работу с неудаленными сотрудниками.
 	*/
-	public function action___activeOnlyList()
+	public function action_activeOnlyList()
 	{
 		$this->session->set('viewDeletePeopleOnly', '0');
 		$this->redirect('contacts');
@@ -344,7 +394,7 @@ class Controller_Contacts extends Controller_Template
 	/*
 	Вывод информации по карте
 	*/
-	public function action___card()
+	public function action_card()
 	{
 		$id=$this->request->param('id');
 		$card = Model::factory('Card')->getCard($id);
@@ -375,7 +425,7 @@ class Controller_Contacts extends Controller_Template
 			->bind('id', $id);//номер карты
 	}
 	
-	public function action___cardlist()
+	public function action_cardlist()
 	{
 		$id=$this->request->param('id');
 		$contact = Model::factory('Contact')->getContact($id);
@@ -397,7 +447,7 @@ class Controller_Contacts extends Controller_Template
 	Вывод списка категорий доступа, выданных пиплу
 	
 	*/
-	public function action___acl()
+	public function action_acl()
 	{
 		$id=$this->request->param('id');
 		$contact = Model::factory('Contact')->getContact($id);//информация о контакте

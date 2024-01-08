@@ -1,5 +1,8 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 return array(
+		'contactListIdView'=> false,// показывать id_pep в листе контактов
+		'contactListTabNumView'=> false,// показывать id_pep в листе контактов
+
 	'version' => array(
 		'minor' => '3',
 		'major' => '2.vnii',

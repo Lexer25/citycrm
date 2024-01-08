@@ -165,4 +165,36 @@ class Keyk
 		return $query->as_array();
 	}
 	
+	/*
+		Удаление указанного идентификатора
+	*/
+	
+	public function delCard($id_pep, $cardType)
+	{
+		
+		
+		return true;
+	}
+	
+	
+	/*
+		Удаление всех идентификаторов для указанного id_pep
+	*/
+	
+	public function delCardForPeople($id_pep)
+	{
+			$sql='delete from card c
+				where c.id_pep='. $id_pep;
+			try {
+				DB::query(Database::DELETE,$sql)	
+				->execute(Database::instance('fb'));
+				return 0;	
+				
+			} catch (Exception $e) {
+				Log::instance()->add(Log::DEBUG, $e->getMessage());
+				
+				return 3;
+			}
+	}
+	
 }

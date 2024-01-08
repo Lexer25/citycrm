@@ -168,11 +168,15 @@ if ($alert) { ?>
 					</div>
 <div>
 			<br />
+				<?php
+			if(Arr::get($contact, 'ACTIVE')) {
+			?>
 			<input type="submit" value="<?php echo __('button.save'); ?>" />
 			&nbsp;&nbsp;
 			<input type="button" value="<?php echo __('button.cancel'); ?>" onclick="document.forms[0].reset()" />
 			&nbsp;&nbsp;
 			<input type="button" value="<?php echo __('button.backtolist'); ?>" onclick="location.href='<?php echo URL::base(); ?>contacts'" />
+			<?php }?>
 		</form>
 	</div>
 </div>

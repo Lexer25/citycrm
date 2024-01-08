@@ -26,15 +26,7 @@ class Controller_Dashboard extends Controller_Template {
 			//Log::instance()->add(Log::NOTICE, 'База данных вот какая: '.Session::instance()->get('skud_number'));
 			include Kohana::find_file('classes/controller','check_db_connect');
 			
-			Session::instance()->set('peopleEventsTimeFrom', date("d.m.Y H:m:s",strtotime("-1 days")));
-			Session::instance()->set('peopleEventsTimeTo', date("d.m.Y H:m:s",strtotime("now")));
-		/* 	
-			$sql='select * from users';
-			$query = DB::query(Database::SELECT, $sql)
-			->execute(Database::instance('exportedDatabase'))
-			->as_array();
-			echo Debug::vars('45', $query); */
-			
+
 	}
 	
 	public function action_services()

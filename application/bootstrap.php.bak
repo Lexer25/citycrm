@@ -157,10 +157,16 @@ Kohana::$config->attach(new Config_Database(array('instance'=>'cdb')));
  * defaults for the URI.
  */
 
- Route::set('edit', '(<controller>(/<action>(/<id>)(/<mode>)))')
+ Route::set('edit', 'guests/edit((/<id>)(/<mode>))')
 	->defaults(array(
 		'controller' => 'guests',
 		'action'     => 'edit',
+	)); 
+    
+Route::set('edit', 'companies/delete((/<id>)(/<parent>))')
+	->defaults(array(
+		'controller' => 'companies',
+		'action'     => 'delete',
 	)); 
     
 Route::set('default', '(<controller>(/<action>(/<id>)))')

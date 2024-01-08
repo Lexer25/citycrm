@@ -12,7 +12,7 @@ class Model_Contact extends Model
 	
 	public function getCountByOrg($org)
 	{
-		$sql = 'SELECT COUNT (*) FROM people WHERE id_org = ' . $org;
+		$sql = 'SELECT COUNT (*) FROM people WHERE p."ACTIVE"='.$this->peopleIsActive.' and id_org = ' . $org;
 		
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
@@ -21,7 +21,7 @@ class Model_Contact extends Model
 		return $query['COUNT'];
 	}
 	
-	
+	/*
 	17.08.2023 
 	Сверка категориий доступа контакта и родительской организации.
 	0 - совпадает,
@@ -237,7 +237,7 @@ class Model_Contact extends Model
 	public function getListByOrg($page = 1, $perpage = 10, $org)
 	{
 		
-		if (Auth::instance()->logged_in('admin'))
+
 		$sql =  'SELECT FIRST ' . $perpage . ' SKIP ' . ($page - 1) * $perpage . ' 	o.id_org,
     				o.name AS oname,
     				p.id_pep,
@@ -249,31 +249,10 @@ class Model_Contact extends Model
 	o.name AS oname, 1 AS canedit ' .
 				'FROM people p INNER JOIN organization o ON p.id_org = o.id_org ' .
 				'WHERE p.id_org = ' . $org .  
+				' and p."ACTIVE" = '.$this->peopleIsActive.
 				' ORDER BY id_pep'; 
-		else
-		$sql = '
-				SELECT FIRST ' . $perpage . ' SKIP ' . ($page - 1) * $perpage . '
-    				o.id_org,
-    				o.name AS oname,
-    				ug."P_EDIT" AS canedit,
-    				ug."P_DELETE" AS candelete,
-    				p.id_pep,
-					p."ACTIVE" as is_active,
-    				p.tabnum,
-    				p.surname,
-    				p.name
-    			FROM
-    				usersgroups ug
-    				INNER JOIN organizationgroup og ON (ug.id_group = og.id_group)
-    				INNER JOIN organization o ON (og.id_org = o.id_org)
-    				INNER JOIN people p ON p.id_org = o.id_org
-    			WHERE
-    				ug.id_user = ' . Auth::instance()->get_user() . '
-    				AND p.id_org = ' . $org . '
-    				AND (ug."O_VIEW" + ug."P_EDIT" + ug."P_ADD" + ug."P_DELETE" > 0) ' . '
-				ORDER BY
-					p.id_pep';
-//echo "<hr>$sql<hr>";
+		
+
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'));
 		
@@ -306,7 +285,7 @@ class Model_Contact extends Model
 	
 	/**
 	5.12.2023 
-	Список пиплов для текущего авторизованного пользователя
+		Список пиплов для текущего авторизованного пользователя
 	
 	*/
 	

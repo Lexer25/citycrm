@@ -11,9 +11,8 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
 			<?php echo HTML::anchor('/', HTML::image('images/icon_home.png') . __('home')); ?>
 		</li>
 
-		<?php if (Auth::instance()->logged_in('admin') || Auth::instance()->logged_in('owner') ) { ?>
-           
-		<?php
+		<?php if (Auth::instance()->logged_in('admin') || Auth::instance()->logged_in('owner') ) { 
+		
 			if(Arr::get($configModule, 'org'))
 			{ ?>
 				<li>
@@ -36,6 +35,7 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
 						<li><? echo HTML::anchor ('contacts/activeOnlyList', __('sidebar.contactslist')); ?></li>
 						<?php if (Auth::instance()->logged_in('admin')) { ?>
 						<li><? echo HTML::anchor ('contacts/edit/0', __('sidebar.addcontact')); ?></li>
+						<li><? echo HTML::anchor ('contacts/addcontact', __('sidebar.addcontact2')); ?></li>
 						<li><? echo HTML::anchor ('contacts/deletedList', __('sidebar.deletedcontact')); ?></li>
 						<?php } ?>
 					</ul>

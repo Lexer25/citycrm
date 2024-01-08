@@ -1,7 +1,0 @@
-
-2024-01-01 22:59:31 --- CRITICAL: ErrorException [ 1 ]: Undefined class constant 'select' ~ APPPATH\classes\Guest.php [ 161 ] in file:line
-2024-01-01 22:59:31 --- DEBUG: #0 [internal function]: Kohana_Core::shutdown_handler()
-#1 {main} in file:line
-2024-01-01 23:00:11 --- DEBUG: 178 SQLSTATE[HY000]: General error: 0 [Gemini InterBase ODBC Driver][INTERBASE]Dynamic SQL Error. SQL error code = -104. Unexpected end of command.  (SQLPrepare[0] at ext\pdo_odbc\odbc_driver.c:206) [ select sso.id_accessname from  ss_accessorg sso
-		where sso.id_org= ] in C:\xampp\htdocs\citycrm\application\classes\Guest.php:135
-2024-01-01 23:02:45 --- DEBUG: 178 Array to string conversion in C:\xampp\htdocs\citycrm\application\classes\Guest.php:135

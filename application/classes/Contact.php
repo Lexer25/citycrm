@@ -7,28 +7,24 @@
 
 class Contact
 {
-	public $idOrgGuest=2;//id_org организации, используемой в качестве гостевой
-	private $idOrgGuestParamName='idOrgGuest';//название параметра в таблице setting БД СКУД
-	
-	public $idOrgGuestArchive=3;//id_org организации, используемой в качестве архива гостей
 	
 	public $name;
 	public $surname;
 	public $patronymic;
-	public $id_org;// организация, куда входит гость
+	public $id_org;// организация, куда входит контакт
 	public $numdoc;//номер документа
 	public $datedoc;//дата документы
 	public $is_active;//активен или неактивен
 	public $flag;//флаг
-	public $sysnote;//разные записи по гостю
-	public $note;//разные записи по гостю
-	public $time_stamp;// время создания записи гостя
+	public $sysnote;//разные записи по контакту
+	public $note;//разные записи по контакту
+	public $time_stamp;// время создания записи контакта
 	public $tabnum;// табельный номер
-	public $cardlist;// время создания записи гостя
+	public $cardlist;// время создания записи контакта
 	public $count_identificator;// количество идентификаторв
 	//public $grz;// ГРЗ
 	
-	public $id_pep = 0;// id_pep гостя
+	public $id_pep = 0;// id_pep контакта
 	
 	
 	public $actionResult=0;// результат выполнения команд
@@ -104,10 +100,10 @@ class Contact
 	
 	
 	/*
-		добавление нового гостя
-		ответ - tru / false //id_pep
+		добавление нового контакта
+		в указанный id_org
 	*/
-	public function addGuest()
+	public function addContact()
 	{
 		$query = DB::query(Database::SELECT,
 			'SELECT gen_id(gen_people_id, 1) FROM rdb$database')
@@ -116,13 +112,13 @@ class Contact
 		$this->id_pep=Arr::get($result, 'GEN_ID');
 		
 		//echo Debug::vars('109', Arr::get($result, 'GEN_ID')); exit;
-		$sql=__('INSERT INTO people (id_pep, id_db, surname, name, patronymic, id_org, note) VALUES (:id,1, \':surname\', \':name\', \':patronymic\',:org,  \':note\')', array
+		$sql=__('INSERT INTO people (id_pep, id_db, surname, name, patronymic, id_org, note) VALUES (:id,1, \':surname\', \':name\', \':patronymic\',:id_org,  \':note\')', array
 			(
 				':id'			=> $this->id_pep,
 				':surname'		=> iconv('UTF-8', 'CP1251',$this->surname),
 				':name'			=> iconv('UTF-8', 'CP1251',$this->name),
 				':patronymic'	=> iconv('UTF-8', 'CP1251',$this->patronymic),
-				':org'			=> $this->idOrgGuest,
+				':id_org'			=> $this->id_org,
 				':note'			=> iconv('UTF-8', 'CP1251',$this->note))
 				);
 
@@ -155,7 +151,6 @@ class Contact
 				} catch (Exception $e) {
 			
 					$this->actionResult=3;
-					//$this->actionDesc=__('guest.addErr', array(':surname'=>$this->surname,':name'=>$this->name,':patronymic'=>$this->patronymic,':id_pep'=>$this->id_pep));
 			
 					Log::instance()->add(Log::DEBUG, '178 '.$e->getMessage());
 					return 3;
@@ -168,9 +163,7 @@ class Contact
 		
 		} catch (Exception $e) {
 			
-			$this->actionResult=3;
-			$this->actionDesc=__('guest.addErr', array(':surname'=>$this->surname,':name'=>$this->name,':patronymic'=>$this->patronymic,':id_pep'=>$this->id_pep));
-			
+					
 			Log::instance()->add(Log::DEBUG, '178 '.$e->getMessage());
 			
 		}
@@ -186,7 +179,7 @@ class Contact
 	public function setAclDefault()
 	{
 		$sql='select sso.id_accessname from  ss_accessorg sso
-		where sso.id_org='.$this->idOrgGuest;
+		where sso.id_org='.$this->id_org;
 		
 		try
 		{
@@ -206,7 +199,6 @@ class Contact
 				} catch (Exception $e) {
 				
 					$this->actionResult=3;
-					//$this->actionDesc=__('guest.addTabNumErr', array(':surname'=>$this->surname,':name'=>$this->name,':patronymic'=>$this->patronymic,':tabnum'=>$this->tabnum));
 					Log::instance()->add(Log::DEBUG, '178 '.$e->getMessage());
 					return 3;
 				}
@@ -215,12 +207,10 @@ class Contact
 			
 			$this->actionResult=0;
 			return 0;
-			//$this->actionDesc=__('guest.addTabNumOk', array(':surname'=>$this->surname,':name'=>$this->name,':patronymic'=>$this->patronymic,':tabnum'=>$this->tabnum));
 		
 		} catch (Exception $e) {
 			
 			$this->actionResult=3;
-			//$this->actionDesc=__('guest.addTabNumErr', array(':surname'=>$this->surname,':name'=>$this->name,':patronymic'=>$this->patronymic,':tabnum'=>$this->tabnum));
 			Log::instance()->add(Log::DEBUG, '178 '.$e->getMessage());
 			return 3;
 			
@@ -240,13 +230,10 @@ class Contact
 			
 			$query = DB::query(Database::UPDATE, $sql)
 				->execute(Database::instance('fb'));
-			$this->actionResult=0;
-			$this->actionDesc=__('guest.addTabNumOk', array(':surname'=>$this->surname,':name'=>$this->name,':patronymic'=>$this->patronymic,':tabnum'=>$this->tabnum));
+			
 		
 		} catch (Exception $e) {
 			
-			$this->actionResult=3;
-			$this->actionDesc=__('guest.addTabNumErr', array(':surname'=>$this->surname,':name'=>$this->name,':patronymic'=>$this->patronymic,':tabnum'=>$this->tabnum));
 			Log::instance()->add(Log::DEBUG, '178 '.$e->getMessage());
 			
 		}
@@ -273,13 +260,9 @@ class Contact
 		$query = DB::query(Database::UPDATE, $sql)
 			->execute(Database::instance('fb'));
 			
-			$this->actionResult=0;
-			//$this->actionDesc=__('guest.adddocOK', array(':numdoc'=>$this->numdoc));
 		} else {
 			
 			// данные по документу заполнены неверно, в БД не записываются.
-			$this->actionResult=3;
-			$this->actionDesc=__('guest.adddocErr', array(':numdoc'=>$this->numdoc));
 			
 		}
 			
@@ -290,7 +273,7 @@ class Contact
 	
 	/*
 		29.12.2023
-		Удаление гостя по его tabnum
+		Удаление контакта по его tabnum
 	*/
 	public function delOnTabNum()
 	{
@@ -300,15 +283,12 @@ class Contact
 		try {
 			$query = DB::query(Database::DELETE, $sql)
 				->execute(Database::instance('fb'));
-			$this->actionResult=0;
-			//$this->actionDesc = __('guest.delOnTabNumOK', array(':tabnum'=>$this->tabnum));
-			$this->actionDesc = __('guest.delOnTabNumOk', array(':tabnum'=>$this->tabnum));
-			//echo Debug::vars('219', $this->actionResult,  $this->actionDesc, __('guest.delOnTabNumOk',  array(':tabnum'=>$this->tabnum)) ); //exit;
+			//$this->actionDesc = __('contact.delOnTabNumOK', array(':tabnum'=>$this->tabnum));
+			$this->actionDesc = __('contact.delOnTabNumOk', array(':tabnum'=>$this->tabnum));
+			//echo Debug::vars('219', $this->actionResult,  $this->actionDesc, __('contact.delOnTabNumOk',  array(':tabnum'=>$this->tabnum)) ); //exit;
 				
 		} catch (Exception $e) {
 			Log::instance()->add(Log::DEBUG, $e->getMessage());
-			$this->actionResult=3;
-			$this->actionDesc=__('guest.delOnTabNumErr', array(':tabnum'=>$this->tabnum));
 			HTTP::redirect('errorpage?err=37'.Text::limit_chars($e->getMessage(), 50));
 		}	
 	}
@@ -317,7 +297,7 @@ class Contact
 	
 	/*
 		29.12.2023
-		Проверка наличия гостя по его tabnum
+		Проверка наличия контакта по его tabnum
 	*/
 	public function checkOnTabNum()
 	{
@@ -331,24 +311,20 @@ class Contact
 				->get('ID_PEP');
 				
 			Log::instance()->add(Log::DEBUG, Debug::vars($query));	
-			if(is_null($query)) $this->actionResult=0;// пипел с таким табельным номером существует
-			if(is_null($query))	$this->actionResult=1;// пипла с таким табельным номером нет
 			
-			//$this->actionDesc = __('guest.delOnTabNumOK', array(':tabnum'=>$this->tabnum));
-			$this->actionDesc = __('guest.delOnTabNumOk', array(':tabnum'=>$this->tabnum));
-			//echo Debug::vars('219', $this->actionResult,  $this->actionDesc, __('guest.delOnTabNumOk',  array(':tabnum'=>$this->tabnum)) ); //exit;
+			//$this->actionDesc = __('contact.delOnTabNumOK', array(':tabnum'=>$this->tabnum));
+			$this->actionDesc = __('contact.delOnTabNumOk', array(':tabnum'=>$this->tabnum));
+			//echo Debug::vars('219', $this->actionResult,  $this->actionDesc, __('contact.delOnTabNumOk',  array(':tabnum'=>$this->tabnum)) ); //exit;
 				
 		} catch (Exception $e) {
 			Log::instance()->add(Log::DEBUG, $e->getMessage());
-			$this->actionResult=3;
-			$this->actionDesc=__('guest.delOnTabNumErr', array(':tabnum'=>$this->tabnum));
 			HTTP::redirect('errorpage?err=37'.Text::limit_chars($e->getMessage(), 50));
 		}	
 	}
 	
 	/*
 		29.12.2023
-		Проверка наличия гостя по его id_pep
+		Проверка наличия контакта по его id_pep
 	*/
 	public function checkOnIdPep()
 	{
@@ -362,16 +338,12 @@ class Contact
 				->get('ID_PEP');
 				
 			Log::instance()->add(Log::DEBUG, Debug::vars($query));	
-			if(is_null($query)) $this->actionResult=0;// пипел с таким id_pep номером существует
-			if(is_null($query))	$this->actionResult=1;// пипла с таким id_pep номером нет
 			
-			$this->actionDesc = __('guest.delOnIdPepOk', array(':tabnum'=>$this->id_pep));
+			$this->actionDesc = __('contact.delOnIdPepOk', array(':tabnum'=>$this->id_pep));
 			
 				
 		} catch (Exception $e) {
 			Log::instance()->add(Log::DEBUG, $e->getMessage());
-			$this->actionResult=3;
-			$this->actionDesc=__('guest.delOnIdPepErr', array(':tabnum'=>$this->id_pep));
 			HTTP::redirect('errorpage?err=37'.Text::limit_chars($e->getMessage(), 50));
 		}	
 	}
@@ -380,7 +352,7 @@ class Contact
 	
 	/*
 		29.12.2023
-		Удаление гостя по его id_pep
+		Удаление контакта по его id_pep
 	*/
 	public function delOnIdPep()
 	{
@@ -391,14 +363,11 @@ class Contact
 		try {
 			$query = DB::query(Database::DELETE, $sql)
 				->execute(Database::instance('fb'));
-			$this->actionResult=0;
 			return 0;
 			
 				
 		} catch (Exception $e) {
 			Log::instance()->add(Log::DEBUG, $e->getMessage());
-			$this->actionResult=3;
-			//$this->actionDesc=__('guest.delOnIdPepErr', array(':id_pep'=>$this->id_pep));
 			return 3;
 			
 		}	
@@ -419,13 +388,11 @@ class Contact
 		try {
 			DB::query(Database::UPDATE,$sql)	
 				->execute(Database::instance('fb'));
-			$this->actionResult=0;
 			return 0;
 			
 				
 		} catch (Exception $e) {
 			Log::instance()->add(Log::DEBUG, $e->getMessage());
-			$this->actionResult=3;
 			
 			return 3;
 			
@@ -472,13 +439,9 @@ class Contact
 		try {
 			$query = DB::query(Database::INSERT, $sql)
 				->execute(Database::instance('fb'));
-			$this->actionResult=0;
-			$this->actionDesc=__('', array(':'=>''));//пояснения к успешному выполнению запроса. Например, $this->actionDesc = __('guest.delOnIdPepOk', array(':tabnum'=>$this->id_pep));
 				
 		} catch (Exception $e) {
 			Log::instance()->add(Log::DEBUG, $e->getMessage());//логирование ошибки в файл
-			$this->actionResult=3;
-			$this->actionDesc=__('', array(':'=>''));
 		}	
 		
 	}
@@ -504,13 +467,9 @@ class Contact
 		try {
 			$query = DB::query(Database::INSERT, $sql)
 				->execute(Database::instance('fb'));
-			$this->actionResult=0;
-			$this->actionDesc=__('', array(':'=>''));//пояснения к успешному выполнению запроса. Например, $this->actionDesc = __('guest.delOnIdPepOk', array(':tabnum'=>$this->id_pep));
 				
 		} catch (Exception $e) {
 			Log::instance()->add(Log::DEBUG, $e->getMessage());//логирование ошибки в файл
-			$this->actionResult=3;
-			$this->actionDesc=__('', array(':'=>''));
 		}	
 	}
 	
@@ -522,7 +481,7 @@ class Contact
 	public function forceexit()
 	{
 		
-		//удаляю карту у гостя
+		//удаляю карту у контакта
 		$sql = 'delete from card c
 			where c.id_pep='.$this->id_pep;
 		
@@ -545,11 +504,11 @@ class Contact
 	
 	
 	
-	public function moveToGuest()
+	public function moveToContact()
 	{
-		//перенос гостя в Гость (т.е. он стал активным)
+		//перенос контакта в Гость (т.е. он стал активным)
 		$sql = 'update people p
-				set p.id_org='.$this->idOrgGuest.'
+				set p.id_org='.$this->id_org.'
 				where p.id_pep='.$this->id_pep;
 		try {		
 		
@@ -566,27 +525,7 @@ class Contact
 		
 	}
 	
-	
-	public function moveToArchive()
-	{
-		//перенос гостя в Архив
-		$sql = 'update people p
-				set p.id_org='.$this->idOrgGuestArchive.'
-				where p.id_pep='.$this->id_pep;
-		try {		
-		
-			$query = DB::query(Database::UPDATE, $sql)
-				->execute(Database::instance('fb'));
-			return 0;	
-				
-					} catch (Exception $e) {
-				Log::instance()->add(Log::DEBUG, $e->getMessage());
-				
-				return 3;
-			
-		}	
-		
-	}
+
 	
 	
 	

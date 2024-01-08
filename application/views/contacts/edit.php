@@ -90,12 +90,13 @@
 </script>
 
 <?php 
-//echo Debug::vars('89 contact', $contact);
+echo Debug::vars('89 contact', $contact);
 //echo Debug::vars('90', $contact_acl);
 //echo Debug::vars('95', $org_tree);
 //echo Debug::vars('96 force_org', $force_org);
 //echo Debug::vars('98', array_to_tree($org_tree));
 //echo Debug::vars('98', out_options(array_to_tree($org_tree)));
+//echo Debug::vars('99', Auth::instance());
 
 if ($alert) { ?>
 <div class="alert_success">
@@ -465,7 +466,7 @@ if ($alert) { ?>
 			</table>
 			<br />
 			<?php
-			if(Arr::get($contact, 'ACTIVE')) {
+			if(Arr::get($contact, 'ACTIVE') or true) {
 			?>
 			<input type="submit" value="<?php echo __('button.save'); ?>" />
 			&nbsp;&nbsp;

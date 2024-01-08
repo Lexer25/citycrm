@@ -90,12 +90,13 @@
 </script>
 
 <?php 
-//echo Debug::vars('89 contact', $contact);
+echo Debug::vars('89 contact', $contact);
 //echo Debug::vars('90', $contact_acl);
 //echo Debug::vars('95', $org_tree);
 //echo Debug::vars('96 force_org', $force_org);
 //echo Debug::vars('98', array_to_tree($org_tree));
 //echo Debug::vars('98', out_options(array_to_tree($org_tree)));
+//echo Debug::vars('99', Auth::instance());
 
 if ($alert) { ?>
 <div class="alert_success">
@@ -148,7 +149,7 @@ if ($alert) { ?>
 				<label for="image_control">Для загрузки изображения выберите фай и нажмите кнопку Загрузить</label>
 				<div class="row">
 					<input type="file" name="image" id="image_control">
-					<input type="submit" value="Upload">
+					<input type="submit" value="Загрузить">
 				</div>
 			</form>
 	<?php }?>

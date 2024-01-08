@@ -98,10 +98,11 @@ class Controller_Companies extends Controller_Template
 	{
 		$id=$this->request->param('id');
 		$company = Model::factory('company')->getCompany($id);
-		if (!$company) $this->redirect('companies');
+		if (!$company) $this->redirect('companies');// если организации нет, то переход на список компаний.
 		$isAdmin = Auth::instance()->logged_in('admin');
 		
 		$contacts = Model::factory('Contact');
+		$contacts->is_active=1;;
 		
 		$q = $contacts->getCountByOrg($id);
 
@@ -266,26 +267,35 @@ class Controller_Companies extends Controller_Template
 		$this->redirect('companies/edit/' . $id);
 	}
 	
+	
+	/*
+	8.01.2024 удаление организации.
+	в процесс удаления выполняется следующие действия:
+	
+	
+	*/
 	public function action_delete()
 	{
 		$id_org=$this->request->param('id');
+		$id_parent=$this->request->param('parent');
 		
-		
+		$alert='';
 		$delCompany = new Company($id_org);
-		$alert='123 '.$id_org;
+
 		//получить список дочерних организаций.
 		$childrenList=$delCompany->getChildIdOrg();
-		//echo Debug::vars('278',$id_org, $childrenList); exit;
+
 		if($childrenList){
 			//каждой организации меняю родителя на новый
-			$alert.=' 281';
+
 			foreach ($childrenList as $key=>$value){
-				$alert.=' 283';
-				$updCompany=new Company(Arr::get($value, 'ID_ORG'));
-				$updCompany->id_parent = $delCompany->id_parent;
+
+				$updCompany=new Company(Arr::get($value, 'ID_ORG'));// udpCompany - обновляемая организация
+
+				$updCompany->id_parent = $delCompany->id_parent;// указываю новое значение родительской организации как родителя удаляемой
 				$alert.=' '.$updCompany->id_org;
 				
-				if($updCompany->setIdParentOrg() == 0) {
+				if($updCompany->setIdParentOrg() == 0) { //выполняют обновление 
 					$alert.=__('remove id_org=:id_org<br>', array(':id_org'=>$updCompany->id_org));
 				} else {
 					
@@ -295,11 +305,13 @@ class Controller_Companies extends Controller_Template
 			}
 			
 		}
-		//для всех контактов удаляемой организации меняю организацию на 1
-		$delCompany->setNewOrgForPeople($delCompany->id_parent);
+		//для всех контактов удаляемой организации меняю организацию на указанную (в данном случае - на родителя удаляемой организации)
+		//!!! не обязательно! пиплы получают Активность =0 и переводятся выше триггерами базы данных.
+		//if($delCompany->setNewOrgForPeople($delCompany->id_parent) == 0) $alert.=__('remove_pep_to_new_parent',  array(':id_org'=>$delCompany->id_parent));;
+		$delCompany->delOrgId();
 		$this->session->set('alert', $alert);
-		echo Debug::vars('293', $alert); exit;
-		$this->redirect('companies');
+		//echo Debug::vars('293', $alert); exit;
+		$this->redirect('companies/?parent='.$id_parent);
 	}
 	
 	public function action_edit()

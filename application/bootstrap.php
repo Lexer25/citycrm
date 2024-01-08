@@ -163,15 +163,17 @@ Kohana::$config->attach(new Config_Database(array('instance'=>'cdb')));
 		'action'     => 'edit',
 	)); 
     
+Route::set('edit', 'companies/delete((/<id>)(/<parent>))')
+	->defaults(array(
+		'controller' => 'companies',
+		'action'     => 'delete',
+	)); 
+    
 Route::set('default', '(<controller>(/<action>(/<id>)))')
 	->defaults(array(
 		'controller' => 'dashboard',
 		'action'     => 'index',
 	));
-Route::set('peoplesearcch', '(<controller>(/<action>(/<id>)(/<card>)))')
-	->defaults(array(
-		'controller' => 'people',
-		'action'     => 'peopleinfo',
-	));
+
 
 

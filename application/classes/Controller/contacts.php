@@ -391,10 +391,14 @@ class Controller_Contacts extends Controller_Template
 	}
 	
 	
+	
+	
+	
+	
 	/*
 	Вывод информации по карте
 	*/
-	public function action_card()
+	public function action___card()
 	{
 		$id=$this->request->param('id');
 		$card = Model::factory('Card')->getCard($id);
@@ -543,7 +547,7 @@ class Controller_Contacts extends Controller_Template
         1 => string(1) "1"
 	
 	*/
-	public function action___saveACL()
+	public function action_saveACL()
 	{
 		//echo Debug::vars('274', $_POST); exit;
 		$id=$this->request->post('id');

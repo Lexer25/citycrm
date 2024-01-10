@@ -157,7 +157,7 @@ Kohana::$config->attach(new Config_Database(array('instance'=>'cdb')));
  * defaults for the URI.
  */
 
- Route::set('edit', 'guests/edit((/<id>)(/<mode>))')
+ Route::set('edit_guests', 'guests/edit((/<id>)(/<mode>))')
 	->defaults(array(
 		'controller' => 'guests',
 		'action'     => 'edit',

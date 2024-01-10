@@ -270,7 +270,7 @@ class Controller_Guests extends Controller_Template
 					$guest->note=Arr::get($_POST, 'note','');
 					
 					$guest->note=Arr::get($_POST, 'note','');
-					$guest->note=Arr::get($_POST, 'note','');
+					
 					
 					if($guest->addGuest() == 0) { // если пользователь добавлен успешно, то выставляю ему набор категорий доступа по умолчанию
 						

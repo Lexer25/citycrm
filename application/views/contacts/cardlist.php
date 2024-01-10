@@ -1,6 +1,8 @@
 <?php
-echo Debug::vars('2', $cards);
+//echo Debug::vars('2', $cards);
+//echo Debug::vars('3', Session::instance());
 $catdTypelist = Model::factory('Card')->getcatdTypelist();//получил список типов идентификаторов
+include Kohana::find_file('views','alert');
 ?>
 <div class="onecolumn">
 	<div class="header">
@@ -81,7 +83,7 @@ $catdTypelist = Model::factory('Card')->getcatdTypelist();//получил сп�
 			<?php
 			if(Arr::get($contact, 'ACTIVE')) {
 			?>
-		<input type="button" value="<?php echo __('cards.create'); ?>" onclick="location.href='<?php echo URL::base() . 'contacts/addcard/' . $contact['ID_PEP']; ?>'" />
+		<input type="button" value="<?php echo __('cards.create'); ?>" onclick="location.href='<?php echo URL::base() . 'contacts/addrfid/' . $contact['ID_PEP']; ?>'" />
 		<input type="button" value="<?php echo __('cards.create_grz'); ?>" onclick="location.href='<?php echo URL::base() . 'contacts/addgrz/' . $contact['ID_PEP']; ?>'" />
 		<?php }?>
 	</div>

@@ -12,7 +12,7 @@ class Model_Contact extends Model
 	
 	public function getCountByOrg($org)
 	{
-		$sql = 'SELECT COUNT (*) FROM people WHERE p."ACTIVE"='.$this->peopleIsActive.' and id_org = ' . $org;
+		$sql = 'SELECT COUNT (*) FROM people WHERE "ACTIVE"='.$this->peopleIsActive.' and id_org = ' . $org;
 		
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
@@ -332,7 +332,7 @@ class Model_Contact extends Model
 	
 	public function getContact($id)
 	{
-		if (!is_numeric($id)) return false;
+		//if (!is_numeric($id)) return false;
 		
 		$sql='SELECT people.*, 1 AS canedit FROM people WHERE id_pep ='. $id;
 		if (Auth::instance()->logged_in('admin'))

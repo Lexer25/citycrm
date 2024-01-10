@@ -156,8 +156,118 @@ class Controller_Contacts extends Controller_Template
 			->bind('filter', $filter)
 			->bind('pagination', $pagination);
 	}
-
+	
+	/*
+	обработка POST-запросов
+	09.01.2024 сохранение информации по контакту.
+	
+	*/
 	public function action_save()
+	{
+		//echo Debug::vars('70', $_POST); exit;
+		/* $id			= Arr::get($_POST, 'id_pep');
+		$surname	= Arr::get($_POST, 'surname');
+		$name		= Arr::get($_POST, 'name','');
+		$patronymic	= Arr::get($_POST, 'patronymic','');
+		$datebirth	= Arr::get($_POST, 'datebirth', 'NULL');
+		$numdoc		= Arr::get($_POST, 'numdoc', null);
+		$datedoc	= Arr::get($_POST, 'datedoc', null);
+		$workstart	= Arr::get($_POST, 'workstart', '09:00:00');
+		$workend	= Arr::get($_POST, 'workend', '18:00:00');
+		$active		= Arr::get($_POST, 'active', 1);
+		$peptype	= Arr::get($_POST, 'peptype', 0);
+		$post		= Arr::get($_POST, 'post', null);
+		$tabnum		= Arr::get($_POST, 'tabnum');
+		$login		= Arr::get($_POST, 'login', '');
+		$password	= Arr::get($_POST, 'password', '');
+		//$org		= Arr::get($_POST, 'id_org');
+		$org		= 2;
+		$inherit	= Arr::get($_POST, 'inherit', 0);
+		$note		= Arr::get($_POST, 'note', null);
+		$id_org_old		= Arr::get($_POST, 'id_org_old', null);
+		
+		
+		$carddatestart		= Arr::get($_POST, 'carddatestart', null);
+		$carddateend		= Arr::get($_POST, 'carddateend', null);
+		$id_cardtype		= Arr::get($_POST, 'id_cardtype', null);
+		$note_card		= Arr::get($_POST, 'note_card', null);
+		
+		
+		$isactive=1;// карта активна.
+		$cardstate=0;//это поле status в таблице card. Смысла никакого не несет, но нужен для единообразного хранения данных
+		$idaccess=null;// устаревший параметр.
+		$useenddate=1;//проверять ли срок действия карты? 1 - проверять, 0 - не проверять. */
+		
+		$id			= Arr::get($_POST, 'id_pep');
+		$idcard		= Arr::get($_POST, 'idcard', null);
+
+				
+					$contact=new contact($id);
+					$contact->name=Arr::get($_POST, 'name','');
+					$contact->patronymic=Arr::get($_POST, 'patronymic','');
+					$contact->surname=Arr::get($_POST, 'surname','');
+					$contact->numdoc=Arr::get($_POST, 'numdoc','');
+					$contact->datedoc=Arr::get($_POST, 'datedoc','');
+					$contact->note=Arr::get($_POST, 'note','');
+					$contact->id_org=Arr::get($_POST, 'id_org','');
+		
+		if($id == 0){ // если 0, то это - новый контакт					
+					if($contact->addContact() == 0) { // если пользователь добавлен успешно, то выставляю ему набор категорий доступа по умолчанию
+					
+						$alert=__('contact.addOK', array(':surname'=>$contact->surname,':name'=>$contact->name,':patronymic'=>$contact->patronymic,':id_pep'=>$contact->id_pep,':tabnum'=>$contact->tabnum));
+						
+						// присвоение категории доступа по умолчанию для организации.
+							if($contact->setAclDefault()){ // если категории добавлены успешно
+								$alert=$alert. '<br>'. __('acl.saved');
+							}
+							//если номер документа или его дата не пусты, то сохранить документы
+							//echo Debug::vars('296', $guest->numdoc=='', $guest->datedoc==''); exit;
+							if($contact->numdoc!='' AND $contact->datedoc!=''){
+								if($contact->addDoc() == 0) {;//добавляю данные по документу
+									$alert.='<br>'. __('contact.adddocOK', array(':numdoc'=>$contact->numdoc, ':surname'=>$contact->surname,':name'=>$contact->name,':patronymic'=>$contact->patronymic));
+									}
+							}
+							 
+						Session::instance()->set('alert', $alert);
+						} else {
+						//не удалось добавить гостя в базу данных СКУД.
+						$alert=__('contact.addErr', array(':surname'=>$contact->surname,':name'=>$contact->name,':patronymic'=>$contact->patronymic,':id_pep'=>$contact->id_pep,':tabnum'=>$contact->tabnum));
+						
+						}
+					//Session::instance()->set('alert', __('contact.key_occuped_NO'));
+					
+				} else {
+					// обновление данных уже существующего сотрудника
+					if($contact->updateContact() == 0) { // если пользователь обновлен успешно, то выставляю ему набор категорий доступа по умолчанию
+					
+						$alert=__('contact.updateOK', array(':surname'=>$contact->surname,':name'=>$contact->name,':patronymic'=>$contact->patronymic,':id_pep'=>$contact->id_pep,':tabnum'=>$contact->tabnum));
+							
+							//если номер документа или его дата не пусты, то сохранить документы
+							//echo Debug::vars('296', $guest->numdoc=='', $guest->datedoc==''); exit;
+							if($contact->numdoc!='' AND $contact->datedoc!=''){
+								if($contact->addDoc() == 0) {;//добавляю данные по документу
+									$alert.='<br>'. __('contact.updatedocOK', array(':numdoc'=>$contact->numdoc, ':surname'=>$contact->surname,':name'=>$contact->name,':patronymic'=>$contact->patronymic));
+									}
+							}
+							 
+						Session::instance()->set('alert', $alert);
+						} else {
+						echo Debug::vars('70 err'); exit;
+						//не удалось обновлить данные по контакту
+						$alert=__('contact.updateErr', array(':surname'=>$contact->surname,':name'=>$contact->name,':patronymic'=>$contact->patronymic,':id_pep'=>$contact->id_pep,':tabnum'=>$contact->tabnum));
+						
+						
+						}
+					
+				}
+		//$this->redirect('guests');
+		Session::instance()->set('alert', $alert);
+		$this->redirect('contacts/edit/' . $id);
+	}
+
+	
+	
+	public function action__save()
 	{
 		//echo Debug::vars('70', $_POST); exit;
 		$id			= Arr::get($_POST, 'id_pep');
@@ -221,8 +331,10 @@ class Controller_Contacts extends Controller_Template
 	public function action_edit()
 	{
 		$id=$this->request->param('id');
-		$force_org=$this->request->query('id_org');//наличие этого параметра означает, что надо выбрать именно указанную организацию
+		$force_org=$this->request->query('id_org');//наличие этого параметра означает, что надо выбрать именно указанную организацию для правильной работы дерева организаций.
 		$contact = Model::factory('Contact')->getContact($id);//персональные данные контакта
+		$contact= new Contact($id);
+		if($id == 0) $contact->is_active=1;
 		//$photo = Model::factory('Contact')->getPicture($id);//персональные данные контакта
 		$contact_acl = Model::factory('Contact')->contact_acl($id);//список категорий доступа, выданных контакту
 		$check_acl = Model::factory('Contact')->check_acl($id);//получить список категорий доступа родительской организации для сверки с текущим списком категорий для контакта: совпадает или нет? 0 -совпадает, 1 - не совпадает.
@@ -342,8 +454,11 @@ class Controller_Contacts extends Controller_Template
 	
 	
 	
+	/*
+	Переход на окно добавления RFID
 	
-	public function action___addcard()
+	*/
+	public function action_addcard()
 	{
 		$id=$this->request->param('id');
 		$contact = Model::factory('Contact')->getContact($id);
@@ -355,7 +470,7 @@ class Controller_Contacts extends Controller_Template
 			->bind('anames', $anames);
 	}
 	
-	public function action___addgrz()
+	public function action_addgrz()
 	{
 		$id=$this->request->param('id');
 		$contact = Model::factory('Contact')->getContact($id);
@@ -391,10 +506,14 @@ class Controller_Contacts extends Controller_Template
 	}
 	
 	
+	
+	
+	
+	
 	/*
 	Вывод информации по карте
 	*/
-	public function action___card()
+	public function action_card()
 	{
 		$id=$this->request->param('id');
 		$card = Model::factory('Card')->getCard($id);
@@ -435,10 +554,15 @@ class Controller_Contacts extends Controller_Template
 		$fl = $this->session->get('alert');
 		$this->session->delete('alert');
 		
+		$arrAlert = $this->session->get('arrAlert');
+		$this->session->delete('arrAlert');
+		
+		
 		$this->template->content = View::factory('contacts/cardlist')
 			->bind('contact', $contact)
 			->bind('cards', $cards)
 			->bind('alert', $fl)
+			->bind('arrAlert', $arrAlert)
 			->bind('id', $id);
 	}
 	
@@ -556,15 +680,13 @@ class Controller_Contacts extends Controller_Template
 	
 	
 	
-	public function action___deletecard()
+	public function action_deletecard()
 	{
 		$id=$this->request->param('id');
-		$card = Model::factory('Card')->getCard($id);
-		$people = $card['ID_PEP'];
-		Model::factory('Card')->delete($id);
-		
-		Session::instance()->set('alert', __('cards.deleted'));
-		$this->redirect('contacts/cardlist/' . $people);
+		$card = new Keyk($id);
+		$card->delCard();
+		Session::instance()->set('alert', __('cards.deleted', array(':id_card'=>$id)));
+		$this->redirect('contacts/cardlist/' . $card->id_pep);
 	}
 	
 	public function action___reload()
@@ -580,11 +702,11 @@ class Controller_Contacts extends Controller_Template
 	
 	
 	
-	public function action___savecard()
+	public function action_savecard()
 	{
 		//echo Debug::vars('348', $_POST ); exit;
-		$idpeople	= Arr::get($_POST, 'id');
-		$idcard		= str_pad(strtoupper(Arr::get($_POST, 'idcard')), 8, "0", STR_PAD_LEFT);//это при регистрации карты
+		$id_pep	= Arr::get($_POST, 'id');
+		$idcard		= str_pad(strtoupper(Arr::get($_POST, 'idcard')), 8, "0", STR_PAD_LEFT);//это при регистрации нового идентификатора
 		$idcard0	= Arr::get($_POST, 'id0', null);// а это передатеся при редактировании карты
 		$datestart	= Arr::get($_POST, 'carddatestart');
 		$dateend	= Arr::get($_POST, 'carddateend', '');
@@ -596,8 +718,42 @@ class Controller_Contacts extends Controller_Template
 		$note	= Arr::get($_POST, 'note');
 		
 		
-		
-		if ($idcard0) {
+		$key=new Keyk($idcard);
+				$check=$key->check(1);
+				if(is_null($check)){
+					
+					//echo Debug::vars('722 checkOK'); exit;
+				
+					
+					$key->id_card=$idcard;
+							$key->timestart=Arr::get($_POST, 'carddatestart');
+							$key->timeend=Arr::get($_POST, 'carddateend');
+							$key->id_pep=Arr::get($_POST, 'id');
+							
+							//присвоедние карты RFID
+							if($key->addRfid()==0) { ;//сохраняю карту RFID
+								
+									$alert=__('guest.addRfidOk', array(':id_card'=>$key->id_card));
+							};
+				Session::instance()->set('alert', $alert);
+				
+				} else {
+					//echo Debug::vars('738 checkErr', $check); exit;
+					//карта выдана сотруднику с id_pep=$check
+					
+					$anypeople=new Contact($check);
+					
+					//Session::instance()->set('alert', __('contact.key_occuped_'.$check));
+					$alert=__('guest.key_occuped', array(':idcard'=>$idcard, ':id_pep'=>$anypeople->id_pep,':name'=>iconv('CP1251', 'UTF-8',$anypeople->name),':surname'=>iconv('CP1251', 'UTF-8',$anypeople->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$anypeople->patronymic)));
+					
+					$arrAlert[]=array('actionResult'=>2, 'actionDesc'=>$alert);
+					
+					Session::instance()->set('arrAlert',$arrAlert);
+				
+				}
+				
+				
+		/* if ($idcard0) {
 			// update
 			//echo Debug::vars('363 update' ); exit;
 			Model::factory('Card')->update($idpeople, $idcard, $datestart, $dateend, $useenddate, $cardstate, $isactive, $idaccess, $note);
@@ -609,8 +765,9 @@ class Controller_Contacts extends Controller_Template
 			Session::instance()->set('alert', __('cards.saved'));
 			
 		}
-		//echo Debug::vars('373 after save '.$idcard); exit;
-		$this->redirect('contacts/card/' . $idcard);
+		echo Debug::vars('373 after save '.$idcard); exit; */
+		//$this->redirect('contacts/card/' . $idcard);
+		$this->redirect('contacts/cardlist/' . $id_pep);
 	}
 	
 	

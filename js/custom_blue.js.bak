@@ -265,7 +265,7 @@ $(function(){
                 dayNamesMin: ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
                 weekHeader: 'Не',
                 dateFormat: 'dd.mm.yy',
-                firstDay: 100,
+                firstDay: 1,
                 isRTL: false,
                 showMonthAfterYear: false,
                 yearSuffix: '',

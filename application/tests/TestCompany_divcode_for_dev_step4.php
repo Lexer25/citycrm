@@ -27,7 +27,9 @@ Class TestCompany_step4 extends Unittest_TestCase
  
  public function addNameOrg()
     {
-        return [
+        //добавление организаций.
+		// название организации - в какую организацию добавлять - код добавленной организации.
+		return [
            ['Отдел 1', 'div_art_res', 'div_art_res_odt1'],
            ['Отдел 2', 'div_art_res', 'div_art_res_odt2'],
            ['Отдел 3', 'div_art_res', 'div_art_res_odt3'],

@@ -14,7 +14,7 @@
 	<?php //echo HTML::style('static/css/modal.css'); ?>
  
 	
-	<link rel="stylesheet" href="static/css/themes/blue/style_.css" type="text/css" media="print, projection, screen" />
+	<link rel="stylesheet" href="static/css/themes/blue/style.css" type="text/css" media="print, projection, screen" />
 	
 	
 	<!--[if IE]>

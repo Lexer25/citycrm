@@ -22,7 +22,7 @@
 			return false;
 		}
 
-		if (!$('#idcard').val().match(/^[0-9a-f]{1,8}$/i)) {
+		if (!$('#idcard').val().match(/^[0-9a-f]{8}$/i)) {
 			$('#error12').show();
 			$('#idcard').focus();
 			return false;
@@ -98,7 +98,7 @@
 	<br class="clear" />
 	<div class="content">
 		<div id="cardinfo">
-		<form action="guest/savecard" method="post" onsubmit="return validatecard()">
+		<form action="guests/savecard" method="post" onsubmit="return validatecard()">
 			<input type="hidden" name="hidden" value="form_sent" />
 			<input type="hidden" name="id" value="<?php echo $contact['ID_PEP']; ?>" />
 			<input type="hidden" name="id_cardtype" value="1" />
@@ -124,7 +124,7 @@
 												if (isset($card)) echo Arr::get($card, 'ID_CARD'); 
 												
 											?>
-											<input type="hidden" size="12" maxlength="8" id="idcard" name="idcard" value="<?php if (isset($card)) echo Arr::get($card, 'ID_CARD'); ?>" />	
+											<input type="hidden" size="12" maxlength="8" id="idcard_0" name="idcard" value="<?php if (isset($card)) echo Arr::get($card, 'ID_CARD'); ?>" />	
 												
 											<?php } else {
 											?>

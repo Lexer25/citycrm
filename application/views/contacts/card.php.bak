@@ -270,22 +270,22 @@
 			</table>
 			<br />
 			<?php
-			if(Arr::get($contact, 'ACTIVE')) {
-			?>
-			<input type="button" value="<?php echo __('cards.reload'); ?>" onclick="reload('<?php echo Arr::get($card, 'ID_CARD'); ?>')" />
-			<br />
-			</div>
+				if(Arr::get($contact, 'ACTIVE')) {
+				?>
+					<input type="button" value="<?php echo __('cards.reload'); ?>" onclick="reload('<?php echo Arr::get($card, 'ID_CARD'); ?>')" />
+					<br />
+				</div>
+				<?php } ?>
 			<?php } ?>
-			<?php } ?>
 			<br />
 			<br />
-			<?php
-			if(Arr::get($contact, 'ACTIVE')) {
+			<?php 
+			//if(Arr::get($contact, 'ACTIVE')) {
 			?>
 			<?php if (isset($card)) 
 			{?>
 				<input type="button" value="<?php echo __('cards.delete'); ?>" onclick="deletecard('<?php echo Arr::get($card, 'ID_CARD'); ?>')" />
-			<?php };?>
+			<?php //};?>
 			<?php };?>
 		</form>
 		</div>

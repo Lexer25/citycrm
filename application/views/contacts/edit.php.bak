@@ -90,8 +90,8 @@
 </script>
 
 <?php 
-echo Debug::vars('89 contact', $contact);
-//echo Debug::vars('90', $contact_acl);
+//echo Debug::vars('89 contact', $contact);
+//echo Debug::vars('90', $contact_acl); exit;
 //echo Debug::vars('95', $org_tree);
 //echo Debug::vars('96 force_org', $force_org);
 //echo Debug::vars('98', array_to_tree($org_tree));
@@ -108,8 +108,8 @@ if ($alert) { ?>
 <?php } ?>
 <div class="onecolumn">
 	<div class="header">
-		<span ><?php echo $contact ? __('contact.title') . ': ' . iconv('CP1251', 'UTF-8', $contact['NAME']) . ' ' . iconv('CP1251', 'UTF-8', $contact['SURNAME']) : __('contact.new'); ?></span>
-		<?php if(Arr::get($contact, 'ACTIVE'))
+		<span ><?php echo $contact ? __('contact.title') . ': ' . iconv('CP1251', 'UTF-8', $contact->name) . ' ' . iconv('CP1251', 'UTF-8', $contact->surname) : __('contact.new'); ?></span>
+		<?php if($contact->is_active)
 				{
 
 					//echo ' <span class="label label-success">'.__('people_is_active').'</span><br>';
@@ -128,13 +128,13 @@ if ($alert) { ?>
 						<a href="javascript:" class="left_switch active"><?php echo __('contact.common'); ?></a>
 					</td>
 					<td>
-						<?php echo HTML::anchor('contacts/acl/' . $contact['ID_PEP'], __('contact.acl'), array('class' => 'middle_switch')); ?>
+						<?php echo HTML::anchor('contacts/acl/' . $contact->id_pep, __('contact.acl'), array('class' => 'middle_switch')); ?>
 					</td>
 					<td>
-						<?php echo HTML::anchor('contacts/cardlist/' . $contact['ID_PEP'], __('contact.cardlist'), array('class' => 'middle_switch')); ?>
+						<?php echo HTML::anchor('contacts/cardlist/' . $contact->id_pep, __('contact.cardlist'), array('class' => 'middle_switch')); ?>
 					</td>
 					<td>
-						<?php echo HTML::anchor('contacts/history/' . $contact['ID_PEP'], __('contact.history'), array('class' => 'right_switch')); ?>
+						<?php echo HTML::anchor('contacts/history/' . $contact->id_pep, __('contact.history'), array('class' => 'right_switch')); ?>
 					</td>
 				</tr>
 			</tbody>
@@ -144,7 +144,7 @@ if ($alert) { ?>
 	</div>
 	<br class="clear" />
 	<div class="content">
-	<?php if(Arr::get($contact, 'ACTIVE')) {?>
+	<?php if($contact->is_active) {?>
 				<form action="<?php echo Route::url('default', array('controller' => 'contacts', 'action' => 'upload')) ?>" method="post" enctype="multipart/form-data">
 				<label for="image_control">Для загрузки изображения выберите фай и нажмите кнопку Загрузить</label>
 				<div class="row">
@@ -155,16 +155,16 @@ if ($alert) { ?>
 	<?php }?>
 		<form action="contacts/save" method="post" onsubmit="return validate()">
 			<input type="hidden" name="hidden" value="form_sent" />
-			<input type="hidden" name="id_pep" value="<?php echo Arr::get($contact, 'ID_PEP', 0); ?>" />
+			<input type="hidden" name="id_pep" value="<?php echo $contact->id_pep; ?>" />
 			
 			<table style="margin: 0">
 				<tr>
 					<td>
 						<div>
-							<?php if ($contact['PHOTO'] != null) { 
+							<?php if ($contact->photo != null) { 
 							//echo Debug::vars('145', $photo); exit;?>
 								
-								<img src="data:image/jpeg;base64,<?php echo base64_encode(pack("H*",str_replace("\0", "",$contact['PHOTO']))); ?>" height="200" alt="photo" />
+								<img src="data:image/jpeg;base64,<?php echo base64_encode(pack("H*",str_replace("\0", "",$contact->photo))); ?>" height="200" alt="photo" />
 								<br>
 							
 								
@@ -182,7 +182,7 @@ if ($alert) { ?>
 						<div>
 							<label for="surname"><?php echo __('contact.surname'); ?></label>
 							<br />
-							<input type="text" size="50" name="surname" id="surname" value="<?php echo iconv('CP1251', 'UTF-8', $contact['SURNAME']); ?>" />
+							<input type="text" size="50" name="surname" id="surname" value="<?php echo iconv('CP1251', 'UTF-8', $contact->surname); ?>" />
 							<br />
 							<span class="error" id="error1" style="color: red; display: none;"><?php echo __('contact.emptysurname'); ?></span>
 						</div>
@@ -193,12 +193,12 @@ if ($alert) { ?>
 									<td>
 										<label for="name"><?php echo __('contact.name'); ?></label>
 										<br />
-										<input type="text" size="50" name="name" id="name" value="<?php echo iconv('CP1251', 'UTF-8', $contact['NAME']); ?>" style="width: 150px" />
+										<input type="text" size="50" name="name" id="name" value="<?php echo iconv('CP1251', 'UTF-8', $contact->name); ?>" style="width: 150px" />
 									</td>
 									<td style="padding-left: 15px">
 										<label for="patronymic"><?php echo __('contact.patronymic'); ?></label>
 										<br />
-										<input type="text" size="50" name="patronymic" id="patronymic" value="<?php echo iconv('CP1251', 'UTF-8', $contact['PATRONYMIC']); ?>" style="width: 150px" />
+										<input type="text" size="50" name="patronymic" id="patronymic" value="<?php echo iconv('CP1251', 'UTF-8', $contact->patronymic); ?>" style="width: 150px" />
 									</td>
 								</tr>
 							</table>
@@ -208,7 +208,7 @@ if ($alert) { ?>
 						<div>
 							<label for="datebirth"><?php echo __('contact.datebirth'); ?></label>
 							<br />
-							<input type="text" name="datebirth" id="datebirth" value="<?php echo Arr::get($contact, 'DATEBIRTH', null); ?>" style="width: 100px;" />
+							<input type="text" name="datebirth" id="datebirth" value="<?php //echo $contact->datebirth; ?>" style="width: 100px;" />
 							<br />
 							<span class="error" id="error21" style="color: red; display: none;"><?php echo __('contact.emptydatebirth'); ?></span>
 							<span class="error" id="error22" style="color: red; display: none;"><?php echo __('contact.wrongdatebirth'); ?></span>
@@ -221,12 +221,12 @@ if ($alert) { ?>
 									<td>
 										<label for="numdoc"><?php echo __('contact.numdoc'); ?></label>
 										<br />
-										<input type="text" size="23" name="numdoc" id="numdoc" value="<?php echo iconv('CP1251', 'UTF-8', $contact['NUMDOC']); ?>" />
+										<input type="text" size="23" name="numdoc" id="numdoc" value="<?php echo iconv('CP1251', 'UTF-8', $contact->numdoc); ?>" />
 									</td>
 									<td style="padding-left: 15px">
 										<label for="datedoc"><?php echo __('contact.datedoc'); ?></label>
 										<br />
-										<input type="text" name="datedoc" id="datedoc" value="<?php echo $contact['DATEDOC']; ?>" style="width: 100px;" />
+										<input type="text" name="datedoc" id="datedoc" value="<?php echo $contact->datedoc; ?>" style="width: 100px;" />
 										<br />
 										<span class="error" id="error31" style="color: red; display: none;"><?php echo __('contact.emptydatedoc'); ?></span>
 										<span class="error" id="error32" style="color: red; display: none;"><?php echo __('contact.wrongdatedoc'); ?></span>
@@ -245,7 +245,7 @@ if ($alert) { ?>
 							<fieldset>
 						<legend>
 						<?php 
-							echo HTML::anchor('companies/edit/'.Arr::get($contact, 'ID_ORG'),'Родительская организация '.Arr::get(Arr::get($org_tree, Arr::get($contact, 'ID_ORG') ), 'title' ));?></legend>
+							echo HTML::anchor('companies/edit/'.$contact->id_org,'Родительская организация '.Arr::get(Arr::get($org_tree, $contact->id_org ), 'title' ));?></legend>
 						<?php
 							/*
 							если сюда пришли из режима Добавить пипла, то id_org=1 (т.е. надо показывать корень всех организаций
@@ -269,12 +269,12 @@ if ($alert) { ?>
 							{
 								$select_org=$force_org;
 							} else {
-								$select_org=Arr::get($contact, 'ID_ORG', 1);
+								$select_org=$contact->id_org;
 							}
 
 							?>
 							
-							<input type="hidden" name="id_org_old" value="<?php echo Arr::get($contact, 'ID_ORG'); ?>" />
+							<input type="hidden" name="id_org_old" value="<?php echo $contact->id_org; ?>" />
 							
 							<select name="id_org">
 								<option></option>
@@ -302,7 +302,7 @@ if ($alert) { ?>
 									<td>
 										<label for="workstart"><?php echo __('contact.workstart'); ?></label>
 										<br />
-										<input type="text" name="workstart" id="workstart" value="<?php echo Arr::get($contact, 'WORKSTART', '09:00:00'); ?>" />
+										<input type="text" name="workstart" id="workstart" value="<?php //echo $contact->workstart; ?>" />
 										<br />
 										<span class="error" id="error41" style="color: red; display: none;"><?php echo __('contact.emptyworkstart'); ?></span>
 										<span class="error" id="error42" style="color: red; display: none;"><?php echo __('contact.wrongworkstart'); ?></span>
@@ -311,7 +311,7 @@ if ($alert) { ?>
 									<td style="padding-left: 15px;">
 										<label for="workend"><?php echo __('contact.workend'); ?></label>
 										<br />
-										<input type="text" name="workend" id="workend" value="<?php echo Arr::get($contact, 'WORKEND', '18:00:00'); ?>" />
+										<input type="text" name="workend" id="workend" value="<?php //echo $contact->workend; ?>" />
 										<br />
 										<span class="error" id="error51" style="color: red; display: none;"><?php echo __('contact.emptyworkend'); ?></span>
 										<span class="error" id="error52" style="color: red; display: none;"><?php echo __('contact.wrongworkend'); ?></span>
@@ -331,14 +331,14 @@ if ($alert) { ?>
 						<br>
 							<label for="post"><?php echo __('contact.post'); ?></label>
 							<br />
-							<input type="text" size="50" name="post" id="post" value="<?php echo iconv('CP1251', 'UTF-8', $contact['POST']); ?>" />
+							<input type="text" size="50" name="post" id="post" value="<?php //echo iconv('CP1251', 'UTF-8', $contact->post); ?>" />
 						</div>
 						
 						<br />
 						<div>
 							<label for="tabnum"><?php echo __('contact.tabnum'); ?></label>
 							<br />
-							<input type="text" size="50" name="tabnum" id="tabnum" value="<?php echo iconv('CP1251', 'UTF-8', $contact['TABNUM']); ?>" />
+							<input type="text" size="50" name="tabnum" id="tabnum" value="<?php echo iconv('CP1251', 'UTF-8', $contact->tabnum); ?>" />
 							<br />
 							<span class="error" id="error6" style="color: red; display: none;"><?php echo __('contact.emptytabnum'); ?></span>
 						</div>
@@ -352,14 +352,14 @@ if ($alert) { ?>
 									<td>
 										<label for="login"><?php echo __('contact.login'); ?></label>
 										<br />
-										<input type="text" name="login" id="login" size="12" value="<?php echo iconv('CP1251', 'UTF-8', $contact['LOGIN']); ?>" />
+										<input type="text" name="login" id="login" size="12" value="<?php //echo iconv('CP1251', 'UTF-8', $contact->login); ?>" />
 										<br />
 										<span class="error" id="error7" style="color: red; display: none;"><?php echo __('contact.emptylogin'); ?></span>
 									</td>
 									<td style="padding-left: 15px">
 										<label for="password"><?php echo __('contact.password'); ?></label>
 										<br />
-										<input type="password" size="12" name="password" id="password" value="<?php echo iconv('CP1251', 'UTF-8', $contact['PSWD']); ?>" />
+										<input type="password" size="12" name="password" id="password" value="<?php //echo iconv('CP1251', 'UTF-8', $contact->pswd); ?>" />
 										<br />
 										<span class="error" id="error8" style="color: red; display: none;"><?php echo __('contact.emptypassword'); ?></span>
 											
@@ -384,9 +384,9 @@ if ($alert) { ?>
 						<div>
 							<?php //echo Debug::vars('372',Arr::get($contact, 'ID_PEP'), Arr::get($contact, 'ACTIVE'), Arr::get($contact, 'FLAG'));?>
 							<?php
-								echo '<p>'.__('ID_PEP'). Arr::get($contact, 'ID_PEP');
-								echo '<p>'.__('IS_ACTIVE'). Arr::get($contact, 'ACTIVE');
-								echo '<p>'.__('FLAG'). Arr::get($contact, 'FLAG');
+								echo '<p>'.__('ID_PEP'). $contact->id_pep;
+								echo '<p>'.__('IS_ACTIVE'). $contact->is_active;
+								echo '<p>'.__('FLAG'). $contact->flag;
 								
 								?>
 						</div>
@@ -452,11 +452,12 @@ if ($alert) { ?>
 						echo '<label for="authmode">'.__('Способ авторизации').'</label><br>';
 						
 						
-						echo Form::select('authmode', $authmode_desc, Arr::get($contact, 'AUTHMODE'), array('disabled'=>'disabled', 'id'=>'authmode'));
+						//echo Form::select('authmode', $authmode_desc, $contact->authmode, array('disabled'=>'disabled', 'id'=>'authmode'));
+						echo Form::select('authmode', $authmode_desc, 3, array('disabled'=>'disabled', 'id'=>'authmode'));
 						echo '<br><label for="note">'.__('note').'</label><br>';
-						echo Form::textarea('note', iconv('CP1251', 'UTF-8', Arr::get($contact, 'NOTE')), array('id'=>'note'));
+						echo Form::textarea('note', iconv('CP1251', 'UTF-8', $contact->note), array('id'=>'note'));
 						//echo '<br><label for="sysnote">'.__('sysnote').'</label><br>';
-						//echo Form::textarea('about', iconv('CP1251', 'UTF-8',Arr::get($contact, 'SYSNOTE')), array('id'=>'sysnote'));
+						//echo Form::textarea('about', iconv('CP1251', 'UTF-8',$contact->SYSNOTE')), array('id'=>'sysnote'));
 					?>
 		
 					
@@ -466,7 +467,7 @@ if ($alert) { ?>
 			</table>
 			<br />
 			<?php
-			if(Arr::get($contact, 'ACTIVE')) {
+			if($contact->is_active or true) {
 			?>
 			<input type="submit" value="<?php echo __('button.save'); ?>" />
 			&nbsp;&nbsp;

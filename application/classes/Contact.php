@@ -11,6 +11,7 @@ class Contact
 	public $name;
 	public $surname;
 	public $patronymic;
+	public $photo;
 	public $id_org;// организация, куда входит контакт
 	public $numdoc;//номер документа
 	public $datedoc;//дата документы
@@ -40,6 +41,7 @@ class Contact
 		, p.surname
 		, p.name
 		, p.patronymic
+		, p.photo
 		, p.numdoc
 		, p.datedoc
 		, p."ACTIVE" as is_active
@@ -64,6 +66,7 @@ class Contact
 		$this->name=Arr::get($query, 'NAME');
 		$this->surname=Arr::get($query, 'SURNAME');
 		$this->patronymic=Arr::get($query, 'PATRONYMIC');
+		$this->photo=Arr::get($query, 'PHOTO');
 		$this->id_org=Arr::get($query, 'ID_ORG');
 		$this->numdoc=Arr::get($query, 'NUMDOC');
 		$this->datedoc=Arr::get($query, 'DATEDOC');
@@ -71,8 +74,7 @@ class Contact
 		$this->sysnote=Arr::get($query, 'SYSNOTE');
 		$this->time_stamp=Arr::get($query, 'TIME_STAMP');
 		$this->tabnum=Arr::get($query, 'TABNUM');
-		//$this->rfid=Arr::get($query, 'RFID');
-		//$this->grz=Arr::get($query, 'GRZ');
+		
 		
 		$sql='select  c.id_cardtype, count(c.id_card) from card c
 			where c.id_pep='.$id_pep.'
@@ -100,6 +102,37 @@ class Contact
 	
 	
 	/*
+	9.01.2024 обновление данных уже существующего контакта
+	
+	*/
+	
+	public function updateContact()
+	{
+		$sql='UPDATE PEOPLE
+			SET ID_ORG = '.$this->id_org.',
+			SURNAME = \''.$this->surname.'\',
+			NAME = \''.$this->name.'\',
+			PATRONYMIC = \''.$this->patronymic.'\',
+			NOTE = \''.$this->id_org.'\'
+			WHERE (ID_PEP = '.$this->id_pep.') AND (ID_DB = 1)';
+	//echo Debug::vars('118', $sql); exit;		
+			try
+		{
+			
+			$query = DB::query(Database::UPDATE, iconv('UTF-8', 'CP1251',$sql))
+				->execute(Database::instance('fb'));
+			return 0;
+		
+		} catch (Exception $e) {
+			
+			Log::instance()->add(Log::DEBUG, '178 '.$e->getMessage());
+			return 3;
+		}
+		
+	}
+	
+	
+	/*
 		добавление нового контакта
 		в указанный id_org
 	*/
@@ -111,8 +144,8 @@ class Contact
 		$result = $query->current();
 		$this->id_pep=Arr::get($result, 'GEN_ID');
 		
-		//echo Debug::vars('109', Arr::get($result, 'GEN_ID')); exit;
-		$sql=__('INSERT INTO people (id_pep, id_db, surname, name, patronymic, id_org, note) VALUES (:id,1, \':surname\', \':name\', \':patronymic\',:id_org,  \':note\')', array
+		//echo Debug::vars('109', Arr::get($result, 'GEN_ID'), $this); //exit;
+		$sql=__('INSERT INTO people (id_pep, id_db, surname, name, patronymic, id_org, note) VALUES (:id,1, \':surname\', \':name\', \':patronymic\',:id_org,\':note\')', array
 			(
 				':id'			=> $this->id_pep,
 				':surname'		=> iconv('UTF-8', 'CP1251',$this->surname),
@@ -122,7 +155,7 @@ class Contact
 				':note'			=> iconv('UTF-8', 'CP1251',$this->note))
 				);
 
-			
+//echo Debug::vars('127', $sql); exit;			
 					try
 		{
 					
@@ -139,13 +172,7 @@ class Contact
 					->get('TABNUM');
 					
 					$this->tabnum=$query;
-					
-					
-					$this->actionResult=0;
-					
-					
-					
-					$this->setAclDefault();// заполнение таблицы SS_ACCESSUSER
+
 					return 0;
 
 				} catch (Exception $e) {
@@ -154,18 +181,11 @@ class Contact
 			
 					Log::instance()->add(Log::DEBUG, '178 '.$e->getMessage());
 					return 3;
-			
-		}
+			}
 
-				
-					
-			
-		
 		} catch (Exception $e) {
-			
-					
 			Log::instance()->add(Log::DEBUG, '178 '.$e->getMessage());
-			
+			return 3;
 		}
 		
 				

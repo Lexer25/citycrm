@@ -688,7 +688,7 @@ class Controller_Guests extends Controller_Template
 	
 	
 	
-	public function action_savecard_()
+	public function action__savecard_()
 	{
 		//echo Debug::vars('348', $_POST ); exit;
 		$idpeople	= Arr::get($_POST, 'id');

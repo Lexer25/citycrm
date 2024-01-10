@@ -294,7 +294,7 @@ $(function(){
                 yearSuffix: '',
 		nextText: '&raquo;',
 		prevText: '&laquo;',
-		dateFormat: 'yy-mm-dd',
+		dateFormat: 'dd.mm.yy',
 		showAnim: 'slideDown'
 	});
 	

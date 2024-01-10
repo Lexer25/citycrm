@@ -222,7 +222,7 @@ class Model_Card extends Model
 				':id_cardtype'		=> $id_cardtype,
 				':note'		=> $note
 			)); 
-			//echo Debug::vars('172', $sql);EXIT;
+			echo Debug::vars('172', $sql);EXIT;
 		try
 		{
 			$query=DB::query(Database::INSERT, iconv('UTF-8', 'CP1251',$sql))
@@ -236,18 +236,6 @@ class Model_Card extends Model
 	public function update($idpeople, $idcard, $datestart, $dateend, $useenddate, $cardstate, $isactive, $idaccess, $note)
 	{
 			//echo Debug::vars('185', $idpeople, $idcard, $datestart, $dateend, $useenddate, $cardstate, $isactive, $idaccess, $note); exit;
-			echo Debug::vars('185',
-			__('UPDATE card SET timestart = \':start\', timeend = \':end\', flag = :flag, status = :status, "ACTIVE" = :active, note =\':note\' WHERE id_card = \':card\'', 
-			array(
-				':people' 	=> $idpeople,
-				':start'	=> $datestart,
-				':end'		=> $dateend == '' ? null : $dateend,
-				':flag'		=> $useenddate,
-				':status'	=> $cardstate,
-				':active'	=> $isactive,
-				':note'	=> $note,
-				':card'		=> $idcard))) ;
-			//	exit;
 			
 			$sql=__('UPDATE card SET timestart = \':start\', timeend = \':end\', flag = :flag, status = :status, "ACTIVE" = :active, note =\':note\' WHERE id_card = \':card\'', 
 			array(
@@ -259,6 +247,8 @@ class Model_Card extends Model
 				':active'	=> $isactive,
 				':note'	=> $note,
 				':card'		=> $idcard));
+				
+				echo Debug::vars('185',$sql); exit;
 			DB::query(Database::UPDATE, iconv('UTF-8', 'CP1251', $sql))
 			->execute(Database::instance('fb'));
 			

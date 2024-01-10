@@ -27,12 +27,16 @@ Class TestCompany_step2 extends Unittest_TestCase
  
  public function addNameList()
     {
-        return [
-            ['SurName1','Name1','Patronimyc1'],
-            ['SurName21','Name21','Patronimyc21'],
-            ['SurName31','Name31','Patronimyc31'],
+       //добавление ФИО в оргназацию с указанным divcode
+	   // Ф - И - О - divcode организации.
+	   
+	   return [
+            ['SurName1','Name1','Patronimyc1', 'div_art_res_odt3'],
+            ['SurName21','Name21','Patronimyc21', 'div_art_res_odt3'],
+            ['SurName31','Name31','Patronimyc31', 'div_art_res_odt3'],
          
-           
+        // ответ - автоматически сформированный табельный номер.
+		// при добавлении пипла можно указывать и его табельный номер из головной системы.
           
         ];
     }

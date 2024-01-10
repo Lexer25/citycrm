@@ -43,7 +43,9 @@
 		<?php include Kohana::find_file('views', 'sidebar'); ?>
 		<div id="content">
 			<div class="inner">
-				<?php echo $content; ?>
+				<?php 
+				include Kohana::find_file('views','alert');
+				echo $content; ?>
 				
 			</div>
 		</div>

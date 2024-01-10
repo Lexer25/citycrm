@@ -1,6 +1,8 @@
 <?php
 //echo Debug::vars('2', $cards);
+//echo Debug::vars('3', Session::instance());
 $catdTypelist = Model::factory('Card')->getcatdTypelist();//получил список типов идентификаторов
+include Kohana::find_file('views','alert');
 ?>
 <div class="onecolumn">
 	<div class="header">

@@ -22,7 +22,7 @@
 			return false;
 		}
 
-		if (!$('#idcard').val().match(/^[0-9a-f]{1,8}$/i)) {
+		if (!$('#idcard').val().match(/^[0-9a-f]{8}$/i)) {
 			$('#error12').show();
 			$('#idcard').focus();
 			return false;

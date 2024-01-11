@@ -18,7 +18,9 @@ class Controller_Contacts extends Controller_Template
 	}
 	
 	
-	
+	/*
+	10.01.2024 загрузка фотографии для контактая
+	*/
 	
 	public function action_upload()
 	{
@@ -26,6 +28,7 @@ class Controller_Contacts extends Controller_Template
 		
 		if ($this->request->method() === Request::POST)
 		{
+			$id_pep=Arr::get($_POST, 'id_pep');
 			// create validation object
 			$validation = Validation::factory($_FILES)
 				->label('image', 'Picture')
@@ -37,60 +40,35 @@ class Controller_Contacts extends Controller_Template
 			// check input data
 			if ($validation->check())
 			{
-				echo Debug::vars('40 eys', $validation, $validation['image']);// exit;
+		
 				// process upload
-				echo Upload::save($validation['image'], 'vnii_photo', 'C:\xampp\tmp'); //exit;
+				Upload::save($validation['image'], 'vnii_photo', 'C:\xampp\tmp'); 
 				//запись содержимого файла в базу данных
 				$file_name='C:\xampp\tmp\vnii_photo';
-				//$fp = fopen($file_name, "w");
-				echo Debug::vars('46', Database::instance('fb')); //exit;
-				echo Debug::vars('47',  Arr::get(
-      			Arr::get(
-      					Kohana::$config->load('database')->fb,
-      					'connection'
-      					),
-      		'dsn')); //exit;
+			
 				
-		$photo=file_get_contents($file_name);		
-		//$db = new PDO('odbc:vnii_local');
-		$db = new PDO( Arr::get(
-      			Arr::get(
-      					Kohana::$config->load('database')->fb,
-      					'connection'
-      					),
-      		'dsn'));
-        $stmt = $db->prepare("UPDATE people SET photo = ? 
-				WHERE id_pep = 1");
-        //$stmt = $db->prepare("INSERT INTO ZKSOFT_FP_TAMPLATE (IDX_FINGER,ID_DB,ID_CARD,IDX_USER,FP_TAMPLATE,FP_LENGTH) VALUES(?,?,?,?,?,?)");
-
-
-        $stmt->bindParam(1, $photo);
-       
-
-        $db->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);
-        $db->beginTransaction();
-        $stmt->execute();
-        $db->commit();
-        $db->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
+			$photo=file_get_contents($file_name);
+				$contact=new Contact ($id_pep);
+				if($contact->savephoto($photo) == 0) {
+					
+					$alert=__('contact.insertphotoOk');
+				} else {
+					
+					$alert=__('contact.insertphotoErr1');
+				}
+				
 		
-		
-		
-				//echo Debug::vars('47', $_FILES, $_POST); exit;
-
-				// set user message
-				Session::instance()->set('message', 'Image is successfully uploaded');
+				
 			} else {
 				
-				//echo Debug::vars('48 err', $validation); exit;
-				Session::instance()->set('errors', $validation->errors('upload'));
+				$alert=__('contact.insertphotoErr2');
 			}
-
-			// set user errors
-			
+			Session::instance()->set('alert', $alert);
+			$this->redirect('contacts/edit/'.$id_pep);		
 		}
 
-		// redirect to home page
-		$this->request->redirect('/');
+	
+		
 	}
 	
 /*
@@ -198,10 +176,13 @@ class Controller_Contacts extends Controller_Template
 		$idaccess=null;// устаревший параметр.
 		$useenddate=1;//проверять ли срок действия карты? 1 - проверять, 0 - не проверять. */
 		
+		$todo			= Arr::get($_POST, 'todo');
+		$active			= Arr::get($_POST, 'active');
 		$id			= Arr::get($_POST, 'id_pep');
 		$idcard		= Arr::get($_POST, 'idcard', null);
+		$alert='';
 
-				
+	
 					$contact=new contact($id);
 					$contact->name=Arr::get($_POST, 'name','');
 					$contact->patronymic=Arr::get($_POST, 'patronymic','');
@@ -259,12 +240,20 @@ class Controller_Contacts extends Controller_Template
 						
 						}
 					
-				}
+				
+		};
+		
+		
 		//$this->redirect('guests');
 		Session::instance()->set('alert', $alert);
-		$this->redirect('contacts/edit/' . $id);
+		$this->redirect('contacts/edit/' . $contact->id_pep);
 	}
-
+	
+	
+	public function action_hardDeleteContact()
+	{
+		echo Debug::vars('276', $_POST); exit;
+	}
 	
 	
 	public function action__save()
@@ -334,7 +323,10 @@ class Controller_Contacts extends Controller_Template
 		$force_org=$this->request->query('id_org');//наличие этого параметра означает, что надо выбрать именно указанную организацию для правильной работы дерева организаций.
 		$contact = Model::factory('Contact')->getContact($id);//персональные данные контакта
 		$contact= new Contact($id);
-		if($id == 0) $contact->is_active=1;
+		if($id == 0) {
+			$contact->is_active=1;
+			$contact->id_org=1;
+		}
 		//$photo = Model::factory('Contact')->getPicture($id);//персональные данные контакта
 		$contact_acl = Model::factory('Contact')->contact_acl($id);//список категорий доступа, выданных контакту
 		$check_acl = Model::factory('Contact')->check_acl($id);//получить список категорий доступа родительской организации для сверки с текущим списком категорий для контакта: совпадает или нет? 0 -совпадает, 1 - не совпадает.
@@ -345,6 +337,11 @@ class Controller_Contacts extends Controller_Template
 		
 		$fl = $this->session->get('alert');
 		$this->session->delete('alert');
+		//определяю режим работы окна редактирования.
+		$mode='unknow';
+		if($contact->id_pep==0) $mode='new';//режим добавления нового контакта
+		if($contact->id_pep >0 and $contact->is_active==1) $mode='edit';//режим редактирования существующего контакта
+		if($contact->id_pep >0 and $contact->is_active==0) $mode='fired';//режим редактирования "удаленного" контакта
 		
 		$this->template->content = View::factory('contacts/edit')
 			->bind('contact', $contact)
@@ -354,11 +351,12 @@ class Controller_Contacts extends Controller_Template
 			->bind('force_org', $force_org)
 			->bind('check_acl', $check_acl)
 			->bind('companies', $companies)
+			->bind('mode', $mode)
 			//->bind('photo', $photo);
 			;
 	}
 
-	public function action__view()
+	public function action_view()
 	{
 		$id=$this->request->param('id');
 		$contact = Model::factory('Contact')->getContact($id);
@@ -438,7 +436,7 @@ class Controller_Contacts extends Controller_Template
 		$contact=new Contact($id_pep);
 		
 		/* делаю сотрудника АКТИВНЫМ*/
-		if($contact->setIsActiveOnIdPep()==0){
+		if($contact->setIsActiveOnIdPep()==1){
 			$alert=__('contact.setIsActiveOK', array(':name'=>iconv('CP1251', 'UTF-8',$contact->name),':surname'=>iconv('CP1251', 'UTF-8',$contact->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$contact->patronymic)));
 				
 		} else {
@@ -461,12 +459,18 @@ class Controller_Contacts extends Controller_Template
 	public function action_addrfid()
 	{
 		$id=$this->request->param('id');
-		$contact = Model::factory('Contact')->getContact($id);
+		$contact = new Contact($id);
+		$mode='unknow';
+		if($contact->id_pep==0) $mode='new';//режим добавления нового контакта
+		if($contact->id_pep >0 and $contact->is_active==1) $mode='edit';//режим редактирования существующего контакта
+		if($contact->id_pep >0 and $contact->is_active==0) $mode='fired';//режим редактирования "удаленного" контакта
+		
 		$anames = AccessName::getList();
 		$card = array();
 		
 		$this->template->content = View::factory('contacts/card')
 			->bind('contact', $contact)
+			->bind('mode', $mode)
 			->bind('anames', $anames);
 	}
 	
@@ -519,7 +523,7 @@ class Controller_Contacts extends Controller_Template
 		$card = Model::factory('Card')->getCard($id);
 		
 		if ($id != "0" && !$card) $this->redirect('/');
-		$contact = Model::factory('Contact')->getContact($card['ID_PEP']);
+		$contact = new Contact($card['ID_PEP']);
 		$contact_acl = Model::factory('Contact')->contact_acl($card['ID_PEP']);
 		
 		$loads = Model::factory('Card')->getLoads($card['ID_CARD']);
@@ -527,6 +531,8 @@ class Controller_Contacts extends Controller_Template
 
 		$fl = $this->session->get('alert');
 		$this->session->delete('alert');
+		
+		$mode='edit';
 		
 		//переключатель view
 		$viewList=array(
@@ -541,13 +547,21 @@ class Controller_Contacts extends Controller_Template
 			->bind('multiple', $multiple)//не используется
 			->bind('anames', $anames)//Перечень всех категорий доступа. не используется
 			->bind('alert', $fl)//сообщение alert
+			->bind('mode', $mode)//режим работы формы
 			->bind('id', $id);//номер карты
 	}
+	
+	/*
+		вывод списка идентификторов 
+		
+	
+	*/
 	
 	public function action_cardlist()
 	{
 		$id=$this->request->param('id');
-		$contact = Model::factory('Contact')->getContact($id);
+		
+		$contact = new Contact($id);
 		if (!$contact) $this->redirect('contacts');
 		$cards = Model::factory('Card')->getListByPeople($id);
 
@@ -557,12 +571,18 @@ class Controller_Contacts extends Controller_Template
 		$arrAlert = $this->session->get('arrAlert');
 		$this->session->delete('arrAlert');
 		
+		$mode='unknow';
+		if($contact->id_pep==0) $mode='new';//режим добавления нового контакта
+		if($contact->id_pep >0 and $contact->is_active==1) $mode='edit';//режим редактирования существующего контакта
+		if($contact->id_pep >0 and $contact->is_active==0) $mode='fired';//режим редактирования "удаленного" контакта
+		
 		
 		$this->template->content = View::factory('contacts/cardlist')
 			->bind('contact', $contact)
 			->bind('cards', $cards)
 			->bind('alert', $fl)
 			->bind('arrAlert', $arrAlert)
+			->bind('mode', $mode)
 			->bind('id', $id);
 	}
 	
@@ -574,19 +594,27 @@ class Controller_Contacts extends Controller_Template
 	public function action_acl()
 	{
 		$id=$this->request->param('id');
-		$contact = Model::factory('Contact')->getContact($id);//информация о контакте
+		//$contact = Model::factory('Contact')->getContact($id);//информация о контакте
+		$contact = new Contact($id);//информация о контакте
+		
 		$contact_acl = Model::factory('Contact')->contact_acl($id);//список категорий доступа, выданных контакту
 		if ($id != "0" && !$contact) $this->redirect('contacts');
 		$isAdmin = Auth::instance()->logged_in('admin');
 		$companies = Model::factory('Company')->getNames($isAdmin ? null : Auth::instance()->get_user());
 		
-
+		$mode='unknow';
+		if($contact->id_pep==0) $mode='new';//режим добавления нового контакта
+		if($contact->id_pep >0 and $contact->is_active==1) $mode='edit';//режим редактирования существующего контакта
+		if($contact->id_pep >0 and $contact->is_active==0) $mode='fired';//режим редактирования "удаленного" контакта
+		
+		
 		$fl = $this->session->get('alert');
 		$this->session->delete('alert');
 		
 		$this->template->content = View::factory('contacts/acl')
 			->bind('contact', $contact)
 			->bind('alert', $fl)
+			->bind('mode', $mode)
 			->bind('contact_acl', $contact_acl)
 			->bind('companies', $companies);
 	}
@@ -689,7 +717,7 @@ class Controller_Contacts extends Controller_Template
 		$this->redirect('contacts/cardlist/' . $card->id_pep);
 	}
 	
-	public function action___reload()
+	public function action_reload()
 	{
 		$id=$this->request->param('id');
 		$card = Model::factory('Card')->getCard($id);
@@ -733,7 +761,7 @@ class Controller_Contacts extends Controller_Template
 							//присвоедние карты RFID
 							if($key->addRfid()==0) { ;//сохраняю карту RFID
 								
-									$alert=__('guest.addRfidOk', array(':id_card'=>$key->id_card));
+									$alert=__('contact.addRfidOk', array(':id_card'=>$key->id_card));
 							};
 				Session::instance()->set('alert', $alert);
 				
@@ -744,7 +772,7 @@ class Controller_Contacts extends Controller_Template
 					$anypeople=new Contact($check);
 					
 					//Session::instance()->set('alert', __('contact.key_occuped_'.$check));
-					$alert=__('guest.key_occuped', array(':idcard'=>$idcard, ':id_pep'=>$anypeople->id_pep,':name'=>iconv('CP1251', 'UTF-8',$anypeople->name),':surname'=>iconv('CP1251', 'UTF-8',$anypeople->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$anypeople->patronymic)));
+					$alert=__('contact.key_occuped', array(':idcard'=>$idcard, ':id_pep'=>$anypeople->id_pep,':name'=>iconv('CP1251', 'UTF-8',$anypeople->name),':surname'=>iconv('CP1251', 'UTF-8',$anypeople->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$anypeople->patronymic)));
 					
 					$arrAlert[]=array('actionResult'=>2, 'actionDesc'=>$alert);
 					

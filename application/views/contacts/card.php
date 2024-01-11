@@ -68,27 +68,55 @@
 <?php } ?>
 <div class="onecolumn">
 	<div class="header">
-		<span><?php echo __('contact.card') . ' - ' . iconv('CP1251', 'UTF-8', $contact['NAME'] . ' ' . $contact['SURNAME']); ?></span>
+		<span>
+			<?php 
+			
+			switch($mode) {
+				case('new'):
+					;
+				break;
+				
+				case('edit'):
+					echo __('contact.titleEditContact', array( 
+					':name'=> iconv('CP1251', 'UTF-8', $contact->name),
+					':surname'=> iconv('CP1251', 'UTF-8', $contact->surname),
+					':patronymic'=> iconv('CP1251', 'UTF-8', $contact->patronymic)));
+				break;
+				
+				case('fired'):
+					echo __('contact.titlefiredContact', array( 
+					':name'=> iconv('CP1251', 'UTF-8', $contact->name),
+					':surname'=> iconv('CP1251', 'UTF-8', $contact->surname),
+					':patronymic'=> iconv('CP1251', 'UTF-8', $contact->patronymic)));
+				break;
+				default:
+					echo __('form.editContact');
+				break;
+			}
+				
+				
+				?>
+		</span>
 		<div class="switch">
 			<table cellpadding="0" cellspacing="0">
 			<tbody>
 				<tr>
 					<td>
 						<?php
-							if ($contact['CANEDIT'] == 0) 
-								echo HTML::anchor('contacts/view/' . $contact['ID_PEP'], __('contact.common'), array('class' => 'left_switch'));
+							if (true) 
+								echo HTML::anchor('contacts/view/' . $contact->id_pep, __('contact.common'), array('class' => 'left_switch'));
 							else
-								echo HTML::anchor('contacts/edit/' . $contact['ID_PEP'], __('contact.common'), array('class' => 'left_switch')); 
+								echo HTML::anchor('contacts/edit/' . $contact->id_pep, __('contact.common'), array('class' => 'left_switch')); 
 						?>
 					</td>
 					<td>
 						<a href="javascript:" class="middle_switch active"><?php echo __('contact.card'); ?></a>
 					</td>
 					<td>
-						<?php echo HTML::anchor('contacts/cardlist/' . $contact['ID_PEP'], __('contact.cardlist'), array('class' => 'middle_switch')); ?>
+						<?php echo HTML::anchor('contacts/cardlist/' . $contact->id_pep, __('contact.cardlist'), array('class' => 'middle_switch')); ?>
 					</td>
 					<td>
-						<?php echo HTML::anchor('contacts/history/' . $contact['ID_PEP'], __('contact.history'), array('class' => 'right_switch')); ?>
+						<?php echo HTML::anchor('contacts/history/' . $contact->id_pep, __('contact.history'), array('class' => 'right_switch')); ?>
 					</td>
 				</tr>
 			</tbody>
@@ -100,7 +128,7 @@
 		<div id="cardinfo">
 		<form action="contacts/savecard" method="post" onsubmit="return validatecard()">
 			<input type="hidden" name="hidden" value="form_sent" />
-			<input type="hidden" name="id" value="<?php echo $contact['ID_PEP']; ?>" />
+			<input type="hidden" name="id" value="<?php echo $contact->id_pep; ?>" />
 			<input type="hidden" name="id_cardtype" value="1" />
 			<?php if (isset($card)) { ?>
 			<input type="hidden" name="id0" value="<?php echo Arr::get($card, 'ID_CARD'); ?>" />
@@ -202,14 +230,14 @@
 							<br />
 			<?php if (isset($card) or 1) { ?>
 			<?php
-			if(Arr::get($contact, 'ACTIVE')) {
+			if($contact->is_active) {
 			?>
 				<input type="submit" value="<?php echo __('button.save'); ?>" />
 			&nbsp;&nbsp;
 			<?php }?>
 			<input type="button" value="<?php echo __('button.cancel'); ?>" onclick="document.forms[0].reset()" />
 			&nbsp;&nbsp;
-			<input type="button" value="<?php echo __('button.backtocardlist'); ?>" onclick="location.href='<?php echo URL::base() . 'contacts/cardlist/' . $contact['ID_PEP']; ?>'" />
+			<input type="button" value="<?php echo __('button.backtocardlist'); ?>" onclick="location.href='<?php echo URL::base() . 'contacts/cardlist/' . $contact->id_pep; ?>'" />
 						</div>
 						<?php } ?>
 					</td>
@@ -270,7 +298,7 @@
 			</table>
 			<br />
 			<?php
-				if(Arr::get($contact, 'ACTIVE')) {
+				if($contact->is_active) {
 				?>
 					<input type="button" value="<?php echo __('cards.reload'); ?>" onclick="reload('<?php echo Arr::get($card, 'ID_CARD'); ?>')" />
 					<br />

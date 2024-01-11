@@ -12,7 +12,7 @@ class Contact
 	public $surname;
 	public $patronymic;
 	public $photo;
-	public $id_org;// организация, куда входит контакт
+	public $id_org=1;// организация, куда входит контакт
 	public $numdoc;//номер документа
 	public $datedoc;//дата документы
 	public $is_active;//активен или неактивен
@@ -85,7 +85,7 @@ class Contact
 		//$this->cadlist=new Key($id_pep);
 		
 		
-		}
+		} 
 	}
 	
 	/*
@@ -238,6 +238,65 @@ class Contact
 		
 	}
 	
+	/*
+	10.01.2024
+	Добавление фотографии для указанного пипла
+	*/
+	
+	public function savephoto($photo)
+	{
+		/*
+		 	$sql='update people p
+			set p.photo=\''.$photo.'\'
+			where p.id_pep='.$this->id_pep;
+		try
+		{
+			
+			$query = DB::query(Database::UPDATE, $sql)
+				->execute(Database::instance('fb'));
+			return 0;
+		
+		} catch (Exception $e) {
+			
+			Log::instance()->add(Log::DEBUG, '178 '.$e->getMessage());
+			return 3;
+		}
+		
+		*/ 
+	/* 	 
+		 $query = DB::query(Database::INSERT, "update people 
+				set photo=:photo
+				where id_pep=:id_pep")
+			->bind(':photo', $photo)
+			->bind(':id_pep', $this->id_pep)
+			->execute(Database::instance('fb'));
+	 
+	
+	
+	*/
+	
+	
+		
+		$db = new PDO( Arr::get(
+      			Arr::get(
+      					Kohana::$config->load('database')->fb,
+      					'connection'
+      					),
+      		'dsn'));
+        $stmt = $db->prepare("UPDATE people SET photo = ? 
+				WHERE id_pep = ".$this->id_pep);
+    
+		$stmt->bindParam(1, $photo);
+       
+
+        $db->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);
+        $db->beginTransaction();
+        $stmt->execute();
+        $db->commit();
+        $db->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
+		Log::instance()->add(Log::DEBUG, '297 '.Debug::vars($stmt)); 
+		
+	}
 	
 	public function setTabNum()
 	{

@@ -308,6 +308,9 @@ return array
 	'contact.setNotActiveErr'		=> 'Ошибка при попытке пометить контакт :surname :name :patronymic как неактивный',
 	'contact.setIsActiveOK'			=> 'Контакт :surname :name :patronymic помечен как активный',
 	'contact.setIsActiveErr'		=> 'Ошибка при попытке пометить контакт :surname :name :patronymic как АКТИВНЫЙ',
+	'contact.titleEditContact'		=> 'Редактирование контакта :surname :name :patronymic',
+	'contact.titleCardList'			=> 'Список идентификаторов контакта :surname :name :patronymic',
+	'contact.titlefiredContact'		=> 'Просмотр удаленного контакта :surname :name :patronymic',
 	
 	'contacts.compareacl'			=>'Категория доступа',
 	
@@ -325,6 +328,10 @@ return array
 	'contact.acl'					=> 'Категории доступа',
 	'contact.grz'					=> 'Государтсвенный регистрационный знак',
 	'contact.grz_model'				=> 'Марка, модель',
+	'contact.note'					=> 'Служебные записи',
+	'contact.addOK'					=> 'Новый контакт добавлен успешно',
+	'contact.updateOk'				=> 'Контакт обновлен успешно',
+	'contact.key_occuped'				=>'Отказ в выдаче карты. Карта :idcard зарегистрирована на контакт '.HTML::anchor('guests/edit/:id_pep/guest_mode', ':surname :name :patronymic'),
 	
 	
 	'guests'						=> 'Гости',
@@ -525,4 +532,8 @@ return array
 	
 	'error.username.username_available' => 'имя пользователя занято',
 	'error.email.email_available'		=> 'адрес электронной почты занят',
+	
+	
+	'form.editContact'				=>'Редактирование контакта',
+	'form.select_file_enabled_in_edit_mode'				=>'Выбор файла с изображением доступен только в режиме редактирования контакта',
 );

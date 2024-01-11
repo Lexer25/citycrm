@@ -108,51 +108,80 @@ if ($alert) { ?>
 <?php } ?>
 <div class="onecolumn">
 	<div class="header">
-		<span ><?php echo $contact ? __('contact.title') . ': ' . iconv('CP1251', 'UTF-8', $contact->name) . ' ' . iconv('CP1251', 'UTF-8', $contact->surname) : __('contact.new'); ?></span>
-		<?php if($contact->is_active)
-				{
-
-					//echo ' <span class="label label-success">'.__('people_is_active').'</span><br>';
-					
-				} else {
-
-					echo ' <span class="label label-danger">'.__('people_is_not_active').'</span><br>';
-				}
+		<span >
+			<?php 
+			
+			switch($mode) {
+				case('new'):
+					echo  __('contact.new');
+				break;
+				
+				case('edit'):
+					echo __('contact.titleEditContact', array( 
+					':name'=> iconv('CP1251', 'UTF-8', $contact->name),
+					':surname'=> iconv('CP1251', 'UTF-8', $contact->surname),
+					':patronymic'=> iconv('CP1251', 'UTF-8', $contact->patronymic)));
+				break;
+				
+				case('fired'):
+					echo __('contact.titlefiredContact', array( 
+					':name'=> iconv('CP1251', 'UTF-8', $contact->name),
+					':surname'=> iconv('CP1251', 'UTF-8', $contact->surname),
+					':patronymic'=> iconv('CP1251', 'UTF-8', $contact->patronymic)));
+				break;
+				default:
+					echo __('form.editContact');
+				break;
+			}
+				
+				
 				?>
-		<?php if ($contact) { ?>
-		<div class="switch">
-			<table cellpadding="0" cellspacing="0">
-			<tbody>
-				<tr>
-					<td>
-						<a href="javascript:" class="left_switch active"><?php echo __('contact.common'); ?></a>
-					</td>
-					<td>
-						<?php echo HTML::anchor('contacts/acl/' . $contact->id_pep, __('contact.acl'), array('class' => 'middle_switch')); ?>
-					</td>
-					<td>
-						<?php echo HTML::anchor('contacts/cardlist/' . $contact->id_pep, __('contact.cardlist'), array('class' => 'middle_switch')); ?>
-					</td>
-					<td>
-						<?php echo HTML::anchor('contacts/history/' . $contact->id_pep, __('contact.history'), array('class' => 'right_switch')); ?>
-					</td>
-				</tr>
-			</tbody>
-			</table>
-		</div>
-		<?php } ?>
+				</span>
+
+		<?php 	switch($mode) {
+				case('edit'):
+				case('fired'):
+				 ?>
+					<div class="switch">
+						<table cellpadding="0" cellspacing="0">
+						<tbody>
+							<tr>
+								<td>
+									<a href="javascript:" class="left_switch active"><?php echo __('contact.common'); ?></a>
+								</td>
+								<td>
+									<?php echo HTML::anchor('contacts/acl/' . $contact->id_pep, __('contact.acl'), array('class' => 'middle_switch')); ?>
+								</td>
+								<td>
+									<?php echo HTML::anchor('contacts/cardlist/' . $contact->id_pep, __('contact.cardlist'), array('class' => 'middle_switch')); ?>
+								</td>
+								<td>
+									<?php echo HTML::anchor('contacts/history/' . $contact->id_pep, __('contact.history'), array('class' => 'right_switch')); ?>
+								</td>
+							</tr>
+						</tbody>
+						</table>
+					</div>
+		<?php 
+			break;
+		
+		} ?>
 	</div>
 	<br class="clear" />
 	<div class="content">
-	<?php if($contact->is_active) {?>
+	<?php if($mode=='edit') {?>
 				<form action="<?php echo Route::url('default', array('controller' => 'contacts', 'action' => 'upload')) ?>" method="post" enctype="multipart/form-data">
 				<label for="image_control">Для загрузки изображения выберите фай и нажмите кнопку Загрузить</label>
 				<div class="row">
 					<input type="file" name="image" id="image_control">
 					<input type="submit" value="Загрузить">
+					<input type="hidden" name="id_pep" value="<?php echo $contact->id_pep; ?>" />
 				</div>
 			</form>
-	<?php }?>
+	<?php } else {
+		
+		echo __('form.select_file_enabled_in_edit_mode');
+	}?>
 		<form action="contacts/save" method="post" onsubmit="return validate()">
 			<input type="hidden" name="hidden" value="form_sent" />
 			<input type="hidden" name="id_pep" value="<?php echo $contact->id_pep; ?>" />
@@ -180,7 +209,7 @@ if ($alert) { ?>
 						<fieldset>
 						<legend>Персональные данные</legend>
 						<div>
-							<label for="surname"><?php echo __('contact.surname'); ?></label>
+							<label for="surname"><?php echo __('contact.surname').'*'; ?></label>
 							<br />
 							<input type="text" size="50" name="surname" id="surname" value="<?php echo iconv('CP1251', 'UTF-8', $contact->surname); ?>" />
 							<br />
@@ -297,6 +326,7 @@ if ($alert) { ?>
 						
 						<fieldset>
 						<legend>Рабочие данные</legend>
+						<!--
 						<div>	
 							<table align="left">
 								<tbody>
@@ -324,7 +354,7 @@ if ($alert) { ?>
 							</table>
 							
 						</div>
-						
+						-->
 						
 						<div>
 						
@@ -337,6 +367,7 @@ if ($alert) { ?>
 						</div>
 						
 						<br />
+						<!--
 						<div>
 							<label for="tabnum"><?php echo __('contact.tabnum'); ?></label>
 							<br />
@@ -344,6 +375,7 @@ if ($alert) { ?>
 							<br />
 							<span class="error" id="error6" style="color: red; display: none;"><?php echo __('contact.emptytabnum'); ?></span>
 						</div>
+						-->
 						</fieldset>
 						<br />
 						<!--<fieldset>
@@ -381,66 +413,67 @@ if ($alert) { ?>
 							</table>
 						</div>
 						</fieldset> -->
-						<fieldset>
-						<legend>Служебная информация</legend>
-						<div>
-							<?php //echo Debug::vars('372',Arr::get($contact, 'ID_PEP'), Arr::get($contact, 'ACTIVE'), Arr::get($contact, 'FLAG'));?>
-							<?php
+						
+						<?php if($mode=='edit'){
+						echo '<fieldset>
+									<legend>Служебная информация</legend>
+								<div>';
 								echo '<p>'.__('ID_PEP'). $contact->id_pep;
 								echo '<p>'.__('IS_ACTIVE'). $contact->is_active;
 								echo '<p>'.__('FLAG'). $contact->flag;
-								
-								?>
-						</div>
-						</fieldset>
+						echo '</div>
+								</fieldset>';
+						}?>
+						
 						
 						<br />
 					</td>
 					<td style="padding-left: 80px; vertical-align: top;">
 					<br>
 				
-					<?php //формирование расцветки и надписей
-					//echo Debug::vars('357', $check_acl);
-					switch ($check_acl){
-						case '0':
-							$ffon='#dff0d8';
-							$fmess= __('Категории доступа контакта и организации совпадают.');
-							break;
-						case '1':
-							$ffon='#fcf8e3';
-							$fmess=  __('У контакта категорий доступа больше, чем у организации.');
-							break;
-						case '2':
-							$ffon='#f2dede';
-							$fmess=  __('У контакта категорий доступа меньше, чем у организации.');
-							break;
-						case '3':
-							$ffon='#fcf8e3';
-							$fmess=  __('Набор категорий доступа контакта отличается от набор категорий доступа родительской организации.');
-							break;
-						default:
-							$ffon='#f2dede';
-							$fmess=  __('Ошибка при сравнении категорий доступа у контакта и организации.');
-							break;
-					}
-					?>
-					<fieldset style="padding-left: 25px; background-color:<?php echo $ffon;?>">
-						<legend>Cписок категорий доступа контакта</legend>
-						<ol>
-					
-					<?php		
-					foreach($contact_acl as $key=>$value)
-					{
-						echo '<li>'.iconv('CP1251','UTF-8',  Arr::get($value, 'NAME')).'</li>';
-					}
-					?>
-					</ol>
-					<?php
-					
-					echo $fmess;
-					?>
-					</fieldset>
-					<?php
+					<?php //формирование расцветки и надписей для раздела категорий доступа
+					if($mode == 'edit'){
+						//echo Debug::vars('357', $check_acl);
+						switch ($check_acl){
+							case '0':
+								$ffon='#dff0d8';
+								$fmess= __('Категории доступа контакта и организации совпадают.');
+								break;
+							case '1':
+								$ffon='#fcf8e3';
+								$fmess=  __('У контакта категорий доступа больше, чем у организации.');
+								break;
+							case '2':
+								$ffon='#f2dede';
+								$fmess=  __('У контакта категорий доступа меньше, чем у организации.');
+								break;
+							case '3':
+								$ffon='#fcf8e3';
+								$fmess=  __('Набор категорий доступа контакта отличается от набор категорий доступа родительской организации.');
+								break;
+							default:
+								$ffon='#f2dede';
+								$fmess=  __('Ошибка при сравнении категорий доступа у контакта и организации.');
+								break;
+						}
+						?>
+						<fieldset style="padding-left: 25px; background-color:<?php echo $ffon;?>">
+							<legend>Cписок категорий доступа контакта</legend>
+							<ol>
+						
+						<?php		
+						foreach($contact_acl as $key=>$value)
+						{
+							echo '<li>'.iconv('CP1251','UTF-8',  Arr::get($value, 'NAME')).'</li>';
+						}
+						?>
+						</ol>
+						<?php
+						
+						echo $fmess;
+						?>
+						</fieldset>
+					<?php }
 					//echo Debug::vars('352', $contact );
 					
 
@@ -451,12 +484,12 @@ if ($alert) { ?>
 					'4'=>'Не строгое соответствие RFID и FaceID (тип 4)',
 					'5'=>'Проход по любому идентификатору (тип 5)');
 						
-						echo '<label for="authmode">'.__('Способ авторизации').'</label><br>';
+						//echo '<label for="authmode">'.__('Способ авторизации').'</label><br>';
 						
 						
 						//echo Form::select('authmode', $authmode_desc, $contact->authmode, array('disabled'=>'disabled', 'id'=>'authmode'));
-						echo Form::select('authmode', $authmode_desc, 3, array('disabled'=>'disabled', 'id'=>'authmode'));
-						echo '<br><label for="note">'.__('note').'</label><br>';
+						//echo Form::select('authmode', $authmode_desc, 3, array('disabled'=>'disabled', 'id'=>'authmode'));
+						echo '<br><label for="note">'.__('contact.note').'</label><br>';
 						echo Form::textarea('note', iconv('CP1251', 'UTF-8', $contact->note), array('id'=>'note'));
 						//echo '<br><label for="sysnote">'.__('sysnote').'</label><br>';
 						//echo Form::textarea('about', iconv('CP1251', 'UTF-8',$contact->SYSNOTE')), array('id'=>'sysnote'));
@@ -469,14 +502,42 @@ if ($alert) { ?>
 			</table>
 			<br />
 			<?php
-			if($contact->is_active or true) {
+			if($contact->is_active and $contact->id_pep==0) {// это добавление нового контакта
+			echo Form::hidden('todo', 'addContact');//
+			echo Form::submit('', __('button.addpeople'));
+			echo Form::submit(null, __('button.cancel'), array('onclick'=>'document.forms[0].reset()'));
+			echo Form::submit(null, __('button.backtolist'), array('onclick'=>'location.href='.URL::base().'contacts'));
+			};
+
+			if($contact->is_active and $contact->id_pep>0) {// это редактирование уже существующего контакта
+			echo Form::hidden('todo', 'updateContact');//
+			echo Form::submit('', __('button.updateContact'));
+			echo Form::submit(null, __('button.cancel'), array('onclick'=>'document.forms[0].reset()'));
+			echo Form::submit(null, __('button.backtolist'), array('onclick'=>'location.href='.URL::base().'contacts'));
+			};
+			echo Form::close();
+			
+			
+			
+			
+			if($contact->is_active == 0 and $contact->id_pep>0) {// это редактирование уже существующего 	
+			echo Form::open('contacts/restore');
+			echo Form::hidden('todo', 'hardDeleteContact');
+			echo Form::hidden('id_pep', $contact->id_pep);
+			echo Form::submit(null, __('restore'));
+			echo Form::close();
+			}
+			
+			if($contact->is_active == 0 and $contact->id_pep>0) {// это редактирование уже существующего 	
+			echo Form::open('contacts/hardDeleteContact');
+			echo Form::hidden('todo', 'hardDeleteContact');
+			echo Form::hidden('id_pep', $contact->id_pep);
+			echo Form::submit(null, __('totalDelete'));
 			?>
-			<input type="submit" value="<?php echo __('button.save'); ?>" />
-			&nbsp;&nbsp;
-			<input type="button" value="<?php echo __('button.cancel'); ?>" onclick="document.forms[0].reset()" />
-			&nbsp;&nbsp;
-			<input type="button" value="<?php echo __('button.backtolist'); ?>" onclick="location.href='<?php echo URL::base(); ?>contacts'" />
-			<?php }?>
-		</form>
+			<input type="button" value="<?php echo __('cards.delete'); ?>" onclick="return confirm('Пипел будет удален из бД')" />
+			<?php echo Form::close();
+			}
+			
+			?>
 	</div>
 </div>

@@ -104,23 +104,53 @@ if ($alert) { ?>
 <?php } ?>
 <div class="onecolumn">
 	<div class="header">
-		<span><?php echo $contact ? __('contact.title') . ': ' . iconv('CP1251', 'UTF-8', $contact['NAME']) . ' ' . iconv('CP1251', 'UTF-8', $contact['SURNAME']) : __('contact.new'); ?></span>
+		<span>
+		
+		<?php 
+			
+			switch($mode) {
+				case('new'):
+					;
+				break;
+				
+				case('edit'):
+					echo __('contact.titleEditContact', array( 
+					':name'=> iconv('CP1251', 'UTF-8', $contact->name),
+					':surname'=> iconv('CP1251', 'UTF-8', $contact->surname),
+					':patronymic'=> iconv('CP1251', 'UTF-8', $contact->patronymic)));
+				break;
+				
+				case('fired'):
+					echo __('contact.titlefiredContact', array( 
+					':name'=> iconv('CP1251', 'UTF-8', $contact->name),
+					':surname'=> iconv('CP1251', 'UTF-8', $contact->surname),
+					':patronymic'=> iconv('CP1251', 'UTF-8', $contact->patronymic)));
+				break;
+				default:
+					echo __('form.editContact');
+				break;
+			}
+				
+				
+				?>
+		
+		</span>
 		<?php if ($contact) { ?>
 		<div class="switch">
 			<table cellpadding="0" cellspacing="0">
 			<tbody>
 				<tr>
 					<td>
-						<?php echo HTML::anchor('contacts/edit/' . $contact['ID_PEP'], __('contact.common'), array('class' => 'left_switch')); ?>
+						<?php echo HTML::anchor('contacts/edit/' . $contact->id_pep, __('contact.common'), array('class' => 'left_switch')); ?>
 					</td>
 					<td>
 						<a href="javascript:" class="middle_switch active"><?php echo __('contact.acl'); ?></a>
 					</td>
 					<td>
-						<?php echo HTML::anchor('contacts/cardlist/' . $contact['ID_PEP'], __('contact.cardlist'), array('class' => 'middle_switch')); ?>
+						<?php echo HTML::anchor('contacts/cardlist/' . $contact->id_pep, __('contact.cardlist'), array('class' => 'middle_switch')); ?>
 					</td>
 					<td>
-						<?php echo HTML::anchor('contacts/history/' . $contact['ID_PEP'], __('contact.history'), array('class' => 'right_switch')); ?>
+						<?php echo HTML::anchor('contacts/history/' . $contact->id_pep, __('contact.history'), array('class' => 'right_switch')); ?>
 					</td>
 				</tr>
 			</tbody>
@@ -132,7 +162,7 @@ if ($alert) { ?>
 	<div class="content">
 		<form action="contacts/saveACL" method="post" onsubmit="return validate()">
 			<input type="hidden" name="hidden" value="form_sent" />
-			<input type="hidden" name="id" value="<?php echo $contact['ID_PEP']; ?>" />
+			<input type="hidden" name="id" value="<?php echo $contact->id_pep; ?>" />
 		
 		<div style="padding-left: 15px">
 		
@@ -169,7 +199,7 @@ if ($alert) { ?>
 <div>
 			<br />
 				<?php
-			if(Arr::get($contact, 'ACTIVE')) {
+			if($contact->is_active) {
 			?>
 			<input type="submit" value="<?php echo __('button.save'); ?>" />
 			&nbsp;&nbsp;

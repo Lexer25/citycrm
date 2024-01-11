@@ -298,7 +298,7 @@
 			</table>
 			<br />
 			<?php
-				if(Arr::get($contact, 'ACTIVE')) {
+				if($contact->is_active) {
 				?>
 					<input type="button" value="<?php echo __('cards.reload'); ?>" onclick="reload('<?php echo Arr::get($card, 'ID_CARD'); ?>')" />
 					<br />

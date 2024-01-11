@@ -1,4 +1,5 @@
 <?php 
+// список идентификаторов
 //echo Debug::vars('2', $cards); exit;
 //echo Debug::vars('2', $catdTypelist); //exit;
 //echo Debug::vars('3', $alert); //exit;
@@ -61,7 +62,7 @@ if ($alert) { ?>
 						</td>
 						-->
 						<td><?php 
-							echo HTML::anchor('contacts/card/' . $card['ID_CARD'], $card['ID_CARD']); ?></td>
+							echo HTML::anchor('cards/edit/' . $card['ID_CARD'], $card['ID_CARD']); ?></td>
 						<td><?php echo iconv('CP1251', 'UTF-8', Arr::get($cardtype, 'smallname')); ?></td> 
 						<td><?php echo $card['TIMESTART']; ?></td> 
 						<td><?php echo $card['TIMEEND']; ?></td>

@@ -209,4 +209,47 @@ class Keyk
 			}
 	}
 	
+	/*
+	11.02.2024
+	Обновление данных указанной карты.
+	*/
+	
+	public function update()
+	{
+			
+			/*
+			
+UPDATE CARD
+SET ID_PEP = 13792,
+    ID_ACCESSNAME = NULL,
+    TIMESTART = '1-OCT-2023 00:00:00',
+    TIMEEND = '1-OCT-2024 00:00:00',
+    NOTE = '',
+    STATUS = 0,
+    "ACTIVE" = 1,
+    FLAG = 0,
+    ID_CARDTYPE = 1,
+    CREATEDAT = '29-SEP-2023 12:03:25'
+WHERE (ID_CARD = '00084AC7') AND (ID_DB = 1);
+
+
+*/
+			$sql='UPDATE CARD
+			SET TIMESTART = \''.$this->timestart.'\',
+				TIMEEND = \''.$this->timeend.'\',
+				"ACTIVE" = '.($this->is_active? 1 : 0 ).'
+				WHERE (ID_CARD = \''.$this->id_card.'\') AND (ID_DB = 1)';
+				//echo Debug::vars('242', $this,  $sql); exit;
+			try {
+				DB::query(Database::UPDATE,$sql)	
+				->execute(Database::instance('fb'));
+				return 0;	
+				
+			} catch (Exception $e) {
+				Log::instance()->add(Log::DEBUG, $e->getMessage());
+				
+				return 3;
+			}
+	}
+	
 }

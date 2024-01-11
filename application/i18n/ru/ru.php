@@ -322,7 +322,7 @@ return array
 	'contact.history'				=> 'Журнал событий',
 	'contact.card'					=> 'Карта',
 	'contact.cardlist'				=> 'Список карт',
-	'contact.cardid'				=> 'Код карты',
+	'contact.cardid'				=> 'Код идентификатора',
 	'contact.cardstore'				=> 'Запомнить код',
 	'contact.new'					=> 'Новый контакт',
 	'contact.acl'					=> 'Категории доступа',
@@ -382,14 +382,14 @@ return array
 	'sidebar.archive'				=> 'Архив гостей',
 	'sidebar.config'				=> 'Настройка',
 
-	'cards.title'					=> 'Карты',
+	'cards.title'					=> 'Список идентификаторов',
 	'cards.empty'					=> 'Список карт пуст',
-	'cards.code'					=> 'Код карты',
+	'cards.code'					=> 'Код идентификатора',
 	'cards.datestart'				=> 'Дата начала действия',
 	'cards.dateend'					=> 'Дата окончания действия',
 	'cards.useenddate'				=> 'Учитывать срок действия карты',
 	'cards.active'					=> 'Карта активна',
-	'cards.details'					=> 'Данные карты',
+	'cards.details'					=> 'Данные идентификатора',
 	'cards.loadhistory'				=> 'Загрузка карты в точки прохода',
 	'cards.nohistory'				=> 'Записи не найдены',
 	'cards.access'					=> 'Категория доступа',
@@ -416,6 +416,15 @@ return array
 	'card.wronglenght'				=> 'Номер карты должен содержать 8 символов',
 	'cards.grz'						=> 'Данные ГРЗ',
 	'cards.delete_grz'				=> 'Удалить ГРЗ',
+	'card.common'					=> 'Свойства',
+	'card.titleEdit'				=> 'Свойства идентификатора :id_card',
+	'card.titleLoad'				=> 'Таблица загрузки идентификатора :id_card в точки прохода',
+	'card.titleHistory'				=> 'История идентификатора :id_card',
+	'card.updateOk'					=> 'Данные карты обновлены успешно',
+	'card.updateErr'				=> 'Ошибка! Данные карты не обновлены',
+	'card.reloadOk'					=> 'Команда на повторную загрузку идентификатора :id_card выполнена успешно',
+	'card.load'						=> 'Таблица загрузки идентификаторов',
+	'card.history'					=> 'История',
 	
 	
 	'companies.title'				=> 'Организации',
@@ -497,6 +506,9 @@ return array
 	'device.ipPortFormatError'	=> 'Неправильный формат IP порта. Значение должно быть .',
 	'device.card_not_in_order_from_load'=>'Нет',
 	'device.card_in_order_from_load'=>'Да',
+	'device.no_data_about_load_time'=>'Нет данных',
+	'device.no_data_about_load_result'=>'Нет данных',
+	'device.no_data_about_load_time_stamp'=>'Нет данных',
 
 	
 	

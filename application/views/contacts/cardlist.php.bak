@@ -15,7 +15,7 @@ include Kohana::find_file('views','alert');
 				break;
 				
 				case('edit'):
-					echo __('contact.titleEditContact', array( 
+					echo __('contact.titleCardList', array( 
 					':name'=> iconv('CP1251', 'UTF-8', $contact->name),
 					':surname'=> iconv('CP1251', 'UTF-8', $contact->surname),
 					':patronymic'=> iconv('CP1251', 'UTF-8', $contact->patronymic)));
@@ -90,7 +90,7 @@ include Kohana::find_file('views','alert');
 							<input type="checkbox" />
 						</td>
 						-->
-						<td><?php echo HTML::anchor('contacts/card/' . $card['ID_CARD'], $card['ID_CARD']); ?></td>
+						<td><?php echo HTML::anchor('cards/card/' . $card['ID_CARD'], $card['ID_CARD']); ?></td>
 						<td><?php echo iconv('CP1251', 'UTF-8', Arr::get($cardtype, 'smallname')); ?></td> 
 						<td><?php echo $card['TIMESTART']; ?></td>
 						<td><?php echo $card['TIMEEND']; ?></td>

@@ -717,16 +717,7 @@ class Controller_Contacts extends Controller_Template
 		$this->redirect('contacts/cardlist/' . $card->id_pep);
 	}
 	
-	public function action_reload()
-	{
-		$id=$this->request->param('id');
-		$card = Model::factory('Card')->getCard($id);
-		
-		Model::factory('Card')->reload($id);
-		
-		Session::instance()->set('alert', __('cards.deleted'));
-		$this->redirect('contacts/cardlist');
-	}
+	
 	
 	
 	

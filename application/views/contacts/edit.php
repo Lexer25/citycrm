@@ -90,6 +90,7 @@
 </script>
 
 <?php 
+//echo Debug::vars('93 contact mode', $mode);
 //echo Debug::vars('89 contact', $contact);
 //echo Debug::vars('90', $contact_acl); exit;
 //echo Debug::vars('95', $org_tree);
@@ -414,7 +415,7 @@ if ($alert) { ?>
 						</div>
 						</fieldset> -->
 						
-						<?php if($mode=='edit'){
+						<?php if($mode=='edit' or $mode=='fired'){
 						echo '<fieldset>
 									<legend>Служебная информация</legend>
 								<div>';
@@ -502,41 +503,42 @@ if ($alert) { ?>
 			</table>
 			<br />
 			<?php
-			if($contact->is_active and $contact->id_pep==0) {// это добавление нового контакта
-			echo Form::hidden('todo', 'addContact');//
-			echo Form::submit('', __('button.addpeople'));
-			echo Form::submit(null, __('button.cancel'), array('onclick'=>'document.forms[0].reset()'));
-			echo Form::submit(null, __('button.backtolist'), array('onclick'=>'location.href='.URL::base().'contacts'));
-			};
-
-			if($contact->is_active and $contact->id_pep>0) {// это редактирование уже существующего контакта
-			echo Form::hidden('todo', 'updateContact');//
-			echo Form::submit('', __('button.updateContact'));
-			echo Form::submit(null, __('button.cancel'), array('onclick'=>'document.forms[0].reset()'));
-			echo Form::submit(null, __('button.backtolist'), array('onclick'=>'location.href='.URL::base().'contacts'));
-			};
-			echo Form::close();
+				switch($mode) {
+				case('new'):
+					echo Form::hidden('todo', 'addContact');//
+					echo Form::submit('', __('button.addpeople'));
+					echo Form::submit(null, __('button.cancel'), array('onclick'=>'document.forms[0].reset()'));
+					echo Form::submit(null, __('button.backtolist'), array('onclick'=>'location.href='.URL::base().'contacts'));
+					echo Form::close();
+				break;
+				
+				case('edit'):
 			
+					echo Form::hidden('todo', 'updateContact');//
+					echo Form::submit('', __('button.save'));
+					echo Form::submit(null, __('button.cancel'), array('onclick'=>'document.forms[0].reset()'));
+					echo Form::submit(null, __('button.backtolist'), array('onclick'=>'location.href='.URL::base().'contacts'));
+					echo Form::close();
 			
-			
-			
-			if($contact->is_active == 0 and $contact->id_pep>0) {// это редактирование уже существующего 	
-			echo Form::open('contacts/restore');
-			echo Form::hidden('todo', 'hardDeleteContact');
-			echo Form::hidden('id_pep', $contact->id_pep);
-			echo Form::submit(null, __('restore'));
-			echo Form::close();
+				break;
+				
+				case('fired'):
+					echo Form::close();
+					echo Form::open('contacts/delete');
+					echo Form::hidden('todo', 'hardDeleteContact');
+					echo Form::hidden('id_pep', $contact->id_pep);
+					echo Form::submit(null, __('button.totalDelete'));
+						echo Form::close();
+				break;
+				default:
+					echo __('form.editContact');
+				break;
 			}
 			
-			if($contact->is_active == 0 and $contact->id_pep>0) {// это редактирование уже существующего 	
-			echo Form::open('contacts/hardDeleteContact');
-			echo Form::hidden('todo', 'hardDeleteContact');
-			echo Form::hidden('id_pep', $contact->id_pep);
-			echo Form::submit(null, __('totalDelete'));
-			?>
-			<input type="button" value="<?php echo __('cards.delete'); ?>" onclick="return confirm('Пипел будет удален из бД')" />
-			<?php echo Form::close();
-			}
+			
+		
+			
+			
 			
 			?>
 	</div>

@@ -122,8 +122,8 @@
 							<a href="contacts/view/<?php echo Arr::get($pep,'ID_PEP'); ?>"><img src="images/icon_view.png" alt="view" class="help" title="<?php echo __('tip.view'); ?>"/></a>
 							<?php } ?>
 							<?php if (Arr::get($pep,'IS_ACTIVE') == 1) { ?>
-									<a href="javascript:" onclick="if (confirm('<?php echo __('contacts.confirmSetNotActive'); ?>')) location.href='<?php echo URL::base() . 'contacts/fired/' . $pep['ID_PEP']; ?>';">
-									<?php echo HTML::image('images/icon_delete.png', array('title' => __('tip.fired'), 'class' => 'help')); ?>
+									<a href="javascript:" onclick="if (confirm('<?php echo __('contacts.confirmdelete1'); ?>')) location.href='<?php echo URL::base() . 'contacts/delete/' . $pep['ID_PEP']; ?>';">
+									<?php echo HTML::image('images/icon_delete.png', array('title' => __('tip.delete'), 'class' => 'help')); ?>
 							</a>
 							<?php } else {?>
 								<a href="javascript:" onclick="if (confirm('<?php echo __('contacts.restore'); ?>')) location.href='<?php echo URL::base() . 'contacts/restore/' . Arr::get($pep,'ID_PEP'); ?>';">

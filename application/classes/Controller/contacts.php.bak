@@ -384,17 +384,14 @@ class Controller_Contacts extends Controller_Template
 	}
 	
 	/*
-	Удаление сотрудника 
+		Увольнение сотрудника 
 	
 	*/
 	
-	public function action_delete()
+	//public function action_delete()
+	public function action_fired()
 	{
-		/* $id=$this->request->param('id');
-		Model::factory('Contact')->delete($id);
-		Session::instance()->set('alert', __('contact.deleted'));
-		$this->redirect('contacts');
-		 */
+		
 		$id_pep=$this->request->param('id');
 		$key=new Keyk();
 		$contact=new Contact($id_pep);
@@ -410,7 +407,7 @@ class Controller_Contacts extends Controller_Template
 		}
 		
 		/* делаю сотрудника неактивным*/
-		if($contact->setNotActiveOnIdPep()){
+		if($contact->setNotActiveOnIdPep() == 0){
 			$alert.='<br>'.__('contact.setNotActiveOK', array(':name'=>iconv('CP1251', 'UTF-8',$contact->name),':surname'=>iconv('CP1251', 'UTF-8',$contact->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$contact->patronymic)));
 				
 		} else {
@@ -419,7 +416,33 @@ class Controller_Contacts extends Controller_Template
 		}
 		
 		Session::instance()->set('alert',$alert);
-		$this->redirect('contacts');
+		$this->redirect('companies/people/'.$contact->id_org);
+	}
+	
+	/*
+		12.01.2024
+		Удаление сотрудника 
+	
+	*/
+	
+	public function action_delete()
+	{
+		//echo Debug::vars('430', $_POST); exit;
+			
+		$contact=new Contact(Arr::get($_POST, 'id_pep'));
+		
+		$alert='';
+		/* делаю сотрудника неактивным*/
+		if($contact->delOnIdPep() == 0){
+			$alert.='<br>'.__('contact.deleteOK', array(':name'=>iconv('CP1251', 'UTF-8',$contact->name),':surname'=>iconv('CP1251', 'UTF-8',$contact->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$contact->patronymic)));
+				
+		} else {
+			$alert.='<br>'.__('contact.deleteErr', array(':name'=>iconv('CP1251', 'UTF-8',$contact->name),':surname'=>iconv('CP1251', 'UTF-8',$contact->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$contact->patronymic)));
+	
+		}
+		
+		Session::instance()->set('alert',$alert);
+		$this->redirect('contacts/deletedList');
 	}
 	
 	/*
@@ -430,13 +453,12 @@ class Controller_Contacts extends Controller_Template
 	public function action_restore()
 	{
 		$id_pep=$this->request->param('id');
-		/* Model::factory('Contact')->restore($id);
-		Session::instance()->set('alert', __('contact.restore'));
-		$this->redirect('contacts'); */
 		$contact=new Contact($id_pep);
 		
 		/* делаю сотрудника АКТИВНЫМ*/
-		if($contact->setIsActiveOnIdPep()==1){
+		if($contact->setIsActiveOnIdPep()==0){
+			
+			$contact->setAclDefault();// устанавливаю категории доступа по умолчанию
 			$alert=__('contact.setIsActiveOK', array(':name'=>iconv('CP1251', 'UTF-8',$contact->name),':surname'=>iconv('CP1251', 'UTF-8',$contact->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$contact->patronymic)));
 				
 		} else {
@@ -716,6 +738,8 @@ class Controller_Contacts extends Controller_Template
 		Session::instance()->set('alert', __('cards.deleted', array(':id_card'=>$id)));
 		$this->redirect('contacts/cardlist/' . $card->id_pep);
 	}
+	
+	
 	
 	
 	

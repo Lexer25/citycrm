@@ -81,7 +81,7 @@ if ($alert) { ?>
 						?></td>
 						<td>
 							<a href="javascript:" onclick="if (confirm('<?php echo __('cards.confirmdelete'); ?>')) location.href='<?php echo URL::base() . 'cards/delete/' . $card['ID_CARD']; ?>';">
-								<?php echo HTML::image('images/icon_delete.png', array('title' => __('tip.delete'), 'class' => 'help')); ?>
+								<?php echo HTML::image('images/icon_delete.png', array('title' => __('tip.fired'), 'class' => 'help')); ?>
 							</a>
 						</td>
 					</tr>

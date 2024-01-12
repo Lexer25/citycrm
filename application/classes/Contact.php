@@ -438,7 +438,7 @@ class Contact
 		
 		$sql='delete from people p 
 			where p.id_pep='.$this->id_pep;
-			//echo Debug::vars('307', $sql); exit;
+		//	echo Debug::vars('307', $sql); exit;
 		try {
 			$query = DB::query(Database::DELETE, $sql)
 				->execute(Database::instance('fb'));

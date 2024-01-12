@@ -17,6 +17,9 @@ return array
 	'tip.delete'					=> 'Удалить',
 	'tip.restore'					=> 'Восстановить',
 	'tip.view'						=> 'Посмотреть',
+	'tip.fired'						=> 'Уволить',
+	
+	
 	'search'						=> 'Поиск',
 	'yes'							=> 'Да',
 	'no'							=> 'Нет',
@@ -269,9 +272,11 @@ return array
 	'contacts.phone'				=> 'Телефон',
 	'contacts.empty'				=> 'Контакты не найдены',
 	'contacts.confirmdelete'		=> 'Вы действительно хотите удалить контакт?',
-	'contacts.restore'		=> 'Вы действительно хотите восстановить контакт?',
+	'contacts.confirmSetNotActive'	=> 'Контакт будет уволенный.<br>Контакт можно восстановить в разделе Контакты - Уволенные.',
+	'contacts.restore'				=> 'Вы действительно хотите восстановить контакт?',
 
 	'contact.title'					=> 'Контакт',
+	'contact.surname'				=> 'Фамилия',
 	'contact.surname'				=> 'Фамилия',
 	'contact.name'					=> 'Имя',
 	'contact.patronymic'			=> 'Отчество',
@@ -304,8 +309,10 @@ return array
 	'contact.saved'					=> 'Контакт сохранен',
 	'contact.updated'				=> 'Контакт обновлен',
 	'contact.deleted'				=> 'Контакт удален',
-	'contact.setNotActiveOK'		=> 'Контакт :surname :name :patronymic отмечен как неактивный',
-	'contact.setNotActiveErr'		=> 'Ошибка при попытке пометить контакт :surname :name :patronymic как неактивный',
+	'contact.setNotActiveOK'		=> 'Контакт :surname :name :patronymic отмечен как УВОЛЕННЫЙ',
+	'contact.setNotActiveErr'		=> 'Ошибка при попытке пометить контакт :surname :name :patronymic как УВОЛЕННЫЙ',
+	'contact.deleteOK'				=> 'Контакт :surname :name :patronymic удален',
+	'contact.deleteErr'				=> 'Ошибка при удалении контакта :surname :name :patronymic',
 	'contact.setIsActiveOK'			=> 'Контакт :surname :name :patronymic помечен как активный',
 	'contact.setIsActiveErr'		=> 'Ошибка при попытке пометить контакт :surname :name :patronymic как АКТИВНЫЙ',
 	'contact.titleEditContact'		=> 'Редактирование контакта :surname :name :patronymic',
@@ -331,8 +338,9 @@ return array
 	'contact.note'					=> 'Служебные записи',
 	'contact.addOK'					=> 'Новый контакт добавлен успешно',
 	'contact.updateOk'				=> 'Контакт обновлен успешно',
-	'contact.key_occuped'				=>'Отказ в выдаче карты. Карта :idcard зарегистрирована на контакт '.HTML::anchor('guests/edit/:id_pep/guest_mode', ':surname :name :patronymic'),
-	
+	'contact.key_occuped'			=>'Отказ в выдаче карты. Карта :idcard зарегистрирована на контакт '.HTML::anchor('guests/edit/:id_pep/guest_mode', ':surname :name :patronymic'),
+	'contacts.id_pep'				=>'id_pep',
+	'contacts.titleSearch'			=>'Результат поиска по фильтру \':filter\'',
 	
 	'guests'						=> 'Гости',
 	'guest.new'						=> 'Добавить нового гостя',
@@ -381,6 +389,7 @@ return array
 	
 	'sidebar.archive'				=> 'Архив гостей',
 	'sidebar.config'				=> 'Настройка',
+	'sidebar.deletedcontact'		=> 'Уволенные контакты',
 
 	'cards.title'					=> 'Список идентификаторов',
 	'cards.empty'					=> 'Список карт пуст',
@@ -464,6 +473,8 @@ return array
 	'button.backtolist'				=> 'Вернуться к списку',
 	'button.backtocardlist'			=> 'Вернуться к списку карт',
 	'button.addpeople'				=> 'Добавить контакт',
+	'button.totalDelete'			=> 'Удалить контакт',
+	
 
 	'settings.title'				=> 'Настройки',
 	'settings.language'				=> 'Выберите язык',
@@ -508,6 +519,7 @@ return array
 	'device.card_in_order_from_load'=>'Да',
 	'device.no_data_about_load_time'=>'Нет данных',
 	'device.no_data_about_load_result'=>'Нет данных',
+	'device.no_data_about_load_time_stamp'=>'Нет данных',
 
 	
 	

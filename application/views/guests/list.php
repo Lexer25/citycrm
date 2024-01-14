@@ -63,7 +63,6 @@ if ($alert) { ?>
 						<th><?php echo __('contacts.code'); ?></th>
 						
 						<th><?php echo __('contacts.name'); ?></th>
-						<?php if ($showphone == 1) echo '<th>' . __('contacts.phone') . '</th>'; ?>
 						<th><?php echo __('contacts.company'); ?></th>
 						<th><?php echo __('key.rfid'); ?></th>
 						<th><?php echo __('key.grz'); ?></th>
@@ -75,10 +74,8 @@ if ($alert) { ?>
 				</thead>
 				<tbody>
 					<?php foreach ($people as $pep) { 
-					//$key= new Key(Arr::get($pep,'ID_PEP'));
 					$guest=new Guest(Arr::get($pep,'ID_PEP'));
-					//echo Debug::vars('93', $guest);
-					?>
+						?>
 					
 					<tr>
 						<!--
@@ -89,17 +86,8 @@ if ($alert) { ?>
 						<td><?php echo iconv('CP1251', 'UTF-8', $guest->tabnum); ?></td>
 						
 						<td><?php 
-
 								echo HTML::anchor('guests/edit/' . $guest->id_pep.'/'.Session::instance()->get('mode'), iconv('CP1251', 'UTF-8', $guest->name . ' ' . $guest->surname));
-						
 						?></td>
-						<?php 
-						if ($showphone == 1) {
-							$p = $guest->phonework;
-							if ($p == '(   )    -  -   (    )') $p = '';
-							echo '<td nowrap="nowrap">' . str_replace(' (    )', '', $p) . '</td>';
-						}
-						?>
 						<td><?php 
 								$org= new Company($guest->id_org);
 								echo iconv('CP1251', 'UTF-8', $org->name);
@@ -153,19 +141,10 @@ if ($alert) { ?>
 						<td>
 							<?php
 							
-							//echo HTML::anchor('guests/edit/'.$guest->id_pep, HTML::image('images/icon_edit.png', array('alt'=>'edit', 'class'=>'help', 'title'=>__('tip.edit'))));
-							//echo HTML::anchor('guests/view/'.$guest->id_pep, HTML::image('images/icon_view.png', array('alt'=>'edit', 'class'=>'help', 'title'=>__('tip.view'))));
-							
-						
 							echo HTML::anchor('guests/delete/'.$guest->id_pep, 
 							HTML::image('images/icon_delete.png', array('alt'=>'edit', 'class'=>'help', 'title'=>__('tip.delete'))),
 							array('onclick'=>'return confirm(\''.__('guest.confirmdelete').'\')')
 								);
-							
-							
-								
-							echo '<br><br><br><br>';
-							
 							?>
 							
 						</td>

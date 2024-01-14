@@ -388,7 +388,7 @@ class Controller_Contacts extends Controller_Template
 	
 	*/
 	
-	//public function action_delete()
+	
 	public function action_fired()
 	{
 		
@@ -794,20 +794,7 @@ class Controller_Contacts extends Controller_Template
 				}
 				
 				
-		/* if ($idcard0) {
-			// update
-			//echo Debug::vars('363 update' ); exit;
-			Model::factory('Card')->update($idpeople, $idcard, $datestart, $dateend, $useenddate, $cardstate, $isactive, $idaccess, $note);
-			Session::instance()->set('alert', __('cards.updated'));
-		} else {
-			//save
-			
-			Model::factory('Card')->save($idpeople, $idcard, $datestart, $dateend, $useenddate, $cardstate, $isactive, $idaccess, $id_cardtype, $note);
-			Session::instance()->set('alert', __('cards.saved'));
-			
-		}
-		echo Debug::vars('373 after save '.$idcard); exit; */
-		//$this->redirect('contacts/card/' . $idcard);
+		
 		$this->redirect('contacts/cardlist/' . $id_pep);
 	}
 	

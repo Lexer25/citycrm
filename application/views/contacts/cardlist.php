@@ -74,11 +74,13 @@ include Kohana::find_file('views','alert');
 							<input type="checkbox" id="check_all" name="check_all"/>
 						</th>
 						-->
-						<th style="width:20%"><?php echo __('cards.code'); ?></th>
-						<th style="width:30%"><?php echo __('cards.datestart'); ?></th>
-						<th style="width:30%"><?php echo __('cards.datestart'); ?></th>
-						<th style="width:30%"><?php echo __('cards.dateend'); ?></th>
-						<th style="width:20%"><?php echo __('cards.active'); ?></th>
+						<th><?php echo __('cards.code'); ?></th>
+						<th><?php echo __('cards.datestart'); ?></th>
+						<th><?php echo __('cards.datestart'); ?></th>
+						<th><?php echo __('cards.dateend'); ?></th>
+						<th><?php echo __('cards.active'); ?></th>
+						<th><?php echo __('cards.action'); ?></th>
+						
 					</tr>
 				</thead>
 				<tbody>
@@ -95,6 +97,11 @@ include Kohana::find_file('views','alert');
 						<td><?php echo $card['TIMESTART']; ?></td>
 						<td><?php echo $card['TIMEEND']; ?></td>
 						<td><?php echo $card['ACTIVE'] == 1 ? __('yes') : __('no'); ?></td>
+						<td>
+							<a href="javascript:" onclick="if (confirm('<?php echo __('cards.confirmdelete'); ?>')) location.href='<?php echo URL::base() . 'contacts/deletecard/' . $card['ID_CARD']; ?>';">
+								<?php echo HTML::image('images/icon_delete.png', array('title' => __('tip.fired'), 'class' => 'help')); ?>
+							</a>
+						</td>
 					</tr>
 					<?php } ?>
 				</tbody>

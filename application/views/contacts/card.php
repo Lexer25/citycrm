@@ -77,7 +77,7 @@
 				break;
 				
 				case('edit'):
-					echo __('contact.titleEditContact', array( 
+					echo __('contact.titleEditContactAddId', array( 
 					':name'=> iconv('CP1251', 'UTF-8', $contact->name),
 					':surname'=> iconv('CP1251', 'UTF-8', $contact->surname),
 					':patronymic'=> iconv('CP1251', 'UTF-8', $contact->patronymic)));

@@ -104,7 +104,9 @@ if ($alert) { ?>
 <?php } ?>
 <div class="onecolumn">
 	<div class="header">
-		<span><?php echo $contact ? __('contact.title') . ': ' . iconv('CP1251', 'UTF-8', $contact['NAME']) . ' ' . iconv('CP1251', 'UTF-8', $contact['SURNAME']) : __('contact.new'); ?></span>
+		<span>
+			<?php echo $contact ? __('guest.title') . ': ' . iconv('CP1251', 'UTF-8', $contact['NAME']) . ' ' . iconv('CP1251', 'UTF-8', $contact['SURNAME']) : __('contact.new'); ?>
+		</span>
 		<?php if ($contact) { ?>
 		<div class="switch">
 			<table cellpadding="0" cellspacing="0">
@@ -174,7 +176,7 @@ if ($alert) { ?>
 			<input type="button" value="<?php echo __('button.cancel'); ?>" onclick="document.forms[0].reset()" />
 			&nbsp;&nbsp;
 			<?php }?>
-			<input type="button" value="<?php echo __('button.backtolist'); ?>" onclick="location.href='<?php echo URL::base(); ?>contacts'" />
+			<!-- <input type="button" value="<?php echo __('button.backtolist'); ?>" onclick="location.href='<?php echo URL::base(); ?>guests/edit/<?php echo $contact['ID_PEP']; ?>/guest_mode'" /> -->
 		</form>
 	</div>
 </div>

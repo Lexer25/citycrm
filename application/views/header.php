@@ -7,17 +7,13 @@
 ?>
 <div id="header">
 	<div id="logo"><img src="images/logo2.png" alt="logo"/></div>
-	<div id="search">
-		<?php 
-		
-		echo  __('system.version'). Arr::get(Kohana::$config->load('config_newcrm')->version, 'minor').'.'.Arr::get(Kohana::$config->load('config_newcrm')->version, 'major'); 
-
-		
-		?>
-	</div>
+	
 
 	<div id="search">
 		<?php echo HTML::anchor('settings/list', __('settings')) . ' | ' . HTML::anchor('logout', __('logout')); ?>
+	</div>
+	<div id="search">
+		<?php echo  __('system.version'). Arr::get(Kohana::$config->load('config_newcrm')->version, 'minor').'.'.Arr::get(Kohana::$config->load('config_newcrm')->version, 'major'); ?>
 	</div>
 
 	<div id="account_info">

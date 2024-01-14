@@ -22,7 +22,7 @@
 			return false;
 		}
 
-		if (!$('#idcard').val().match(/^[0-9a-f]{1,8}$/i)) {
+		if (!$('#idcard').val().match(/^[0-9a-zA-Z]{5,9}$/i)) {
 			$('#error12').show();
 			$('#idcard').focus();
 			return false;
@@ -129,7 +129,7 @@ if (isset($alert)) { ?>
 												<br />
 											<?php } ?>
 												<span class="error" id="error11" style="color: red; display: none;"><?php echo __('card.emptyid'); ?></span>
-												<span class="error" id="error12" style="color: red; display: none;"><?php echo __('card.wrongcharacter'); ?></span>
+												<span class="error" id="error12" style="color: red; display: none;"><?php echo __('card.wrongcharactergrz'); ?></span>
 												<?php if (isset($newcard)) { ?>
 												&nbsp;&nbsp;
 												<input type="button" value="<?php echo __('contact.cardstore'); ?>" />

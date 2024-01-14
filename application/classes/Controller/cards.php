@@ -67,9 +67,15 @@ class Controller_Cards extends Controller_Template
 			->bind('pagination', $pagination);
 	}
 
-	public function action_delete($id)
+	public function action_delete()
 	{
-		Model::factory('Card')->delete($id);
+		//echo Debug::vars('72', $this->request->param('id')); exit;
+		$key=new Keyk($this->request->param('id'));
+		if($key->delCard()){
+				$alert=__('cards.deletedOk', array(':id_card'=>$this->request->param('id')));
+		} else {
+			$alert=__('cards.deletedErr', array(':id_card'=>$this->request->param('id')));
+		}
 		$this->redirect('cards');
 	}
 	

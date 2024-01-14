@@ -65,6 +65,7 @@ $catdTypelist = Model::factory('Card')->getcatdTypelist();//получил сп�
 						<td><?php echo $card['TIMESTART']; ?></td>
 						<td><?php echo $card['TIMEEND']; ?></td>
 						<td><?php echo $card['ACTIVE'] == 1 ? __('yes') : __('no'); ?></td>
+
 					</tr>
 					<?php } ?>
 				</tbody>
@@ -82,5 +83,6 @@ $catdTypelist = Model::factory('Card')->getcatdTypelist();//получил сп�
 		<input type="button" value="<?php echo __('cards.create'); ?>" onclick="location.href='<?php echo URL::base() . 'guests/addcard/' . $contact['ID_PEP']; ?>'" />
 		<input type="button" value="<?php echo __('cards.create_grz'); ?>" onclick="location.href='<?php echo URL::base() . 'guests/addgrz/' . $contact['ID_PEP']; ?>'" />
 		<?php } ?>
+		
 	</div>
 </div>

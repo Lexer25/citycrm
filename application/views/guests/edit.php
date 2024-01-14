@@ -475,36 +475,32 @@ if ($alert) { ?>
 			<br />
 			
 				<?php
-												
-				//ручная метка о выходе
-				//if (Session::instance()->get('mode')=='issue') {//Новый гость, новая карта
-				if ($mode=='issue') {//Новый гость, новая карта
+				
+			switch($mode){
+			
+				case 'guest_mode'://просмотр гостя с картой, можно сделать отметку о выходе
+					echo Form::hidden('todo', 'forceexit');// 
+					echo Form::submit('forceexit', __('guest.forceexit'));
+				
+				break;
+				case 'archive_mode'://просмотр архива
+				
+					echo Form::hidden('todo', 'reissue');// 
+					echo Form::submit('reissue', __('guest.reissue'));
 					
+				break;
+				case 'issue'://выдача карты новому гостю
 					echo Form::hidden('todo', 'savenew');// 
 					echo Form::submit('savenew', __('button.save'));
 					echo '&nbsp;&nbsp';
 					echo Form::submit(null, __('button.cancel'), array('onclick'=>'document.forms[0].reset()'));
-					
-							
-				};
 				
-				//ручная метка о выходе
-				//if (Session::instance()->get('mode')=='guest_mode') {//свойства Гостя. Разрешен Отметка о выходе
-				if ($mode=='guest_mode') {//свойства Гостя. Разрешен Отметка о выходе
-					
-					echo Form::hidden('todo', 'forceexit');// 
-					echo Form::submit('forceexit', __('guest.forceexit'));
-					echo Form::submit(null, __('button.backtolist'), array('onclick'=>'location.href='.URL::base().'guests'));
-							
-				};
-				
-				//if (Session::instance()->get('mode')=='archive_mode') {// свойства гостя в Архиве. Разрешена повторная выдача карты
-				if ($mode=='archive_mode') {// свойства гостя в Архиве. Разрешена повторная выдача карты
-				
-					echo Form::hidden('todo', 'reissue');// 
-					echo Form::submit('reissue', __('guest.reissue'));
-							
-				};
+				break;
+			
+			
+		}
+		
+
 		echo Form::close();
 		
 		

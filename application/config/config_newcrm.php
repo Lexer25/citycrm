@@ -5,7 +5,7 @@ return array(
 
 	'version' => array(
 		'minor' => '3',
-		'major' => '2.vnii',
+		'major' => '3.vnii',
 	),
 	
 	'test_mode' => array(

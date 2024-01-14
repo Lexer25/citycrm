@@ -218,38 +218,7 @@ class Controller_Guests extends Controller_Template
 	public function action_save()
 	{
 		//echo Debug::vars('70', $_POST); exit;
-		/* $id			= Arr::get($_POST, 'id_pep');
-		$surname	= Arr::get($_POST, 'surname');
-		$name		= Arr::get($_POST, 'name','');
-		$patronymic	= Arr::get($_POST, 'patronymic','');
-		$datebirth	= Arr::get($_POST, 'datebirth', 'NULL');
-		$numdoc		= Arr::get($_POST, 'numdoc', null);
-		$datedoc	= Arr::get($_POST, 'datedoc', null);
-		$workstart	= Arr::get($_POST, 'workstart', '09:00:00');
-		$workend	= Arr::get($_POST, 'workend', '18:00:00');
-		$active		= Arr::get($_POST, 'active', 1);
-		$peptype	= Arr::get($_POST, 'peptype', 0);
-		$post		= Arr::get($_POST, 'post', null);
-		$tabnum		= Arr::get($_POST, 'tabnum');
-		$login		= Arr::get($_POST, 'login', '');
-		$password	= Arr::get($_POST, 'password', '');
-		//$org		= Arr::get($_POST, 'id_org');
-		$org		= 2;
-		$inherit	= Arr::get($_POST, 'inherit', 0);
-		$note		= Arr::get($_POST, 'note', null);
-		$id_org_old		= Arr::get($_POST, 'id_org_old', null);
 		
-		
-		$carddatestart		= Arr::get($_POST, 'carddatestart', null);
-		$carddateend		= Arr::get($_POST, 'carddateend', null);
-		$id_cardtype		= Arr::get($_POST, 'id_cardtype', null);
-		$note_card		= Arr::get($_POST, 'note_card', null);
-		
-		
-		$isactive=1;// карта активна.
-		$cardstate=0;//это поле status в таблице card. Смысла никакого не несет, но нужен для единообразного хранения данных
-		$idaccess=null;// устаревший параметр.
-		$useenddate=1;//проверять ли срок действия карты? 1 - проверять, 0 - не проверять. */
 		
 		$id			= Arr::get($_POST, 'id_pep');
 		$idcard		= Arr::get($_POST, 'idcard', null);
@@ -294,10 +263,16 @@ class Controller_Guests extends Controller_Template
 							
 							//если номер документа или его дата не пусты, то сохранить документы
 							//echo Debug::vars('296', $guest->numdoc=='', $guest->datedoc==''); exit;
-							if($guest->addDoc() == 0) {;//добавляю данные по документу
-									$arrAlert[]=array('actionResult'=>$guest->actionResult, 'actionDesc'=>$guest->actionDesc);
-									$alert.='<br>'. __('guest.adddocOK', array(':numdoc'=>$guest->numdoc, ':surname'=>$guest->surname,':name'=>$guest->name,':patronymic'=>$guest->patronymic));
+
+							if($guest->numdoc=='' OR $guest->datedoc==''){//если хоть одно поле пустое, то данные по документу НЕ сохранять 
+								$arrAlert[]=array('actionResult'=>2, 'actionDesc'=>'guest.noDocForSave');
+							} else {
+							
+								if($guest->addDoc() == 0) {;//добавляю данные по документу
+										
+										$alert.='<br>'. __('guest.adddocOK', array(':numdoc'=>$guest->numdoc, ':surname'=>$guest->surname,':name'=>$guest->name,':patronymic'=>$guest->patronymic));
 								}
+							}
 							 
 					Session::instance()->set('alert', $alert);
 					} else {
@@ -312,8 +287,14 @@ class Controller_Guests extends Controller_Template
 					
 					$anypeople=new Guest($check);
 					
-					//Session::instance()->set('alert', __('contact.key_occuped_'.$check));
-					$arrAlert[]=array('actionResult'=>2, 'actionDesc'=>__('guest.key_occuped', array(':idcard'=>$idcard, ':id_pep'=>$anypeople->id_pep,':name'=>iconv('CP1251', 'UTF-8',$anypeople->name),':surname'=>iconv('CP1251', 'UTF-8',$anypeople->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$anypeople->patronymic))));
+					//echo Debug::vars('315', $idcard, $anypeople, $anypeople->id_org == $anypeople->idOrgGuest, $anypeople->id_org == $anypeople->idOrgGuestArchive); exit;
+					if($anypeople->id_org == $anypeople->idOrgGuest OR $anypeople->id_org == $anypeople->idOrgGuestArchive){
+						$arrAlert[]=array('actionResult'=>2, 'actionDesc'=>__('guest.key_occuped', array(':idcard'=>$idcard, ':id_pep'=>$anypeople->id_pep,':name'=>iconv('CP1251', 'UTF-8',$anypeople->name),':surname'=>iconv('CP1251', 'UTF-8',$anypeople->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$anypeople->patronymic))));
+						
+					} else {
+						$arrAlert[]=array('actionResult'=>2, 'actionDesc'=>__('guest.key_occuped_contact', array(':idcard'=>$idcard, ':id_pep'=>$anypeople->id_pep,':name'=>iconv('CP1251', 'UTF-8',$anypeople->name),':surname'=>iconv('CP1251', 'UTF-8',$anypeople->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$anypeople->patronymic))));
+					
+					}
 					Session::instance()->set('arrAlert',$arrAlert);
 				}
 				
@@ -386,10 +367,7 @@ class Controller_Guests extends Controller_Template
 	
 	/*
 	Регистрация нового гостя или редактирование уже зарегистрированного.
-	входные параметры:
-	id_pep 
-	mode - режима редактирования (0 - активный гость, 1 - гость в архиве)
-	
+
 	*/
 	
 
@@ -405,6 +383,7 @@ class Controller_Guests extends Controller_Template
 		
 		$fl = $this->session->get('alert');
 		$arrAlert = $this->session->get('arrAlert');
+		
 		$this->session->delete('alert');
 		$this->session->delete('arrAlert');
 		

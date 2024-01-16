@@ -14,7 +14,8 @@ class Controller_Contacts extends Controller_Template
 
 		$this->session = Session::instance();
 		I18n::$lang = $this->session->get('language', 'en-us');
-		$this->listsize = $this->session->get('listsize', 10);
+		$this->listsize = $this->session->set('listsize', 100);
+		$this->listsize = $this->session->get('listsize', 100);
 	}
 	
 	
@@ -133,6 +134,7 @@ class Controller_Contacts extends Controller_Template
 			->bind('showphone', $showphone)
 			->bind('filter', $filter)
 			->bind('pagination', $pagination);
+			//echo View::factory('profiler/stats');
 	}
 	
 	/*
@@ -143,38 +145,7 @@ class Controller_Contacts extends Controller_Template
 	public function action_save()
 	{
 		//echo Debug::vars('70', $_POST); exit;
-		/* $id			= Arr::get($_POST, 'id_pep');
-		$surname	= Arr::get($_POST, 'surname');
-		$name		= Arr::get($_POST, 'name','');
-		$patronymic	= Arr::get($_POST, 'patronymic','');
-		$datebirth	= Arr::get($_POST, 'datebirth', 'NULL');
-		$numdoc		= Arr::get($_POST, 'numdoc', null);
-		$datedoc	= Arr::get($_POST, 'datedoc', null);
-		$workstart	= Arr::get($_POST, 'workstart', '09:00:00');
-		$workend	= Arr::get($_POST, 'workend', '18:00:00');
-		$active		= Arr::get($_POST, 'active', 1);
-		$peptype	= Arr::get($_POST, 'peptype', 0);
-		$post		= Arr::get($_POST, 'post', null);
-		$tabnum		= Arr::get($_POST, 'tabnum');
-		$login		= Arr::get($_POST, 'login', '');
-		$password	= Arr::get($_POST, 'password', '');
-		//$org		= Arr::get($_POST, 'id_org');
-		$org		= 2;
-		$inherit	= Arr::get($_POST, 'inherit', 0);
-		$note		= Arr::get($_POST, 'note', null);
-		$id_org_old		= Arr::get($_POST, 'id_org_old', null);
 		
-		
-		$carddatestart		= Arr::get($_POST, 'carddatestart', null);
-		$carddateend		= Arr::get($_POST, 'carddateend', null);
-		$id_cardtype		= Arr::get($_POST, 'id_cardtype', null);
-		$note_card		= Arr::get($_POST, 'note_card', null);
-		
-		
-		$isactive=1;// карта активна.
-		$cardstate=0;//это поле status в таблице card. Смысла никакого не несет, но нужен для единообразного хранения данных
-		$idaccess=null;// устаревший параметр.
-		$useenddate=1;//проверять ли срок действия карты? 1 - проверять, 0 - не проверять. */
 		
 		$todo			= Arr::get($_POST, 'todo');
 		$active			= Arr::get($_POST, 'active');
@@ -376,7 +347,7 @@ class Controller_Contacts extends Controller_Template
 		$contact = Model::factory('Contact')->getContact($id);//Получаю контакт по его id
 		if (!$contact) $this->redirect('contacts');//если контакта нет, то перенаправление на список контактов 
 		$data = History::getHistory($id);// беру историю для указанного контакта историю (контроллер History.php, метод getHistory($user))
-		
+		//echo Debug::vars('381', $data); exit;
 		$this->template->content = View::factory('contacts/history')//вызываю вью contacts/history.php
 			->bind('contact', $contact)
 			->bind('data', $data)

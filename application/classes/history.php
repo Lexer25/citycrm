@@ -2,10 +2,12 @@
 
 class History
 {
+	
+	
 	public static function getHistory($user)
 	{
 		
-					
+		$eventListNotView=array(0);
 		$sql=' SELECT              
                     e.id_event,
                     e.id_eventtype,
@@ -26,9 +28,10 @@ class History
 
                 WHERE
 					e.ess1 = ' . $user . '
+					and e.id_eventtype not in ('.implode(",", $eventListNotView).')
 				ORDER BY
 					e.id_event DESC';			
-		
+		//echo Debug::vars('33', $sql); exit;
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'));
 		

@@ -1,4 +1,15 @@
+<script type="text/javascript">
+
+
+ 
+  	$(function() {		
+  		$("#tablesorter").tablesorter();
+		
+  	});	
+	
+</script>
 <?php 
+//https://webformyself.com/sortirovka-tablic-pri-pomoshhi-plagina-tablesorter-js/?ysclid=lrgdz4nrzp693511651
 // список идентификаторов
 //echo Debug::vars('2', $cards); exit;
 //echo Debug::vars('2', $catdTypelist); //exit;
@@ -32,14 +43,9 @@ if ($alert) { ?>
 		
 		if (count($cards) > 0) { ?>
 		<form id="form_data" name="form_data" action="" method="post">
-			<table class="data" width="100%" cellpadding="0" cellspacing="0">
-				<thead>
+			<table class="data tablesorter-blue" width="100%" cellpadding="0" cellspacing="0" id="tablesorter" >
+			<thead  allign="center">
 					<tr>
-						<!--
-						<th style="width:10px">
-							<input type="checkbox" id="check_all" name="check_all"/>
-						</th>
-						-->
 						<th><?php echo __('cards.code'); ?></th>
 						<th><?php echo __('cards.id_cardtype'); ?></th>
 						<th><?php echo __('cards.datestart'); ?></th>
@@ -49,18 +55,29 @@ if ($alert) { ?>
 						<th><?php echo __('cards.company'); ?></th>
 						<th><?php echo __('cards.action'); ?></th>
 					</tr>
-				</thead>
+					</thead>
+					<tr align="center">
+					<?php
+						echo '<td>1</td>';
+						echo '<td>2</td>';
+						echo '<td>3</td>';
+						echo '<td>4</td>';
+						echo '<td>5</td>';
+						echo '<td>6</td>';
+						echo '<td>7</td>';
+						echo '<td>8</td>';
+					
+					?>
+						
+					</tr>
+			
 				<tbody>
 					<?php foreach ($cards as $card) { 
 						$cardtype=Arr::get($catdTypelist, $card['ID_CARDTYPE']);
 						
 					?>
 					<tr>
-						<!--
-						<td>
-							<input type="checkbox" />
-						</td>
-						-->
+						
 						<td><?php 
 							echo HTML::anchor('cards/edit/' . $card['ID_CARD'], $card['ID_CARD']); ?></td>
 						<td><?php echo iconv('CP1251', 'UTF-8', Arr::get($cardtype, 'smallname')); ?></td> 

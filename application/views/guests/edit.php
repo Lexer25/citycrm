@@ -39,61 +39,7 @@
 				return false;
 			}
 		}
-		/*
-		ymd = ymd.split('.');
-		if (ymd[1] > 31 || ymd[1] < 1 || ymd[2] > 12 || ymd[2] < 1) {
-			$('#error33').show();
-			return false;
-		}
-		
-		var hm = $('#workstart').val();
-		if (hm == '') {
-			$('#error41').show();
-			$('#workstart').focus();
-			return false;
-		}
-		if (!hm.match(/^\d{2}:\d{2}$/) && !hm.match(/^\d{2}:\d{2}:\d{2}$/)) {
-			$('#error42').show();
-			$('#workstart').focus();
-			return false;
-		}
-		hm = hm.split(':');
-		if (hm[0] > 23 || hm[1] > 59 || (hm.length == 3 && hm[2] > 59)) {
-			$('#error43').show();
-			$('#workstart').focus();
-			return false;
-		}
-		hm = $('#workend').val();
-		if (hm == '') {
-			$('#error51').show();
-			$('#workend').focus();
-			return false;
-		}
-		if (!hm.match(/^\d{2}:\d{2}$/) && !hm.match(/^\d{2}:\d{2}:\d{2}$/)) {
-			$('#error52').show();
-			$('#workend').focus();
-			return false;
-		}
-		hm = hm.split(':');
-		if (hm[0] > 23 || hm[1] > 59 || (hm.length == 3 && hm[2] > 59)) {
-			$('#error53').show();
-			$('#workstart').focus();
-			return false;
-		}
-		if ($('#tabnum').val() == '') {
-			$('#error6').show();
-			$('#tabnum').focus();
-			return false;
-		} else if ($('#login').val() == '') {
-			$('#error7').show();
-			$('#login').focus();
-			return false;
-		} else if ($('#password').val() == '') {
-			$('#error8').show();
-			$('#password').focus();
-			return false;
-		}
-		*/
+
 		$('.error').hide();
 		if ($('#idcard').val() == '') {
 			$('#error11').show();
@@ -297,7 +243,11 @@ if ($alert) { ?>
 										<label for="datedoc"><?php echo __('contact.datedoc'); ?></label>
 										<br />
 										<input type="text" name="datedoc" id="datedoc" value="<?php 
-											if(!is_null($guest->datedoc)) echo date('d.m.Y', strtotime($guest->datedoc)); ?>" style="width: 100px;" />
+											if(!is_null($guest->datedoc)) {
+													echo date('d.m.Y', strtotime($guest->datedoc));
+											} else {
+													echo date("d.m.Y");
+											}												?>" style="width: 100px;" />
 										<br />
 										<span class="error" id="error31" style="color: red; display: none;"><?php echo __('contact.emptydatedoc'); ?></span>
 										<span class="error" id="error32" style="color: red; display: none;"><?php echo __('contact.wrongdatedoc'); ?></span>

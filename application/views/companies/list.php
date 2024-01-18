@@ -1,3 +1,13 @@
+<script type="text/javascript">
+
+
+ 
+  	$(function() {		
+  		$("#tablesorter").tablesorter({ headers: { 7:{sorter: false}},  widgets: ['zebra']});
+		
+  	});	
+	
+</script>
 <style>
 .tree{
   --spacing : 1.5rem;
@@ -40,7 +50,7 @@
 	<br class="clear"/>
 	<div class="content">
 		<form id="form_data" name="form_data" action="" method="post">
-			<table class="data" width="100%" cellpadding="0" cellspacing="0">
+			<table class="data tablesorter-blue" width="100%" cellpadding="0" cellspacing="0" id="tablesorter" >
 				<thead>
 					<tr>
 						<!--

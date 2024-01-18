@@ -137,11 +137,11 @@ class Model_Card extends Model
 							//echo Debug::vars('186', $id_org, $filter,  $filter=''); exit;
 		
 		if(is_null($filter) or $filter=='') {// если фильтра нет, то выбираем все карты из родительской и подчиненной организаций
-		$sql='select c.* from people p
+		$sql='select count(c.id_card) from people p
 		join card c on c.id_pep=p.id_pep
 		join organization_getchild (1, ' . $id_org . ') og on og.id_org = p.id_org';
 		} else {
-			$sql='select c.* from people p
+			$sql='select count(c.id_card) from people p
 		join card c on c.id_pep=p.id_pep
 		join organization_getchild (1, ' . $id_org . ') og on og.id_org = p.id_org
             where c.id_card = \''.$filter.'\'';
@@ -151,15 +151,12 @@ class Model_Card extends Model
 		
 		//echo Debug::vars('190', $sql); exit;
 		$res = DB::query(Database::SELECT, $sql)
-			->execute(Database::instance('fb'));
+			->execute(Database::instance('fb'))
+			->get('COUNT');
 			
-		return $res->count();
+		return $res;
 		
 
-		$res = DB::query(Database::SELECT, $sql)
-			->execute(Database::instance('fb'));
-			
-		return $res->count();
 			}
 	
 	public function getCountByPeople($id)

@@ -35,7 +35,7 @@ class Controller_Cards extends Controller_Template
 	public function action_index($filter = null)
 	{
 		
-		$isAdmin = Auth::instance()->logged_in('admin');
+		//$isAdmin = Auth::instance()->logged_in('admin');
 		
 		$cards = Model::factory('Card');
 		
@@ -58,13 +58,14 @@ class Controller_Cards extends Controller_Template
 		//echo Debug::vars('55',$isAdmin, $list ); exit;	
 		$fl = $this->session->get('alert');
 		$this->session->delete('alert');
-		
+	
 		$this->template->content = View::factory('cards/list')
 			->bind('cards', $list)
 			->bind('catdTypelist', $catdTypelist)
 			->bind('alert', $fl)
 			->bind('filter', $filter)
 			->bind('pagination', $pagination);
+			//echo View::factory('profiler/stats');
 	}
 
 	public function action_delete()

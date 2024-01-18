@@ -258,7 +258,7 @@ if ($alert) { ?>
 									<td style="padding-left: 15px">
 										<label for="datedoc"><?php echo __('contact.datedoc'); ?></label>
 										<br />
-										<input type="text" name="datedoc" id="datedoc" value="<?php echo $contact->datedoc; ?>" style="width: 100px;" />
+										<input type="text" name="datedoc" id="datedoc" value="<?php echo date('d.m.Y', strtotime($contact->datedoc)); ?>" style="width: 100px;" />
 										<br />
 										<span class="error" id="error31" style="color: red; display: none;"><?php echo __('contact.emptydatedoc'); ?></span>
 										<span class="error" id="error32" style="color: red; display: none;"><?php echo __('contact.wrongdatedoc'); ?></span>

@@ -324,8 +324,8 @@ class Company
 	public function getChildId_pepList()
 	{
 		
-		$sql = 'select * from people p
-where p.id_org='.$this->id_org;
+		$sql = 'select p.id_pep from people p
+		where p.id_org='.$this->id_org;
 		//echo Debug::vars('190',$sql); exit;
 		try {		
 		

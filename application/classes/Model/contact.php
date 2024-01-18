@@ -192,12 +192,12 @@ class Model_Contact extends Model
 		//echo Debug::vars('186', $id_org, $filter,  $filter=''); exit;
 			
 		if(is_null($filter) or $filter=='') {// если фильтра нет, то выбираем всех пиплов из родительской и подчиненной организаций
-		$sql='select * from people p
+		$sql='select count(*) from people p
 		join organization_getchild (1, ' . $id_org . ') og on og.id_org = p.id_org
 		where p."ACTIVE"='.$this->peopleIsActive;
 		
 		} else {
-			$sql='select * from people p
+			$sql='select count(*) from people p
 			join organization_getchild (1, ' . $id_org . ') og on og.id_org = p.id_org
             where p."ACTIVE"='.$this->peopleIsActive.'
 			and (p.name containing \''.$filter.'\'
@@ -208,9 +208,10 @@ class Model_Contact extends Model
 		
 		//echo Debug::vars('190', $sql); exit;
 		$res = DB::query(Database::SELECT, $sql)
-			->execute(Database::instance('fb'));
+			->execute(Database::instance('fb'))
+			->get('COUNT');
 			
-		return $res->count();
+		return $res;
 	}
 	
 	public function getListF($user, $page = 1, $perpage = 10, $filter)

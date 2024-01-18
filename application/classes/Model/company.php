@@ -135,27 +135,26 @@ where ssa.id_org='. $id_org;
 		//echo Debug::vars('135', Auth::instance()->get_user(), $id_org_control); exit;
 		if(is_null($filter))//если фильтра нет, то надо выбрать все организации для этого пользователя
 		{
-		$sql = 'select o.id_org, o.name, o.divcode from organization o
+		$sql = 'select count(o.id_org) from organization o
 			join organization_getchild (1,'.$id_org_control.') og on og.id_org =o.id_org'. 
-			($parent_org ? " where o.id_parent = '$parent_org'" : '') . 
-			' ORDER BY  o.id_org';
+			($parent_org ? " where o.id_parent = '$parent_org'" : '');
 			
 	
 			
 		} else { //если фильтр указан, то надо выбрать эту организацию из списка разрешенных для этого пользователя
-			$sql = 'select o.id_org, o.name, o.divcode from organization o
+			$sql = 'select count(o.id_org) from organization o
 			join organization_getchild (1,'.$id_org_control.') og on og.id_org =o.id_org '.
-			($filter ? " where o.name containing '$filter'" : '') .
-			'ORDER BY  o.id_org';
+			($filter ? " where o.name containing '$filter'" : '');
 			
 			
 		}
 			//echo Debug::vars('50', $sql); exit;
 		$res = DB::query(Database::SELECT, $sql)
-			->execute(Database::instance('fb'));
+			->execute(Database::instance('fb'))
+			->get('COUNT');
 		
-		return $res->count();
-		//return $res;
+		
+		return $res;
 	}
 	
 	public function getListF($user, $page = 1, $perpage = 10,  $filter)

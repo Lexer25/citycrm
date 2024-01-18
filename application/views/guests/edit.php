@@ -147,7 +147,7 @@ if ($alert) { ?>
 		<span><?php 
 		
 		$guest=new Guest($id_pep);
-		//switch(Session::instance()->get('mode')){
+		//echo Debug::vars('150', $guest);exit;
 		switch($mode){
 			
 			case 'guest_mode'://просмотр гостя с картой, можно сделать отметку о выходе

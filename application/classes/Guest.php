@@ -48,6 +48,7 @@ class Guest
 		, p."ACTIVE" as is_active
 		, p.flag
 		, p.sysnote
+		, p.note
 		, p.time_stamp
 		, p.tabnum
 		
@@ -72,6 +73,7 @@ class Guest
 		$this->datedoc=Arr::get($query, 'DATEDOC');
 		$this->is_active=Arr::get($query, 'IS_ACTIVE');
 		$this->sysnote=Arr::get($query, 'SYSNOTE');
+		$this->note=Arr::get($query, 'NOTE');
 		$this->time_stamp=Arr::get($query, 'TIME_STAMP');
 		$this->tabnum=Arr::get($query, 'TABNUM');
 		//$this->rfid=Arr::get($query, 'RFID');
@@ -124,7 +126,7 @@ class Guest
 				':org'			=> $this->idOrgGuest,
 				':note'			=> iconv('UTF-8', 'CP1251',$this->note))
 				);
-
+	//echo Debug::vars('127', $sql); exit;
 			
 					try
 		{
@@ -258,33 +260,23 @@ class Guest
 	*/
 	public function addDoc()
 	{
-		$validation=Validation::factory(array('numdoc'=>$this->numdoc, 'datedoc'=>$this->datedoc));
-			$validation->rule('numdoc','not_empty') 
-			->rule('datedoc','not_empty')
-		;			
-		if ($validation->check()){
-			//данные на документ есть, можно записывать.
+		
 			$sql='update people p
 			set p.datedoc=\''.$this->datedoc.'\',
 			p.numdoc=\''.$this->numdoc.'\'
 			where p.id_pep='.$this->id_pep;
 		//echo Debug::vars('147', $sql); exit; 
-		$query = DB::query(Database::UPDATE, $sql)
+		try {
+		$query = DB::query(Database::UPDATE, iconv('UTF-8', 'CP1251', $sql))
 			->execute(Database::instance('fb'));
 			
 			$this->actionResult=0;
 			//$this->actionDesc=__('guest.adddocOK', array(':numdoc'=>$this->numdoc));
-		} else {
-			
-			// данные по документу заполнены неверно, в БД не записываются.
+		} catch (Exception $e) {
+			Log::instance()->add(Log::DEBUG, $e->getMessage());
 			$this->actionResult=3;
-			$this->actionDesc=__('guest.adddocErr', array(':numdoc'=>$this->numdoc));
 			
-		}
-			
-		
-		
-				
+		}	
 	}
 	
 	/*

@@ -1,3 +1,13 @@
+<script type="text/javascript">
+
+
+ 
+  	$(function() {		
+  		$("#tablesorter").tablesorter({ headers: { 7:{sorter: false}},  widgets: ['zebra']});
+		
+  	});	
+	
+</script>
 <?php
 //echo Debug::vars('2', Session::instance()); 
 //echo Debug::vars('2', Session::instance()); 
@@ -52,7 +62,7 @@
 	
 		<?php if (count($people) > 0) { ?>
 		<form id="form_data" name="form_data" action="" method="post">
-			<table class="data" width="100%" cellpadding="0" cellspacing="0">
+			<table class="data tablesorter-blue" width="100%" cellpadding="0" cellspacing="0" id="tablesorter" >
 				<thead>
 					<tr>
 						<!--
@@ -104,7 +114,7 @@
 							if (Auth::instance()->logged_in('admin') || $pep['CANEDIT'] == 1)
 								echo HTML::anchor('contacts/edit/' . $pep['ID_PEP'], iconv('CP1251', 'UTF-8', $pep['NAME'] . ' ' . $pep['SURNAME']));
 							else
-								echo HTML::anchor('contacts/view/' . $pep['ID_PEP'], iconv('CP1251', 'UTF-8', $pep['NAME'] . ' ' . $pep['SURNAME']));
+								echo HTML::anchor('contacts/view/' . $pep['ID_PEP'], iconv('CP1251', 'UTF-8', $pep['SURNAME'] . ' ' . $pep['NAME']));
 							//echo iconv('CP1251', 'UTF-8', $pep['NAME'] . ' ' . $pep['SURNAME']); 
 						
 						?></td>

@@ -51,8 +51,9 @@
 				<?php 
 				include Kohana::find_file('views','alert');
 				echo $content; ?>
-				
+		
 			</div>
+
 		</div>
 		
 	</div>

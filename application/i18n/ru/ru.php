@@ -438,6 +438,7 @@ return array
 	'card.reloadOk'					=> 'Команда на повторную загрузку идентификатора :id_card выполнена успешно',
 	'card.load'						=> 'Таблица загрузки идентификаторов',
 	'card.history'					=> 'История',
+	'cards.id_cardtype'				=> 'Тип идентификатора',
 	
 	
 	'companies.title'				=> 'Организации',
@@ -448,6 +449,8 @@ return array
 	'companies.parent'				=> 'Вышестоящий отдел',
 	'companies.access'				=> 'Уровень доступа',
 	'companies.confirmdelete'		=> 'Вы действительно хотите удалить организацию?',
+	'companies.countChildren'		=> 'Количество нижестоящих компаний',
+	'companies.countContact'		=> 'Количество контактов в компаний',
 
     'objects.title'                 => 'Объекты',
     'objects.name'                  => 'Название объекта',

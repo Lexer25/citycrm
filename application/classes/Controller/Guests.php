@@ -298,7 +298,7 @@ class Controller_Guests extends Controller_Template
 					Session::instance()->set('arrAlert',$arrAlert);
 				}
 				
-		$this->redirect('guests/guest');
+		$this->redirect('guests/edit/0/issue');
 			break;
 			
 			case 'forceexit':// ручная отметка о выходе

@@ -3,7 +3,7 @@
 
  
   	$(function() {		
-  		$("#tablesorter").tablesorter();
+  		$("#tablesorter").tablesorter({ headers: { 7:{sorter: false}},  widgets: ['zebra']});
 		
   	});	
 	
@@ -55,7 +55,7 @@ if ($alert) { ?>
 						<th><?php echo __('cards.company'); ?></th>
 						<th><?php echo __('cards.action'); ?></th>
 					</tr>
-					</thead>
+				</thead>	
 					<tr align="center">
 					<?php
 						echo '<td>1</td>';
@@ -116,3 +116,4 @@ if ($alert) { ?>
 		<?php } ?>
 	</div>
 </div>
+

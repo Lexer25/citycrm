@@ -1,3 +1,13 @@
+<script type="text/javascript">
+
+
+ 
+  	$(function() {		
+  		$("#tablesorter").tablesorter({ headers: { 7:{sorter: false}},  widgets: ['zebra']});
+		
+  	});	
+	
+</script>
 <?php 
 //echo Debug::vars('173', Session::instance());
 //echo Debug::vars('3', Session::instance()->get('mode'));
@@ -52,7 +62,7 @@ if ($alert) { ?>
 	<div class="content">
 		<?php if (count($people) > 0) { ?>
 		<form id="form_data" name="form_data" action="" method="post">
-			<table class="data" width="100%" cellpadding="0" cellspacing="0">
+			<table class="data tablesorter-blue" width="100%" cellpadding="0" cellspacing="0" id="tablesorter" >
 				<thead>
 					<tr>
 						<!--

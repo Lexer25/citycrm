@@ -14,8 +14,7 @@ class Controller_Contacts extends Controller_Template
 
 		$this->session = Session::instance();
 		I18n::$lang = $this->session->get('language', 'en-us');
-		$this->listsize = $this->session->set('listsize', 100);
-		$this->listsize = $this->session->get('listsize', 100);
+		$this->listsize = $this->session->get('listsize', 10);
 	}
 	
 	
@@ -134,7 +133,8 @@ class Controller_Contacts extends Controller_Template
 			->bind('showphone', $showphone)
 			->bind('filter', $filter)
 			->bind('pagination', $pagination);
-			//echo View::factory('profiler/stats');
+				
+		//	echo View::factory('profiler/stats');
 	}
 	
 	/*

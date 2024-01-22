@@ -14,7 +14,25 @@ class Controller_Contacts extends Controller_Template
 
 		$this->session = Session::instance();
 		I18n::$lang = $this->session->get('language', 'en-us');
-		$this->listsize = $this->session->get('listsize', 10);
+		$this->listsize = $this->session->set('listsize', 100);
+		$this->listsize = $this->session->get('listsize', 100);
+	}
+	
+	
+	/*
+	21.01.2024 подготовка отчета рабочего времени
+	
+	
+	*/
+	public function action_worktime()
+	{
+		//echo Debug::vars('29', $this->request->param('id')); exit;
+		$id_pep= $this->request->param('id'); 
+		$this->template->content = View::factory('contacts/reportsetting')
+				->bind('id_pep', $id_pep)
+				->bind('mode', $mode)
+				->bind('alert', $fl);
+		
 	}
 	
 	
@@ -133,8 +151,7 @@ class Controller_Contacts extends Controller_Template
 			->bind('showphone', $showphone)
 			->bind('filter', $filter)
 			->bind('pagination', $pagination);
-				
-		//	echo View::factory('profiler/stats');
+			//echo View::factory('profiler/stats');
 	}
 	
 	/*

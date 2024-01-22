@@ -157,6 +157,9 @@ if ($alert) { ?>
 									<?php echo HTML::anchor('contacts/cardlist/' . $contact->id_pep, __('contact.cardlist'), array('class' => 'middle_switch')); ?>
 								</td>
 								<td>
+									<?php echo HTML::anchor('contacts/worktime/' . $contact->id_pep, __('contact.worktime'), array('class' => 'middle_switch')); ?>
+								</td>
+								<td>
 									<?php echo HTML::anchor('contacts/history/' . $contact->id_pep, __('contact.history'), array('class' => 'right_switch')); ?>
 								</td>
 							</tr>
@@ -258,7 +261,7 @@ if ($alert) { ?>
 									<td style="padding-left: 15px">
 										<label for="datedoc"><?php echo __('contact.datedoc'); ?></label>
 										<br />
-										<input type="text" name="datedoc" id="datedoc" value="<?php echo date('d.m.Y', strtotime($contact->datedoc)); ?>" style="width: 100px;" />
+										<input type="text" name="datedoc" id="datedoc" value="<?php echo $contact->datedoc; ?>" style="width: 100px;" />
 										<br />
 										<span class="error" id="error31" style="color: red; display: none;"><?php echo __('contact.emptydatedoc'); ?></span>
 										<span class="error" id="error32" style="color: red; display: none;"><?php echo __('contact.wrongdatedoc'); ?></span>

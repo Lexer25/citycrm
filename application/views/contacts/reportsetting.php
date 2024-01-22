@@ -36,14 +36,14 @@ if ($alert) { ?>
 			
 			<table cellspacing="5" cellpadding="5">
 								<tbody>
-																		<tr>
+									<tr>
 										<th align="right" style="padding-right: 10px;">
 											<label for="reportdatestart"><?php echo __('report.datestart'); ?></label> 
 										</th>
 										<td>
 											<div style="padding-bottom: 10px;">
 											
-												<input type="text" size="12" name="reportdatestart" id="reportdatestart" value="<?php 
+												<input type="text" size="12" name="reportdatestart" id="carddatestart" value="<?php 
 													if (isset($key->timestart)) 
 													{
 														echo date("d.m.Y", strtotime($key->timestart));
@@ -55,19 +55,20 @@ if ($alert) { ?>
 											</div>
 										</td>
 									</tr>
+									
 									<tr>
 										<th align="right" style="padding-right: 10px;">
 											<label for="reportdateend"><?php echo __('report.dateend'); ?></label> 
 										</th>
 										<td>
 											<div style="padding-bottom: 10px;">
-												<input type="text" size="12" name="reportdateend" id="reportdateend" value="<?php 
+												<input type="text" size="12" name="reportdateend" id="carddateend" value="<?php 
 													if (isset($key->timeend))
 													{
 														echo date("d.m.Y", strtotime($key->timeend));
 													} else {
 
-														echo date('d.m.Y', strtotime('+1 year'));
+														echo date('d.m.Y');
 													}														?>" />
 												<br />
 												<span class="error" id="error3" style="color: red; display: none;"><?php echo __('report.wrongendtime'); ?></span>

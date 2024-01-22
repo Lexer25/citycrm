@@ -275,7 +275,7 @@ $(function(){
 		showAnim: 'slideDown'
 	});
 	
-	$('#carddatestart, #carddateend').datepicker({
+	$('#carddatestart, #carddateend, #reportdatestart, #reportdateend').datepicker({
 		 closeText: 'Закрыть',
                 prevText: '',
                 currentText: 'Сегодня',
@@ -294,7 +294,7 @@ $(function(){
                 yearSuffix: '',
 		nextText: '&raquo;',
 		prevText: '&laquo;',
-		dateFormat: 'yy-mm-dd',
+		dateFormat: 'dd.mm.yy',
 		showAnim: 'slideDown'
 	});
 	

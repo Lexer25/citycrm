@@ -36,11 +36,24 @@ class Controller_Reports extends Controller_Template
 		$report->init_pep($id_pep);
 		$report->timestart=Arr::get($_POST, 'reportdatestart');
 		$report->timeend=Arr::get($_POST, 'reportdateend');
+		$duration=array(
+			9*3600,
+			9*3600,
+			9*3600,
+			9*3600,
+			9*3600,
+			7*3600+45*60,  //длительность рабочего дня в пятницу
+			0,
+			0);
+		$workstart=array(); // начало рабочего дня по дням недели 0 - воскресентье
+		$workend=array();// окончание рабочего дня по дням недели 0 - воскресентье
+		
 		if($report->getReportWT() == 0){
 			//echo Debug::vars('32', $id_pep, $_POST, $report); exit;
 			$this->template->content = View::factory('report/wt')
 				->bind('id_pep', $id_pep)
 				->bind('report', $report)
+				->bind('duration', $duration)
 				->bind('alert', $fl);
 				
 						

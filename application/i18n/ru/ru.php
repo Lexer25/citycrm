@@ -181,7 +181,7 @@ return array
 	'stat.report.header1'		=>'Отчет о состоянии системы СКУД Артонит Сити',
 	'stat.report.header2'		=>'www.artonit.ru',
 	
-	
+	'report.title'	=> 'Отчет Учет рабочего времени для контакта :surname :name  :patronymic за период c :timefrom по :timeTo',
 	
 	
 	'sidebar.companieslist'			=> 'Список организаций',

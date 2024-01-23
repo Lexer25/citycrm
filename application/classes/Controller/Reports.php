@@ -36,24 +36,25 @@ class Controller_Reports extends Controller_Template
 		$report->init_pep($id_pep);
 		$report->timestart=Arr::get($_POST, 'reportdatestart');
 		$report->timeend=Arr::get($_POST, 'reportdateend');
-		$duration=array(
-			9*3600,
-			9*3600,
-			9*3600,
-			9*3600,
-			9*3600,
-			7*3600+45*60,  //длительность рабочего дня в пятницу
-			0,
-			0);
-		$workstart=array(); // начало рабочего дня по дням недели 0 - воскресентье
-		$workend=array();// окончание рабочего дня по дням недели 0 - воскресентье
+		$report->workTimeOrder=array(
+			array(8*3600, 17*3600, 45*60),//вскр
+			array(8*3600, 17*3600, 45*60),//пнд
+			array(8*3600, 17*3600, 45*60),//вт
+			array(8*3600, 17*3600, 45*60),//ср
+			array(8*3600, 17*3600, 45*60),//чт
+			array(8*3600, 16*3600+45*60, 45*60),//птн
+			array(8*3600, 17*3600, 45*60),//сб
+			
+			); // начало рабочего дня по дням недели 0 - воскресентье
+	
 		
 		if($report->getReportWT() == 0){
-			//echo Debug::vars('32', $id_pep, $_POST, $report); exit;
+			//echo Debug::vars('32', $id_pep, $report->result); exit;
 			$this->template->content = View::factory('report/wt')
 				->bind('id_pep', $id_pep)
 				->bind('report', $report)
 				->bind('duration', $duration)
+				->bind('workTimeOrder', $workTimeOrder)
 				->bind('alert', $fl);
 				
 						

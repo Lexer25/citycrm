@@ -76,20 +76,53 @@ class Model_ReportWorkTime extends Model
 		
 	}
 	
+	/*
+	23.01.204 
+	вспомогательная функция, которая считает количество секунд от начала суток указанной даты
+	*/
+	
+	public function secondFromMidNight($date)
+	{
+		
+		return strtotime($date) - strtotime(date('d.m.Y', strtotime($date)));
+	}
+	
+	/*
+	
+	23.01.2024 подготовка таблицы для распечатки отчета
+	*/
+	
 	public function getReportWT()
 	{
 		$this->getWorkDayList();
 		$result=array();
 		foreach($this->dayList as $key=>$value)
 		{
-			//echo Debug::vars('82', $this->getWorkTimeInDay(Arr::get($value, 'CAST'))); exit;
-			$result[]= $this->getWorkTimeInDay(Arr::get($value, 'CAST'));
+			$var1= $this->getWorkTimeInDay(Arr::get($value, 'CAST'));
 			
+			$result['date']= Arr::get($value, 'CAST');//Дата расчета
+			$result['currentDay']= date('w', strtotime(Arr::get($var1, 'MIN')));//Дата расчета
+			$result['time_in']= $this->secondFromMidNight(Arr::get($var1, 'MIN'));//время прихода контакта на работу
+			$result['time_out']= $this->secondFromMidNight(Arr::get($var1, 'MAX'));//время ухода контакта с работы
 			
+			$result['timeStartNormative']=Arr::get(Arr::get($this->workTimeOrder,$result['currentDay']), 0);//начало рабочего дня по нормативу
+			$result['timeEndNormative']=Arr::get(Arr::get($this->workTimeOrder,$result['currentDay']), 1);//завершение рабочего дня по нормативу
+			$result['timeDinnerNormative']=Arr::get(Arr::get($this->workTimeOrder,$result['currentDay']), 2);// длительность обеда по нормативу
+			$result['timeLongWorkDayNormative']=$result['timeEndNormative']-$result['timeStartNormative'];// нормативная длительность рабочего дня (включая обед)
+		
+			$result['time_startCount']= ($result['time_in']> $result['timeStartNormative'])? $result['time_in'] : $result['timeStartNormative'];//время начала пребывания на работе для расчета
+			$result['time_endtCount']= $result['time_out'];//время окончания пребывания на работе  рабочего дня для расчета
+		
+		//echo Debug::vars('92',   $key, $value,  $result); exit;
+		$this->result[]=$result;
 		}
-		$this->result=$result;
-		//echo Debug::vars('61', $result); exit;
+		
+		return 0;
 	}
+	
+	
+	
+	
 	
 	
 	

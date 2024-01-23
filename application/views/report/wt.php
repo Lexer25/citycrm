@@ -29,7 +29,7 @@ if ($alert) { ?>
 	<br class="clear"/>
 	<div class="content">
 		<?php 
-		
+		$weekDay=array('Вскр','Пнд','Вт','Ср','Чт','Птн','Сб');
 		if (count($report->result)) { 
 		
 		$count=0;
@@ -40,19 +40,17 @@ if ($alert) { ?>
 					<tr>
 						<th><?php echo __('report.count'); ?></th>
 						<th><?php echo __('report.date'); ?></th>
-						<th><?php echo __('report.dayOfWeek'); ?></th>
-						<th><?php echo __('report.id_pep'); ?></th>
-						<th><?php echo __('report.id_org'); ?></th>
-						<th><?php echo __('report.pepname'); ?></th>
+						<!-- <th><?php echo __('report.id_pep'); ?></th>
+						<th><?php echo __('report.id_org'); ?></th> 
+						<th><?php echo __('report.pepname'); ?></th>-->
 						<th><?php echo __('report.time_in'); ?></th>
 						<th><?php echo __('report.time_out'); ?></th>
 						<th><?php echo __('report.time_work'); ?></th>
-						<th><?php echo __('report.длительность по факту, секунд'); ?></th>
-						<th><?php echo __('report.длительность по графику, секунд'); ?></th>
-						<th><?php echo __('report.Недоработал'); ?></th>
-						<th><?php echo __('report.time_work'); ?></th>
-						
-						
+						<th><?php echo __('report.time_startCount'); ?></th>
+						<th><?php echo __('report.time_endCount'); ?></th>
+						<th><?php echo __('report.time_workCount'); ?></th>
+						<th><?php echo __('Длительность рабочего дня'); ?></th>
+						<th><?php echo __('Недоработал'); ?></th>
 						
 					</tr>
 					</thead>
@@ -69,8 +67,9 @@ if ($alert) { ?>
 						echo '<td>8</td>';
 						echo '<td>9</td>';
 						echo '<td>10</td>';
-						echo '<td>11</td>';
-						echo '<td>12</td>';
+						//echo '<td>11</td>';
+						//echo '<td>12</td>';
+						//echo '<td>13</td>';
 						
 						
 					
@@ -81,42 +80,78 @@ if ($alert) { ?>
 				
 				<tbody>
 					<?php foreach ($report->result as $key=>$value) { 
-						//echo Debug::vars('78', $key, $value); //exit;
-						$long=strtotime(Arr::get($value, 'MAX'))-strtotime(Arr::get($value, 'MIN')); //- сколько времени провел на работе
-						$duration_day=Arr::get($duration, date('w', strtotime(Arr::get($value, 'MIN'))));// длительность рабочего дня в секундах
-						
+						//echo Debug::vars('83', $key, $value);exit;
+						$workTimeStart=Arr::get($value, 'timeStartNormative');
+						$workTimeEnd=Arr::get($value, 'timeEndNormative');
+						$duration_day=Arr::get($value, 'timeLongWorkDayNormative');
 					?>
 					<tr>
 						
 						<td><?php echo ++$count; ?></td>
-						<td><?php echo date('d.m.Y', strtotime(Arr::get($value, 'MIN'))); ?></td>
-						<td><?php echo date('w', strtotime(Arr::get($value, 'MIN'))); ?></td>
-						<td><?php echo HTML::anchor('' . $report->id_pep, $report->id_pep); ?></td>
-						<td><?php echo HTML::anchor('' . $pep->id_org, $pep->id_org); ?></td>
-						<td><?php echo iconv('CP1251', 'UTF-8', $pep->surname); ?></td> 
-						<td><?php echo date('H:i:s', strtotime(Arr::get($value, 'MIN'))); ?></td> 
-						<td><?php echo date('H:i:s', strtotime(Arr::get($value, 'MAX'))); ?></td> 
+						<td><?php echo Arr::get($value, 'date'); ?></td>
+						<!--<td><?php echo HTML::anchor('' . $report->id_pep, $report->id_pep); ?></td>
+						<td><?php echo HTML::anchor('' . $pep->id_org, $pep->id_org); ?></td> 
+						<td><?php echo iconv('CP1251', 'UTF-8', $pep->surname).' '.iconv('CP1251', 'UTF-8', $pep->name).' '.iconv('CP1251', 'UTF-8', $pep->patronymic); ?></td> -->
 						<td><?php 
-							$long=strtotime(Arr::get($value, 'MAX'))-strtotime(Arr::get($value, 'MIN'));
-							echo floor($long/3600).':'
-								.str_pad(floor($long%3600/60),2, 0,STR_PAD_LEFT).':'
-								.str_pad(($long%3600)%60,2, 0,STR_PAD_LEFT); ?>
-						</td> 
-						<td><?php 
-							echo $long; ?>
-						</td> 
-						
-						<td><?php echo $duration_day; ?></td> 
-						<td><?php 
-						$var=$duration_day - $long;
-						echo floor($var/3600).':'
+							$var=Arr::get($value, 'time_in');
+							echo floor($var/3600).':'
 								.str_pad(floor($var%3600/60),2, 0,STR_PAD_LEFT).':'
-								.str_pad(($var%3600)%60,2, 0,STR_PAD_LEFT);?></td> 
+								.str_pad(($var%3600)%60,2, 0,STR_PAD_LEFT); ?>
+						</td>
+						
+						<td><?php 
+							$var=Arr::get($value, 'time_out');
+							echo floor($var/3600).':'
+								.str_pad(floor($var%3600/60),2, 0,STR_PAD_LEFT).':'
+								.str_pad(($var%3600)%60,2, 0,STR_PAD_LEFT); ?>
+						</td>
+						
+						<td><?php 
+							$var=Arr::get($value, 'time_out') - Arr::get($value, 'time_in');
+							echo floor($var/3600).':'
+								.str_pad(floor($var%3600/60),2, 0,STR_PAD_LEFT).':'
+								.str_pad(($var%3600)%60,2, 0,STR_PAD_LEFT); ?>
+						</td>
 						
 						
-					
+						
+						<td><?php 
+							$var=Arr::get($value, 'time_startCount');
+							echo floor($var/3600).':'
+								.str_pad(floor($var%3600/60),2, 0,STR_PAD_LEFT).':'
+								.str_pad(($var%3600)%60,2, 0,STR_PAD_LEFT); ?>
+						</td>
+						
+						<td><?php 
+							$var=Arr::get($value, 'time_endtCount');
+							echo floor($var/3600).':'
+								.str_pad(floor($var%3600/60),2, 0,STR_PAD_LEFT).':'
+								.str_pad(($var%3600)%60,2, 0,STR_PAD_LEFT); ?>
+						</td>
 						
 						
+						<td><?php 
+							$var=Arr::get($value, 'time_endtCount') - Arr::get($value, 'time_startCount');
+							echo floor($var/3600).':'
+								.str_pad(floor($var%3600/60),2, 0,STR_PAD_LEFT).':'
+								.str_pad(($var%3600)%60,2, 0,STR_PAD_LEFT); ?>
+						</td>
+						
+						<td><?php 
+							$var=Arr::get($value, 'timeEndNormative') - Arr::get($value, 'timeStartNormative');
+							echo floor($var/3600).':'
+								.str_pad(floor($var%3600/60),2, 0,STR_PAD_LEFT).':'
+								.str_pad(($var%3600)%60,2, 0,STR_PAD_LEFT); ?>
+						</td>
+						
+						<td><?php 
+							$var=Arr::get($value, 'timeEndNormative') - Arr::get($value, 'timeStartNormative') - (Arr::get($value, 'time_endtCount') - Arr::get($value, 'time_startCount'));
+							echo floor($var/3600).':'
+								.str_pad(floor($var%3600/60),2, 0,STR_PAD_LEFT).':'
+								.str_pad(($var%3600)%60,2, 0,STR_PAD_LEFT); ?>
+						</td>
+						
+							
 					</tr>
 					<?php } ?>
 				</tbody>

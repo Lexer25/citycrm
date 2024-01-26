@@ -115,48 +115,121 @@ class Model_ReportWorkTime extends Model
 		
 		//echo Debug::vars('92',   $key, $value,  $result); exit;
 		$this->result[]=$result;
+
 		}
 		
 		return 0;
 	}
 	
 	
-	
-	
-	
-	
-	
-	public function getReportWT2()//учет рабочего времени для контактов указанной организации.
-	{
-			
-		$sql="select pwt.*,     (time_work - time'0:0') sec_work, (time_delay - time'0:0') sec_delay, (time_before - time'0:0') sec_before from Report_WorkTime_Order(1,1,'$this->timestart','$this->timeend',1,1,0,0,0) pwt 
-			where ( 
-				(	id_pep is null) 
-					or ((id_pep in ($this->id_pep)
-				)
-				and (
-					(time_in is not null)
-					or (time_out is not null)
-					or (TIME_WORK is not null))
-					) 
-				)";
-			
-		//echo Debug::vars('47', $sql); exit;	
 
-		try {
-			$this->result = DB::query(Database::SELECT, $sql)
-			->execute(Database::instance('fb'))
-			->as_array();
-			return 0;
-				
-		} catch (Exception $e) {
-			return 3;
-			}	
+	
+	
+	public function send_file ($file)// скачать указанный файл в браузер
+	{
+		//https://habr.com/ru/post/151795/
+		/* $file = $name;
+		header ("Content-Type: application/force-download");
+		header ("Accept-Ranges: bytes");
+		header ("Content-Length: ".filesize($file));
+		header ("Content-Disposition: attachment; filename=".basename($file));  
+		readfile($file);
+		return basename($file); */
 		
+		if (file_exists($file)) {
+    // сбрасываем буфер вывода PHP, чтобы избежать переполнения памяти выделенной под скрипт
+    // если этого не сделать файл будет читаться в память полностью!
+    if (ob_get_level()) {
+      ob_end_clean();
+    }
+    // заставляем браузер показать окно сохранения файла
+    header('Content-Description: File Transfer');
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename=' . basename($file));
+    header('Content-Transfer-Encoding: binary');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize($file));
+    // читаем файл и отправляем его пользователю
+    readfile($file);
+    exit;
+  }
+	}
+  
+  
+	/*
+	Тут происходит преобразовние "голых" данных в формат 
 	
+	*/
 	
+	public function makeCvs($forsave)
+	{
+		$var2=0;
+		$var3=0;
+		$report=array();
+		$report[]=array(iconv('UTF-8','windows-1251', 'Отчет рабочего времени сотрудника ').$this->id_pep);
+		
+		$columnList=array(
+			iconv('UTF-8','windows-1251','Дата'),
+			iconv('UTF-8','windows-1251','День недели'),
+			iconv('UTF-8','windows-1251','Пришел'),
+			iconv('UTF-8','windows-1251','Ушел'),
+			iconv('UTF-8','windows-1251','Отработал'),
+			iconv('UTF-8','windows-1251','Начало рабочего дня'),
+			iconv('UTF-8','windows-1251','Зачершение рабочего дня'),
+			iconv('UTF-8','windows-1251','Обед'),
+			iconv('UTF-8','windows-1251','Длительно рабочего дня'),
+			iconv('UTF-8','windows-1251','Приход расчет'),
+			iconv('UTF-8','windows-1251','Уход расчет'),
+			iconv('UTF-8','windows-1251','Отработал'),
+			iconv('UTF-8','windows-1251','Недоработал'),
+			);
+		
+		$columnNum=array(0, 1,2,3,4,5,6,7,8,9,10, 11,12);
+		$report[]=$columnList;
+		$report[]=$columnNum;
+		foreach ($forsave as $key=>$value)
+		{
+			echo Debug::vars($key, $value);
+						
+			$rep[0]=Arr::get($value, 'date'); //"date" => string(10) "2023-12-01"
+			$rep[1]=Arr::get($value,'currentDay');//"currentDay" => string(1) "5"
+			$rep[2]=$this->trt(Arr::get($value,'time_in'));//"time_in" => integer 27489
+			$rep[3]=$this->trt(Arr::get($value,'time_out'));//"time_out" => integer 54547
+			$rep[4]=$this->trt(Arr::get($value,'time_out') - Arr::get($value,'time_in'));//отработал
+			$rep[5]=$this->trt(Arr::get($value,'timeStartNormative'));//"timeStartNormative" => integer 28800
+			$rep[6]=$this->trt(Arr::get($value,'timeEndNormative'));//"timeEndNormative" => integer 60300
+			$rep[7]=$this->trt(Arr::get($value,'timeDinnerNormative'));//"timeDinnerNormative" => integer 2700
+			$rep[8]=$this->trt(Arr::get($value,'timeLongWorkDayNormative'));//"timeLongWorkDayNormative" => integer 31500
+			$rep[9]=$this->trt(Arr::get($value,'time_startCount'));//"time_startCount" => integer 28800
+			$rep[10]=$this->trt(Arr::get($value,'time_out'));//"time_endtCount" => integer 54547
+			
+			// расчет фактического рабочего времени работы $var3
+			
+			if(Arr::get($value,'timeStartNormative') < Arr::get($value,'time_in')) $var3 = Arr::get($value,'time_out') - Arr::get($value,'time_in');//Отработал в табель с момента прихода
+			if(Arr::get($value,'timeStartNormative') >= Arr::get($value,'time_in')) $var3 = Arr::get($value,'time_out') - Arr::get($value,'timeStartNormative');//Отработал в табель с начала рабочего дня
+			$rep[11]=$this->trt($var3);
+			
+			
+			//выявление и расчет недоработки
+			$rep[12]=0; // время недоработки
+			$var2=Arr::get($value,'timeEndNormative') - Arr::get($value,'timeStartNormative'); // это расчетная длительность рабочего дня.
+			
+			if($var2>$var3) $rep[12]=$this->trt($var2-$var3); //время недоработки
+			//if()
+			//echo Debug::vars($value, $rep); exit;
+			$report[]=$rep;
+		}
+		return $report;
 	}
 	
+	public function trt($var)
+	{
+		return floor($var/3600).':'
+								.str_pad(floor($var%3600/60),2, 0,STR_PAD_LEFT).':'
+								.str_pad(($var%3600)%60,2, 0,STR_PAD_LEFT);
+	}
 }
 	
 

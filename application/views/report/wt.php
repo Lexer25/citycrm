@@ -12,6 +12,9 @@
 $timestart=microtime(true);
 //echo Debug::vars('13', $report);
 $pep=new Contact($report->id_pep);
+//echo Debug::vars('15', $report->result); exit;
+
+
 			
 if ($alert) { ?>
 <div class="alert_success">
@@ -26,6 +29,14 @@ if ($alert) { ?>
 
 		<span><?php echo __('report.title', array(':surname'=>iconv('CP1251', 'UTF-8',$pep->surname),':name'=>iconv('CP1251', 'UTF-8',$pep->name),':patronymic'=>iconv('CP1251', 'UTF-8',$pep->patronymic), ':timefrom'=>$report->timestart, ':timeTo'=>$report->timeend)); ?></span>
 	</div>
+		<?php
+				echo Form::open('reports/savecsv');
+				echo Form::hidden('id_pep', $pep->id_pep); 
+				echo Form::hidden('forsave', serialize ($report->result)); 
+				echo Form::hidden('todo', 'savecvs'); 
+				echo Form::submit(NULL, __('button.savecsv'));
+				echo Form::close();
+		?>
 	<br class="clear"/>
 	<div class="content">
 		<?php 
@@ -84,6 +95,7 @@ if ($alert) { ?>
 						$workTimeStart=Arr::get($value, 'timeStartNormative');
 						$workTimeEnd=Arr::get($value, 'timeEndNormative');
 						$duration_day=Arr::get($value, 'timeLongWorkDayNormative');
+						
 					?>
 					<tr>
 						

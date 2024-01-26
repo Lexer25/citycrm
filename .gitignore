@@ -2,4 +2,5 @@ application/logs/
 application/cache/
 
 *.bak
+*.csv
 

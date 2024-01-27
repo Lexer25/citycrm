@@ -36,9 +36,9 @@ class Controller_Reports extends Controller_Template
 		//https://snipp.ru/php/phpexcel?ysclid=lrwbz922se302951359 
 		$xls = new PHPExcel();
 		$objPHPExcel = new PHPExcel();
-
+		$xls=$objPHPExcel->setActiveSheetIndex(0);	
 		// Set document properties
-		//echo date('H:i:s') , " Set document properties" , EOL;
+		
 		$objPHPExcel->getProperties()->setCreator("ООО Артсек")
 									 ->setLastModifiedBy("ООО Артсек")
 									 ->setTitle("Учет рабочего времени титул")
@@ -47,8 +47,36 @@ class Controller_Reports extends Controller_Template
 									 ->setKeywords("Учет рабочего времени")
 									 ->setCategory("Учет рабочего времени");
 
-		//echo date('H:i:s') , " Add some data" , EOL;
-		$xls=$objPHPExcel->setActiveSheetIndex(0);
+		// Установка названия отчета
+		$pep=new Contact($id_pep);
+		
+		$xls->setCellValue('A1', __('report.title', array(':surname'=>iconv('CP1251', 'UTF-8',$pep->surname),':name'=>iconv('CP1251', 'UTF-8',$pep->name),':patronymic'=>iconv('CP1251', 'UTF-8',$pep->patronymic), ':timefrom'=>'', ':timeTo'=>'')));
+		
+				
+		$titul=array(  'Дата',
+            'День недели',
+            'Пришел',
+            'Ушел',
+            'Отработал',
+            'Начало рабочего дня',
+            'Зачершение рабочего дня',
+            'Обед',
+            'Длительно рабочего дня',
+            'Приход расчет',
+            'Уход расчет',
+            'Отработал',
+            'Недоработал');
+		
+		$row=2;
+		$column=65;
+		
+		foreach($titul  as$key=>$value)
+		{		
+			//echo Debug::vars('70', $value); exit;
+			$xls->setCellValue(chr($column++).$row	, $value); 
+		}
+		
+		
             $xls->setCellValue('A2', 'Дата');
             $xls->setCellValue('B2', 'День недели');
             $xls->setCellValue('C2', 'Пришел');
@@ -83,8 +111,8 @@ class Controller_Reports extends Controller_Template
 		//exit;
 		
 		// Rename worksheet
-		//echo date('H:i:s') , " Rename worksheet" , EOL;
-		$objPHPExcel->getActiveSheet()->setTitle('Simple');
+		
+		$objPHPExcel->getActiveSheet()->setTitle('УРВ');
 
 
 		// Set active sheet index to the first sheet, so Excel opens this as the first sheet

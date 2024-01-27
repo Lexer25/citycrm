@@ -21,6 +21,100 @@ class Controller_Reports extends Controller_Template
 	}
 	
 	/*
+	27.01.2024
+	Сохранение отчета в файл xlsx
+	*/
+	public function action_savexlsx ()
+	{
+		//echo Debug::vars('29', $_POST); exit;
+		$id_pep=Arr::get($_POST, 'id_pep');
+		$forsave=unserialize(Arr::get($_POST, 'forsave'));
+		
+		define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
+		require_once APPPATH . '/vendor/PHPExcel-1.8/Classes/PHPExcel.php';
+		require_once APPPATH . '/vendor//PHPExcel-1.8/Classes/PHPExcel/Writer/Excel2007.php';
+		//https://snipp.ru/php/phpexcel?ysclid=lrwbz922se302951359 
+		$xls = new PHPExcel();
+		$objPHPExcel = new PHPExcel();
+
+		// Set document properties
+		//echo date('H:i:s') , " Set document properties" , EOL;
+		$objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
+									 ->setLastModifiedBy("Maarten Balliauw")
+									 ->setTitle("PHPExcel Test Document")
+									 ->setSubject("PHPExcel Test Document")
+									 ->setDescription("Test document for PHPExcel, generated using PHP classes.")
+									 ->setKeywords("office PHPExcel php")
+									 ->setCategory("Test result file");
+
+		//echo date('H:i:s') , " Add some data" , EOL;
+		$objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A2', 'Дата')
+            ->setCellValue('B2', 'День недели')
+            ->setCellValue('C2', 'Пришел')
+            ->setCellValue('D2', 'Ушел')
+            ->setCellValue('E2', 'Отработал')
+            ->setCellValue('F2', 'Начало рабочего дня')
+            ->setCellValue('G2', 'Зачершение рабочего дня')
+            ->setCellValue('H2', 'Обед')
+            ->setCellValue('I2', 'Длительно рабочего дня')
+            ->setCellValue('J2', 'Приход расчет')
+            ->setCellValue('K2', 'Уход расчет')
+            ->setCellValue('L2', 'Отработал')
+            ->setCellValue('M2', 'Недоработал')
+			;
+			
+		$row=4;
+		foreach($forsave  as$key=>$value)
+		{		
+			//echo Debug::vars('70', $value, array_keys($value)); //exit;
+				$column=65;
+			foreach(array_keys($value) as $key2=>$value2)
+			{
+				//echo Debug::vars('73', Arr::get($value, $value2), chr($column++).$row++); exit; 
+				// Miscellaneous glyphs, UTF-8
+				$objPHPExcel->setActiveSheetIndex(0)
+					->setCellValue(chr($column++).$row	, $this->trt(Arr::get($value, $value2))); 
+			}
+			$row++;
+		
+		}
+		
+		//exit;
+		
+		// Rename worksheet
+		//echo date('H:i:s') , " Rename worksheet" , EOL;
+		$objPHPExcel->getActiveSheet()->setTitle('Simple');
+
+
+		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
+		$objPHPExcel->setActiveSheetIndex(0);
+
+
+		// Save Excel 2007 file
+		//echo date('H:i:s') , " Write to Excel2007 format" , EOL;
+		$callStartTime = microtime(true);
+
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+		//$objWriter->save(str_replace('.php', '.xlsx', __FILE__));
+		$file_name='123321.xlsx';
+		$objWriter->save($file_name);
+		
+		$content = Model::Factory('ReportWorkTime')->send_file($file_name);
+
+		$this->redirect('/contacts/worktime/'.$id_pep);
+	}
+	
+	
+	public function trt($var)
+	{
+		return floor($var/3600).':'
+								.str_pad(floor($var%3600/60),2, 0,STR_PAD_LEFT).':'
+								.str_pad(($var%3600)%60,2, 0,STR_PAD_LEFT);
+	}
+	
+	
+	/*
 	25.01.2024
 	Сохранение отчета в файл csv
 	*/

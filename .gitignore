@@ -3,5 +3,6 @@ application/cache/
 
 *.bak
 *.csv
+*.xls
 *.xlsx
 

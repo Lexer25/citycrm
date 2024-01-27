@@ -39,30 +39,30 @@ class Controller_Reports extends Controller_Template
 
 		// Set document properties
 		//echo date('H:i:s') , " Set document properties" , EOL;
-		$objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
-									 ->setLastModifiedBy("Maarten Balliauw")
-									 ->setTitle("PHPExcel Test Document")
-									 ->setSubject("PHPExcel Test Document")
-									 ->setDescription("Test document for PHPExcel, generated using PHP classes.")
-									 ->setKeywords("office PHPExcel php")
-									 ->setCategory("Test result file");
+		$objPHPExcel->getProperties()->setCreator("ООО Артсек")
+									 ->setLastModifiedBy("ООО Артсек")
+									 ->setTitle("Учет рабочего времени титул")
+									 ->setSubject("Отчет Учет рабочего времени по выбранному сотруднику")
+									 ->setDescription("Отчет Учет рабочего времени по выбранному сотрунику. Отчет получен экспортом из системы Artonit City.")
+									 ->setKeywords("Учет рабочего времени")
+									 ->setCategory("Учет рабочего времени");
 
 		//echo date('H:i:s') , " Add some data" , EOL;
-		$objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue('A2', 'Дата')
-            ->setCellValue('B2', 'День недели')
-            ->setCellValue('C2', 'Пришел')
-            ->setCellValue('D2', 'Ушел')
-            ->setCellValue('E2', 'Отработал')
-            ->setCellValue('F2', 'Начало рабочего дня')
-            ->setCellValue('G2', 'Зачершение рабочего дня')
-            ->setCellValue('H2', 'Обед')
-            ->setCellValue('I2', 'Длительно рабочего дня')
-            ->setCellValue('J2', 'Приход расчет')
-            ->setCellValue('K2', 'Уход расчет')
-            ->setCellValue('L2', 'Отработал')
-            ->setCellValue('M2', 'Недоработал')
-			;
+		$xls=$objPHPExcel->setActiveSheetIndex(0);
+            $xls->setCellValue('A2', 'Дата');
+            $xls->setCellValue('B2', 'День недели');
+            $xls->setCellValue('C2', 'Пришел');
+            $xls->setCellValue('D2', 'Ушел');
+            $xls->setCellValue('E2', 'Отработал');
+            $xls->setCellValue('F2', 'Начало рабочего дня');
+            $xls->setCellValue('G2', 'Зачершение рабочего дня');
+            $xls->setCellValue('H2', 'Обед');
+            $xls->setCellValue('I2', 'Длительно рабочего дня');
+            $xls->setCellValue('J2', 'Приход расчет');
+            $xls->setCellValue('K2', 'Уход расчет');
+            $xls->setCellValue('L2', 'Отработал');
+            $xls->setCellValue('M2', 'Недоработал');
+			
 			
 		$row=4;
 		foreach($forsave  as$key=>$value)
@@ -73,8 +73,8 @@ class Controller_Reports extends Controller_Template
 			{
 				//echo Debug::vars('73', Arr::get($value, $value2), chr($column++).$row++); exit; 
 				// Miscellaneous glyphs, UTF-8
-				$objPHPExcel->setActiveSheetIndex(0)
-					->setCellValue(chr($column++).$row	, $this->trt(Arr::get($value, $value2))); 
+				//$objPHPExcel->setActiveSheetIndex(0)
+					$xls->setCellValue(chr($column++).$row	, $this->trt(Arr::get($value, $value2))); 
 			}
 			$row++;
 		

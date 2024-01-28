@@ -43,6 +43,15 @@ if ($alert) { ?>
 				echo Form::hidden('todo', 'savecvs'); 
 				echo Form::submit(NULL, __('button.xlsx'));
 				echo Form::close();
+				
+				echo Form::open('reports/savepdf');
+				echo Form::hidden('id_pep', $pep->id_pep); 
+				echo Form::hidden('forsave', serialize ($report->result)); 
+				echo Form::hidden('todo', 'savecvs'); 
+				echo Form::submit(NULL, __('button.pdf'));
+				echo Form::close();
+				
+				
 		?>
 	<br class="clear"/>
 	<div class="content">

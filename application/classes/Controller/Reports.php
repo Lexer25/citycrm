@@ -20,6 +20,163 @@ class Controller_Reports extends Controller_Template
 		$this->listsize = $this->session->get('listsize', 10);
 	}
 	
+	
+	/*
+	28.01.2024
+	Сохранение отчета в pdf
+	*/
+	
+	public function action_savepdf ()
+	{
+		$id_pep=Arr::get($_POST, 'id_pep');
+		$forsave=unserialize(Arr::get($_POST, 'forsave'));
+		
+		define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
+		require_once APPPATH . '/vendor/PHPExcel-1.8/Classes/PHPExcel.php';
+
+		$modePdfList=array(
+			'tcpdf',
+			'mpdf',
+			'dompdf'
+		);
+		
+		$mode=1;
+		$modePDF=Arr::get($modePdfList, $mode);
+			
+			switch($modePDF){
+				case('tcpdf'):
+					/*
+					Работа с TCPDF
+					
+					*/
+					
+					$rendererName = PHPExcel_Settings::PDF_RENDERER_TCPDF;
+					$rendererLibrary = 'tcpdf';
+					$rendererLibraryPath = APPPATH . '/vendor/TCPDF/';
+				break;
+				
+				case('mpdf'):		
+					/*
+					Работа с MPDF
+					Заработало после того, как в файле 
+					C:\xampp\htdocs\citycrm\application\vendor\PHPExcel-1.8\Classes\PHPExcel\Writer\PDF\mPDF.php
+					я заменил строку 94
+					$pdf = new mpdf();
+					на
+					$pdf = new mpdf\mpdf();
+					*/
+					
+					$rendererName = PHPExcel_Settings::PDF_RENDERER_MPDF;
+					$rendererLibrary = 'mPDF';
+					$rendererLibraryPath = APPPATH . '/vendor/mpdf/mpdf/src/';
+			
+				break;
+				case('dompdf'):
+				default:
+					
+					//работа с dompdf. В целом работает.
+					 
+					$rendererName = PHPExcel_Settings::PDF_RENDERER_DOMPDF;
+					$rendererLibrary = 'domPDF';
+					$rendererLibraryPath = APPPATH . '/vendor/dompdf/';
+					
+				break;
+			}
+			// Create new PHPExcel object
+				$xls = new PHPExcel();
+		$objPHPExcel = new PHPExcel();
+		$xls=$objPHPExcel->setActiveSheetIndex(0);
+			
+					
+			// Set document properties
+		$objPHPExcel->getProperties()->setCreator("ООО Артсек")
+									 ->setLastModifiedBy("ООО Артсек")
+									 ->setTitle("Учет рабочего времени титул")
+									 ->setSubject("Отчет Учет рабочего времени по выбранному сотруднику")
+									 ->setDescription("Отчет Учет рабочего времени по выбранному сотрунику. Отчет получен экспортом из системы Artonit City.")
+									 ->setKeywords("Учет рабочего времени")
+									 ->setCategory("Учет рабочего времени");
+
+		$pep=new Contact($id_pep);
+		
+		$xls->setCellValue('A1', __('report.title', array(':surname'=>iconv('CP1251', 'UTF-8',$pep->surname),':name'=>iconv('CP1251', 'UTF-8',$pep->name),':patronymic'=>iconv('CP1251', 'UTF-8',$pep->patronymic), ':timefrom'=>'', ':timeTo'=>'')));
+		
+				
+		$titul=array(  'Дата',
+            'День недели',
+            'Пришел',
+            'Ушел',
+            'Отработал',
+            'Начало рабочего дня',
+            'Зачершение рабочего дня',
+            'Обед',
+            'Длительно рабочего дня',
+            'Приход расчет',
+            'Уход расчет',
+            'Отработал',
+            'Недоработал');
+		
+		$objPHPExcel->getActiveSheet()->mergeCells("A1:M1");
+		
+		$row=2;
+		$column=65;
+		
+		foreach($titul  as$key=>$value)
+		{		
+			//echo Debug::vars('70', $value); exit;
+			$xls->setCellValue(chr($column++).$row	, $value); 
+		}
+
+				$row=4;
+		foreach($forsave  as$key=>$value)
+		{		
+			//echo Debug::vars('70', $value, array_keys($value)); //exit;
+				$column=65;
+			foreach(array_keys($value) as $key2=>$value2)
+			{
+			
+					$xls->setCellValue(chr($column++).$row	, $this->trt(Arr::get($value, $value2))); 
+			}
+			$row++;
+		
+		}
+		
+		//exit;
+		
+		// Rename worksheet
+		
+		$objPHPExcel->getActiveSheet()->setTitle('УРВ');
+
+		//echo Debug::vars('86', '$rendererName='.$rendererName,'$rendererLibraryPath='.$rendererLibraryPath ); //exit;
+			if (!PHPExcel_Settings::setPdfRenderer(
+					$rendererName,
+					$rendererLibraryPath
+				)) {
+				die(
+					'NOTICE: Please set the $rendererName and $rendererLibraryPath values' .
+					'<br />' .
+					'at the top of this script as appropriate for your directory structure'
+				);
+			}
+
+
+			// Redirect output to a client’s web browser (PDF)
+			header('Content-Type: application/pdf');
+			header('Content-Disposition: attachment;filename="01simple.pdf"');
+			header('Cache-Control: max-age=0');
+
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'PDF');
+			
+			$objWriter->save('php://output');
+			exit;
+		
+		
+		
+	}
+	
+	
+	
+	
 	/*
 	27.01.2024
 	Сохранение отчета в файл xlsx
@@ -52,6 +209,8 @@ class Controller_Reports extends Controller_Template
 		
 		$xls->setCellValue('A1', __('report.title', array(':surname'=>iconv('CP1251', 'UTF-8',$pep->surname),':name'=>iconv('CP1251', 'UTF-8',$pep->name),':patronymic'=>iconv('CP1251', 'UTF-8',$pep->patronymic), ':timefrom'=>'', ':timeTo'=>'')));
 		
+		
+		
 				
 		$titul=array(  'Дата',
             'День недели',
@@ -67,6 +226,8 @@ class Controller_Reports extends Controller_Template
             'Отработал',
             'Недоработал');
 		
+		$objPHPExcel->getActiveSheet()->mergeCells("A1:M1");
+		
 		$row=2;
 		$column=65;
 		
@@ -77,20 +238,7 @@ class Controller_Reports extends Controller_Template
 		}
 		
 		
-            $xls->setCellValue('A2', 'Дата');
-            $xls->setCellValue('B2', 'День недели');
-            $xls->setCellValue('C2', 'Пришел');
-            $xls->setCellValue('D2', 'Ушел');
-            $xls->setCellValue('E2', 'Отработал');
-            $xls->setCellValue('F2', 'Начало рабочего дня');
-            $xls->setCellValue('G2', 'Зачершение рабочего дня');
-            $xls->setCellValue('H2', 'Обед');
-            $xls->setCellValue('I2', 'Длительно рабочего дня');
-            $xls->setCellValue('J2', 'Приход расчет');
-            $xls->setCellValue('K2', 'Уход расчет');
-            $xls->setCellValue('L2', 'Отработал');
-            $xls->setCellValue('M2', 'Недоработал');
-			
+         
 			
 		$row=4;
 		foreach($forsave  as$key=>$value)
@@ -99,9 +247,7 @@ class Controller_Reports extends Controller_Template
 				$column=65;
 			foreach(array_keys($value) as $key2=>$value2)
 			{
-				//echo Debug::vars('73', Arr::get($value, $value2), chr($column++).$row++); exit; 
-				// Miscellaneous glyphs, UTF-8
-				//$objPHPExcel->setActiveSheetIndex(0)
+			
 					$xls->setCellValue(chr($column++).$row	, $this->trt(Arr::get($value, $value2))); 
 			}
 			$row++;

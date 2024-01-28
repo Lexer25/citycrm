@@ -53,6 +53,8 @@ class Model_ReportWorkTime extends Model
 	
 	/*
 	Поиск первой и поледней метки времени посещения в течении указанной дат
+	$day - дата
+	return - первая и последняя отметка для указанного сотрудника
 	*/
 	public function getWorkTimeInDay($day)
 	{
@@ -61,8 +63,6 @@ class Model_ReportWorkTime extends Model
 			and e.datetime<\''.date('d.m.Y  H:i:s', strtotime($day. ' +1 day')).'\'
 			and e.ess1='.$this->id_pep.'
 			and e.id_eventtype in (47, 48, 50, 65)';
-		//echo Debug::vars('64', $sql); exit;
-
 		
 		try {
 			$query = Arr::flatten(DB::query(Database::SELECT, $sql)
@@ -104,6 +104,8 @@ class Model_ReportWorkTime extends Model
 			$result['currentDay']= date('w', strtotime(Arr::get($var1, 'MIN')));//Дата расчета
 			$result['time_in']= $this->secondFromMidNight(Arr::get($var1, 'MIN'));//время прихода контакта на работу
 			$result['time_out']= $this->secondFromMidNight(Arr::get($var1, 'MAX'));//время ухода контакта с работы
+			$result['time_on work']=0;
+			if($result['time_out']>$result['time_in']) $result['time_on work']= $this->secondFromMidNight(Arr::get($var1, 'MAX'));//время нахождения на работе в течении суток
 			
 			$result['timeStartNormative']=Arr::get(Arr::get($this->workTimeOrder,$result['currentDay']), 0);//начало рабочего дня по нормативу
 			$result['timeEndNormative']=Arr::get(Arr::get($this->workTimeOrder,$result['currentDay']), 1);//завершение рабочего дня по нормативу

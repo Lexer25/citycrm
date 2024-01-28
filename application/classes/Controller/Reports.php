@@ -362,8 +362,8 @@ class Controller_Reports extends Controller_Template
 	
 		
 		if($report->getReportWT() == 0){
-			//echo Debug::vars('32', $id_pep, $report->result); exit;
-			$content = View::factory('report/wt')
+			
+			$content = View::factory('report/wt_as_desktop')
 				->bind('id_pep', $id_pep)
 				->bind('report', $report)
 				->bind('duration', $duration)

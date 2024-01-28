@@ -98,7 +98,7 @@ if ($alert) { ?>
 				
 				<tbody>
 					<?php foreach ($report->result as $key=>$value) { 
-						//echo Debug::vars('83', $key, $value);exit;
+						//echo Debug::vars('83', $key, $value);//exit;
 						$workTimeStart=Arr::get($value, 'timeStartNormative');
 						$workTimeEnd=Arr::get($value, 'timeEndNormative');
 						$duration_day=Arr::get($value, 'timeLongWorkDayNormative');
@@ -149,30 +149,26 @@ if ($alert) { ?>
 						<td><?php 
 						// недоработал
 						//deviation показывать время, если был на работе меньше нормативного
-						$var1=Arr::get($value, 'timeEndNormative') - Arr::get($value, 'timeStartNormative');//нормативная длительность рабочего дня
-						$var2=0;// сколько был на работе в рамках рабочего времени
-							
-							if(Arr::get($value, 'timeStartNormative') > Arr::get($value, 'time_in')) {
-								$var2=Arr::get($value, 'time_out') - Arr::get($value, 'timeStartNormative');
-							} else {
-								$var2=Arr::get($value, 'time_out') - Arr::get($value, 'time_in');
-							}
-						
-						$var=0;// недоработал
-						if($var2<$var1) $var= $var1-$var2;
-						//$var=$var2;
+					
+						$var=Arr::get($value, 'deviation');
 						echo floor($var/3600).':'
 								.str_pad(floor($var%3600/60),2, 0,STR_PAD_LEFT).':'
-								.str_pad(($var%3600)%60,2, 0,STR_PAD_LEFT); ?>
+								.str_pad(($var%3600)%60,2, 0,STR_PAD_LEFT); 
+								
+								
+								?>
 						</td>
 						
 						<td><?php 
 						//пробыл на работе
-							$var=Arr::get($value, 'time_out')-Arr::get($value, 'time_in');
-							$var=$var2;
+													
+							$var=Arr::get($value, 'time_work');
 							echo floor($var/3600).':'
 								.str_pad(floor($var%3600/60),2, 0,STR_PAD_LEFT).':'
-								.str_pad(($var%3600)%60,2, 0,STR_PAD_LEFT); ?>
+								.str_pad(($var%3600)%60,2, 0,STR_PAD_LEFT); 
+								
+								
+								?>
 						</td>
 						
 						

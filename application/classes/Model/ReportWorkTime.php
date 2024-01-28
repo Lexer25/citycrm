@@ -104,7 +104,7 @@ class Model_ReportWorkTime extends Model
 			$result['currentDay']= date('w', strtotime(Arr::get($var1, 'MIN')));//Дата расчета
 			$result['time_in']= $this->secondFromMidNight(Arr::get($var1, 'MIN'));//время прихода контакта на работу
 			$result['time_out']= $this->secondFromMidNight(Arr::get($var1, 'MAX'));//время ухода контакта с работы
-			$result['time_on work']=0;
+			$result['time_on work']=$result['time_out'] - $result['time_in'];
 			if($result['time_out']>$result['time_in']) $result['time_on work']= $this->secondFromMidNight(Arr::get($var1, 'MAX'));//время нахождения на работе в течении суток
 			
 			$result['timeStartNormative']=Arr::get(Arr::get($this->workTimeOrder,$result['currentDay']), 0);//начало рабочего дня по нормативу
@@ -114,6 +114,34 @@ class Model_ReportWorkTime extends Model
 		
 			$result['time_startCount']= ($result['time_in']> $result['timeStartNormative'])? $result['time_in'] : $result['timeStartNormative'];//время начала пребывания на работе для расчета
 			$result['time_endtCount']= $result['time_out'];//время окончания пребывания на работе  рабочего дня для расчета
+			
+			
+			$result['time_work']= $result['time_out']-$result['time_in'];//время окончания пребывания на работе  рабочего дня для расчета
+			
+			//на lateness - на сколько опоздал
+			if(Arr::get($result, 'timeStartNormative') < Arr::get($result, 'time_in')) {
+								
+								$result['lateness']=Arr::get($result, 'time_in') - Arr::get($result, 'timeStartNormative');
+							
+							} else {
+								$result['lateness']=0;
+								
+							}
+							
+							
+				// недоработал
+						//deviation показывать время, если был на работе меньше нормативного
+						$var1=Arr::get($result, 'timeEndNormative') - Arr::get($result, 'timeStartNormative');//нормативная длительность рабочего дня
+						$var2=0;// сколько был на работе в рамках рабочего времени
+							
+							if(Arr::get($result, 'timeStartNormative') > Arr::get($result, 'time_in')) {
+								$var2=Arr::get($result, 'time_out') - Arr::get($result, 'timeStartNormative');
+							} else {
+								$var2=Arr::get($result, 'time_out') - Arr::get($result, 'time_in');
+							}
+						
+						$result['deviation']=0;// недоработал
+						if($var2<$var1) $result['deviation']= $var1-$var2;
 		
 		//echo Debug::vars('92',   $key, $value,  $result); exit;
 		$this->result[]=$result;
@@ -225,6 +253,11 @@ class Model_ReportWorkTime extends Model
 		}
 		return $report;
 	}
+	
+	/*
+	28.01.2024 преобразование секунд в часы, минуты и секунды
+	
+	*/
 	
 	public function trt($var)
 	{

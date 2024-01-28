@@ -33,6 +33,7 @@ class Controller_Reports extends Controller_Template
 		
 		define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
 		require_once APPPATH . '/vendor/PHPExcel-1.8/Classes/PHPExcel.php';
+		require_once APPPATH . '/vendor/autoload.php';
 
 		$modePdfList=array(
 			'tcpdf',

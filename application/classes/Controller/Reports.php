@@ -99,54 +99,89 @@ class Controller_Reports extends Controller_Template
 									 ->setCategory("Учет рабочего времени");
 
 		$pep=new Contact($id_pep);
+		$xls->setCellValue('A1', 'Отчет подготовлен '. date('d.m.Y.'));
+		$xls->setCellValue('A2', __('report.title', array(':surname'=>iconv('CP1251', 'UTF-8',$pep->surname),':name'=>iconv('CP1251', 'UTF-8',$pep->name),':patronymic'=>iconv('CP1251', 'UTF-8',$pep->patronymic), ':timefrom'=>$forsave->timestart, ':timeTo'=>$forsave->timeend)));
+	
 		
-		$xls->setCellValue('A1', __('report.title', array(':surname'=>iconv('CP1251', 'UTF-8',$pep->surname),':name'=>iconv('CP1251', 'UTF-8',$pep->name),':patronymic'=>iconv('CP1251', 'UTF-8',$pep->patronymic), ':timefrom'=>'', ':timeTo'=>'')));
+//объединнеие ячеек названия отчета на листе
 		
-				
-		$titul=array(  'Дата',
-            'День недели',
-            'Пришел',
-            'Ушел',
-            'Отработал',
-            'Начало рабочего дня',
-            'Зачершение рабочего дня',
-            'Обед',
-            'Длительно рабочего дня',
-            'Приход расчет',
-            'Уход расчет',
-            'Отработал',
-            'Недоработал');
+		$objPHPExcel->getActiveSheet()->mergeCells("A1:H1");
+		$objPHPExcel->getActiveSheet()->mergeCells("A2:H2");
 		
-		$objPHPExcel->getActiveSheet()->mergeCells("A1:M1");
-		
-		$row=2;
-		$column=65;
-		
-		foreach($titul  as$key=>$value)
+			//печать заголовок колонок
+		$row=3;// начиная со второй строки
+		$ccol=1;//автонумерация колонок
+		$column_chr=65;// char кода англ буквы A для позиционирования отчета
+
+		foreach($forsave->colimnTitle  as$key=>$value)
 		{		
 			//echo Debug::vars('70', $value); exit;
-			$xls->setCellValue(chr($column++).$row	, $value); 
-		}
-
-				$row=4;
-		foreach($forsave  as$key=>$value)
-		{		
-			//echo Debug::vars('70', $value, array_keys($value)); //exit;
-				$column=65;
-			foreach(array_keys($value) as $key2=>$value2)
-			{
+			$xls->setCellValue(chr($column_chr).$row	, $value); 
+			$xls->getStyle(chr($column_chr).$row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 			
-					$xls->setCellValue(chr($column++).$row	, $this->trt(Arr::get($value, $value2))); 
-			}
+			$xls->setCellValue(chr($column_chr).($row+1)	, $ccol++); 
+			$xls->getStyle(chr($column_chr).($row+1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			//установка автоширины колонок
+		
+			$xls->getColumnDimension(chr($column_chr))->setAutoSize(true);
+			$column_chr++;
+		
+		}
+		
+		$org=new Company($pep->id_org);
+        //заполнение данных
+			
+		$row=5;
+		foreach($forsave->result  as $key=>$value)
+		{		
+			$column_chr=65;//char английской буквы A
+			
+			
+					$xls->setCellValue(chr($column_chr++).$row	, Arr::get($value, 'date' )); 
+					$xls->setCellValue(chr($column_chr++).$row	, iconv('CP1251', 'UTF-8', $org->name)); 
+					$xls->setCellValue(chr($column_chr++).$row	, __('report.fio', array(':surname'=>iconv('CP1251', 'UTF-8',$pep->surname),':name'=>iconv('CP1251', 'UTF-8',$pep->name),':patronymic'=>iconv('CP1251', 'UTF-8',$pep->patronymic), ':timefrom'=>'', ':timeTo'=>''))); 
+					$xls->setCellValue(chr($column_chr++).$row	, $this->trt(Arr::get($value, 'time_in'))); 
+					$xls->setCellValue(chr($column_chr++).$row	, $this->trt(Arr::get($value, 'lateness'))); 
+					$xls->setCellValue(chr($column_chr++).$row	, $this->trt(Arr::get($value, 'time_out'))); 
+					$xls->setCellValue(chr($column_chr++).$row	, $this->trt(Arr::get($value, 'deviation'))); 
+					$xls->setCellValue(chr($column_chr++).$row	, $this->trt(Arr::get($value, 'time_work'))); 
+			
 			$row++;
 		
 		}
+
+		// рисую границы ячеек
+		$border = array(
+			'borders'=>array(
+				'allborders' => array(
+					'style' => PHPExcel_Style_Border::BORDER_THIN,
+					'color' => array('rgb' => '000000')
+				)
+			)
+		);
 		
-		//exit;
+		$xls->getStyle("A3:H12")->applyFromArray($border);
+		
+		//выделяю заголовок жирной рамкой
+		$border = array(
+			'borders'=>array(
+				'outline' => array(
+					'style' => PHPExcel_Style_Border::BORDER_THICK,
+					'color' => array('rgb' => '000000')
+				),
+				'allborders' => array(
+					'style' => PHPExcel_Style_Border::BORDER_THIN,
+					'color' => array('rgb' => '000000')
+				)
+			)
+		);
+ 
+		$xls->getStyle("A3:H5")->applyFromArray($border);
 		
 		// Rename worksheet
 		
-		$objPHPExcel->getActiveSheet()->setTitle('УРВ');
+			$objPHPExcel->getActiveSheet()->setTitle(iconv('CP1251', 'UTF-8',$pep->surname));
+
 
 		//echo Debug::vars('86', '$rendererName='.$rendererName,'$rendererLibraryPath='.$rendererLibraryPath ); //exit;
 			if (!PHPExcel_Settings::setPdfRenderer(
@@ -163,7 +198,7 @@ class Controller_Reports extends Controller_Template
 
 			// Redirect output to a client’s web browser (PDF)
 			header('Content-Type: application/pdf');
-			header('Content-Disposition: attachment;filename="01simple.pdf"');
+			header('Content-Disposition: attachment;filename="УРВ_'.iconv('CP1251', 'UTF-8',$pep->surname).'_'.date('Y_m_d'));
 			header('Cache-Control: max-age=0');
 
 			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'PDF');
@@ -187,14 +222,14 @@ class Controller_Reports extends Controller_Template
 		//echo Debug::vars('29', $_POST); exit;
 		$id_pep=Arr::get($_POST, 'id_pep');
 		$forsave=unserialize(Arr::get($_POST, 'forsave'));
-		
+		//echo Debug::vars('190', $forsave, count($forsave->colimnTitle)); exit;
 		define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
 		require_once APPPATH . '/vendor/PHPExcel-1.8/Classes/PHPExcel.php';
 		require_once APPPATH . '/vendor//PHPExcel-1.8/Classes/PHPExcel/Writer/Excel2007.php';
 		//https://snipp.ru/php/phpexcel?ysclid=lrwbz922se302951359 
-		$xls = new PHPExcel();
-		$objPHPExcel = new PHPExcel();
-		$xls=$objPHPExcel->setActiveSheetIndex(0);	
+	
+		$objPHPExcel = new PHPExcel();//создал документ
+		
 		// Set document properties
 		
 		$objPHPExcel->getProperties()->setCreator("ООО Артсек")
@@ -205,74 +240,72 @@ class Controller_Reports extends Controller_Template
 									 ->setKeywords("Учет рабочего времени")
 									 ->setCategory("Учет рабочего времени");
 
+		$xls=$objPHPExcel->setActiveSheetIndex(0);	//создал новый лист
+	
+		
 		// Установка названия отчета
-		$pep=new Contact($id_pep);
+		$pep=new Contact($id_pep);// создал пипла для получения ФИО
 		
-		$xls->setCellValue('A1', __('report.title', array(':surname'=>iconv('CP1251', 'UTF-8',$pep->surname),':name'=>iconv('CP1251', 'UTF-8',$pep->name),':patronymic'=>iconv('CP1251', 'UTF-8',$pep->patronymic), ':timefrom'=>'', ':timeTo'=>'')));
+		$xls->setCellValue('A1', __('report.title', array(':surname'=>iconv('CP1251', 'UTF-8',$pep->surname),':name'=>iconv('CP1251', 'UTF-8',$pep->name),':patronymic'=>iconv('CP1251', 'UTF-8',$pep->patronymic), ':timefrom'=>$forsave->timestart, ':timeTo'=>$forsave->timeend)));
+		
+		//объединнеие ячеек названия отчета на листе
+		
+		$objPHPExcel->getActiveSheet()->mergeCells("A1:".chr(65 + count($forsave->colimnTitle))."1");
 		
 		
 		
-				
-		$titul=array(  'Дата',
-            'День недели',
-            'Пришел',
-            'Ушел',
-            'Отработал',
-            'Начало рабочего дня',
-            'Зачершение рабочего дня',
-            'Обед',
-            'Длительно рабочего дня',
-            'Приход расчет',
-            'Уход расчет',
-            'Отработал',
-            'Недоработал');
+		//печать заголовок колонок
 		
-		$objPHPExcel->getActiveSheet()->mergeCells("A1:M1");
+		$row=2;// начиная со второй строки
+		$ccol=1;//автонумерация колонок
+		$column_chr=65;// char кода англ буквы A для позиционирования отчета
 		
-		$row=2;
-		$column=65;
-		
-		foreach($titul  as$key=>$value)
+		foreach($forsave->colimnTitle as $key=>$value)
 		{		
 			//echo Debug::vars('70', $value); exit;
-			$xls->setCellValue(chr($column++).$row	, $value); 
+			$xls->setCellValue(chr($column_chr).$row	, $value); 
+			$xls->getStyle(chr($column_chr).$row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			
+			$xls->setCellValue(chr($column_chr).($row+1)	, $ccol++); 
+			$xls->getStyle(chr($column_chr).($row+1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			//установка автоширины колонок
+		
+			$xls->getColumnDimension(chr($column_chr))->setAutoSize(true);
+			$column_chr++;
 		}
 		
+		//информация по сотруднику
 		
-         
+		
+		$org=new Company($pep->id_org);
+        //заполнение данных
 			
 		$row=4;
-		foreach($forsave  as$key=>$value)
+		foreach($forsave->result  as $key=>$value)
 		{		
-			//echo Debug::vars('70', $value, array_keys($value)); //exit;
-				$column=65;
-			foreach(array_keys($value) as $key2=>$value2)
-			{
+			$column_chr=65;//char английской буквы A
 			
-					$xls->setCellValue(chr($column++).$row	, $this->trt(Arr::get($value, $value2))); 
-			}
+			
+					$xls->setCellValue(chr($column_chr++).$row	, Arr::get($value, 'date' )); 
+					$xls->setCellValue(chr($column_chr++).$row	, iconv('CP1251', 'UTF-8', $org->name)); 
+					$xls->setCellValue(chr($column_chr++).$row	, __('report.fio', array(':surname'=>iconv('CP1251', 'UTF-8',$pep->surname),':name'=>iconv('CP1251', 'UTF-8',$pep->name),':patronymic'=>iconv('CP1251', 'UTF-8',$pep->patronymic), ':timefrom'=>'', ':timeTo'=>''))); 
+					$xls->setCellValue(chr($column_chr++).$row	, $this->trt(Arr::get($value, 'time_in'))); 
+					$xls->setCellValue(chr($column_chr++).$row	, $this->trt(Arr::get($value, 'lateness'))); 
+					$xls->setCellValue(chr($column_chr++).$row	, $this->trt(Arr::get($value, 'time_out'))); 
+					$xls->setCellValue(chr($column_chr++).$row	, $this->trt(Arr::get($value, 'deviation'))); 
+					$xls->setCellValue(chr($column_chr++).$row	, $this->trt(Arr::get($value, 'time_work'))); 
+			
 			$row++;
 		
 		}
 		
-		//exit;
+		$objPHPExcel->getActiveSheet()->setTitle(iconv('CP1251', 'UTF-8',$pep->surname));
+
+
 		
-		// Rename worksheet
-		
-		$objPHPExcel->getActiveSheet()->setTitle('УРВ');
-
-
-		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
-		$objPHPExcel->setActiveSheetIndex(0);
-
-
-		// Save Excel 2007 file
-		//echo date('H:i:s') , " Write to Excel2007 format" , EOL;
-		$callStartTime = microtime(true);
-
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 		//$objWriter->save(str_replace('.php', '.xlsx', __FILE__));
-		$file_name='123321.xlsx';
+		$file_name='УРВ_'.iconv('CP1251', 'UTF-8',$pep->surname).'_'.date('Y_m_d').'.xlsx';
 		$objWriter->save($file_name);
 		
 		$content = Model::Factory('ReportWorkTime')->send_file($file_name);
@@ -361,7 +394,17 @@ class Controller_Reports extends Controller_Template
 			
 			); // начало рабочего дня по дням недели 0 - воскресентье
 	
+		$report->colimnTitle=array(
+				__('report.date'),
+				__('report.org'), 
+				__('report.pepname'),
+				__('report.time_in'),
+				__('report.lateness'),
+				__('report.time_out'),
+				__('report.deviation'),
+				__('report.time_work')
 		
+		);
 		if($report->getReportWT() == 0){
 			
 			$content = View::factory('report/wt_as_desktop')

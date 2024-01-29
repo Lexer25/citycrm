@@ -90,6 +90,10 @@ class Model_ReportWorkTime extends Model
 	/*
 	
 	23.01.2024 подготовка таблицы для распечатки отчета
+	@bref подготовка отчета рабочего времени как на десктопном компьютере
+	@input - расчет ведется по диапазону дат и id_pep
+	@varout массив данных посуточно в следующем порядке:
+	
 	*/
 	
 	public function getReportWT()
@@ -104,7 +108,7 @@ class Model_ReportWorkTime extends Model
 			$result['currentDay']= date('w', strtotime(Arr::get($var1, 'MIN')));//Дата расчета
 			$result['time_in']= $this->secondFromMidNight(Arr::get($var1, 'MIN'));//время прихода контакта на работу
 			$result['time_out']= $this->secondFromMidNight(Arr::get($var1, 'MAX'));//время ухода контакта с работы
-			$result['time_on work']=$result['time_out'] - $result['time_in'];
+			$result['time_on_work']=$result['time_out'] - $result['time_in'];//время нахождения на территории 
 			if($result['time_out']>$result['time_in']) $result['time_on work']= $this->secondFromMidNight(Arr::get($var1, 'MAX'));//время нахождения на работе в течении суток
 			
 			$result['timeStartNormative']=Arr::get(Arr::get($this->workTimeOrder,$result['currentDay']), 0);//начало рабочего дня по нормативу
@@ -116,7 +120,7 @@ class Model_ReportWorkTime extends Model
 			$result['time_endtCount']= $result['time_out'];//время окончания пребывания на работе  рабочего дня для расчета
 			
 			
-			$result['time_work']= $result['time_out']-$result['time_in'];//время окончания пребывания на работе  рабочего дня для расчета
+			$result['time_work']= $result['time_out']-$result['time_startCount'];//время пребывания на работе  рабочего дня для расчета
 			
 			//на lateness - на сколько опоздал
 			if(Arr::get($result, 'timeStartNormative') < Arr::get($result, 'time_in')) {
@@ -127,7 +131,6 @@ class Model_ReportWorkTime extends Model
 								$result['lateness']=0;
 								
 							}
-							
 							
 				// недоработал
 						//deviation показывать время, если был на работе меньше нормативного
@@ -144,6 +147,16 @@ class Model_ReportWorkTime extends Model
 						if($var2<$var1) $result['deviation']= $var1-$var2;
 		
 		//echo Debug::vars('92',   $key, $value,  $result); exit;
+		
+		$result_out=array(
+			$result['date'],
+			$result['time_in'],
+			$result['lateness'],
+			$result['time_out'],
+			$result['deviation'],
+			$result['time_work']
+			
+		);
 		$this->result[]=$result;
 
 		}

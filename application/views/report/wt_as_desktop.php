@@ -40,14 +40,14 @@ if ($alert) { ?>
 		
 				echo Form::open('reports/savexlsx');
 				echo Form::hidden('id_pep', $pep->id_pep); 
-				echo Form::hidden('forsave', serialize ($report->result)); 
+				echo Form::hidden('forsave', serialize ($report)); 
 				echo Form::hidden('todo', 'savecvs'); 
 				echo Form::submit(NULL, __('button.xlsx'));
 				echo Form::close();
 				
 				echo Form::open('reports/savepdf');
 				echo Form::hidden('id_pep', $pep->id_pep); 
-				echo Form::hidden('forsave', serialize ($report->result)); 
+				echo Form::hidden('forsave', serialize ($report)); 
 				echo Form::hidden('todo', 'savecvs'); 
 				echo Form::submit(NULL, __('button.pdf'));
 				echo Form::close();
@@ -58,7 +58,7 @@ if ($alert) { ?>
 	<div class="content">
 		<?php 
 		
-		$weekDay=array('Вскр','Пнд','Вт','Ср','Чт','Птн','Сб');
+	
 		if (count($report->result)) { 
 		
 		$count=0;
@@ -67,29 +67,21 @@ if ($alert) { ?>
 			<table class="data tablesorter-blue" width="100%" cellpadding="0" cellspacing="0" id="tablesorter" >
 			<thead  allign="center">
 					<tr>
-						<th><?php echo __('report.date'); ?></th>
-						<th><?php echo __('report.id_org'); ?></th> 
-						<th><?php echo __('report.pepname'); ?></th>
-						<th><?php echo __('report.time_in'); ?></th>
-						<th><?php echo __('report.lateness'); ?></th>
-						<th><?php echo __('report.time_out'); ?></th>
-						<th><?php echo __('report.deviation'); ?></th>
-						<th><?php echo __('report.time_work'); ?></th>
-						
-						
+					<?php 
+					foreach ($report->colimnTitle as $key=>$value)
+					{
+						echo '<th>'.$value.'</th>';
+					}
+					?>					
 					</tr>
 					</thead>
 					<tr align="center">
 					<?php
-						
-						echo '<td>1</td>';
-						echo '<td>2</td>';
-						echo '<td>3</td>';
-						echo '<td>4</td>';
-						echo '<td>5</td>';
-						echo '<td>6</td>';
-						echo '<td>7</td>';
-						echo '<td>8</td>';
+						$cc=1;
+						foreach ($report->colimnTitle as $key)
+						{
+							echo '<td>'.$cc++.'</td>';
+						}
 						
 					?>
 						
@@ -121,14 +113,8 @@ if ($alert) { ?>
 							
 							//Опоздал
 							
-							if(Arr::get($value, 'timeStartNormative') < Arr::get($value, 'time_in')) {
-								
-								$var=Arr::get($value, 'time_in') - Arr::get($value, 'timeStartNormative');
-							} else {
-								$var=0;
-							}
 							
-							
+							$var=Arr::get($value, 'lateness');
 							echo floor($var/3600).':'
 								.str_pad(floor($var%3600/60),2, 0,STR_PAD_LEFT).':'
 								.str_pad(($var%3600)%60,2, 0,STR_PAD_LEFT);
@@ -182,13 +168,15 @@ if ($alert) { ?>
 			<div id="chart_wrapper" class="chart_wrapper"></div>
 		<!-- End bar chart table-->
 		</form>
-		<?php //echo $pagination; ?>
-		<?php } else { ?>
+		<?php 
+		 } else { ?>
 		<div style="margin: 100px 0; text-align: center;">
 			<?php echo __('report.empty'); ?><br /><br />
 		</div>
 		<?php }
 		echo __('Time executed').' '. (microtime(true) - $timestart);
+			
+		
 		?>
 	</div>
 </div>

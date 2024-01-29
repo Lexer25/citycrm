@@ -68,7 +68,7 @@ if ($alert) { ?>
 						<th><?php echo __('report.count'); ?></th>
 						<th><?php echo __('report.date'); ?></th>
 						<!-- <th><?php echo __('report.id_pep'); ?></th>
-						<th><?php echo __('report.id_org'); ?></th> 
+						<th><?php echo __('report.org'); ?></th> 
 						<th><?php echo __('report.pepname'); ?></th>-->
 						<th><?php echo __('report.time_in'); ?></th>
 						<th><?php echo __('report.time_out'); ?></th>

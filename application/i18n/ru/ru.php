@@ -181,7 +181,16 @@ return array
 	'stat.report.header1'		=>'Отчет о состоянии системы СКУД Артонит Сити',
 	'stat.report.header2'		=>'www.artonit.ru',
 	
-	'report.title'	=> 'Отчет Учет рабочего времени для контакта :surname :name  :patronymic за период c :timefrom по :timeTo',
+	'report.title'				=> 'Отчет Учет рабочего времени для контакта :surname :name  :patronymic за период c :timefrom по :timeTo',
+	'report.date'				=> 'Дата',
+	'report.org'				=> 'Отдел',
+	'report.pepname'			=> 'ФИО',
+	'report.time_in'			=> 'Пришел',
+	'report.lateness'			=> 'Опоздал',
+	'report.time_out'			=> 'Ушел',
+	'report.deviation'			=> 'Недоработал',
+	'report.time_work'			=> 'Пробыл на работе',
+	'report.fio'				=> ':surname :name :patronymic',
 	
 	
 	'sidebar.companieslist'			=> 'Список организаций',

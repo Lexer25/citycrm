@@ -490,6 +490,9 @@ return array
 	'button.backtocardlist'			=> 'Вернуться к списку карт',
 	'button.addpeople'				=> 'Добавить контакт',
 	'button.totalDelete'			=> 'Удалить контакт',
+	'button.savecsv'				=> 'Экспорт cvs',
+	'button.savexlsx'				=> 'Экспорт xlsx',
+	'button.savepdf'				=> 'Экспорт pdf',
 	
 
 	'settings.title'				=> 'Настройки',

@@ -47,6 +47,7 @@ class Contact
 		, p."ACTIVE" as is_active
 		, p.flag
 		, p.sysnote
+		, p.note
 		, p.time_stamp
 		, p.tabnum
 		
@@ -72,6 +73,7 @@ class Contact
 		$this->datedoc=Arr::get($query, 'DATEDOC');
 		$this->is_active=Arr::get($query, 'IS_ACTIVE');
 		$this->sysnote=Arr::get($query, 'SYSNOTE');
+		$this->note=Arr::get($query, 'NOTE');
 		$this->time_stamp=Arr::get($query, 'TIME_STAMP');
 		$this->tabnum=Arr::get($query, 'TABNUM');
 		
@@ -113,7 +115,7 @@ class Contact
 			SURNAME = \''.$this->surname.'\',
 			NAME = \''.$this->name.'\',
 			PATRONYMIC = \''.$this->patronymic.'\',
-			NOTE = \''.$this->id_org.'\'
+			NOTE = \''.$this->note.'\'
 			WHERE (ID_PEP = '.$this->id_pep.') AND (ID_DB = 1)';
 	//echo Debug::vars('118', $sql); exit;		
 			try

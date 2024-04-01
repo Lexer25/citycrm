@@ -1,4 +1,8 @@
 citycrm
+28.03.2024
+Исправлены ошибки с сохранением note для сотрудников. Все находится в файле C:\xampp\htdocs\citycrm\application\classes\Contact.php
+Настройки вынесены в отдлельный modules tuner.
+В разделе modules сделан шаблон для модулей template
 18.01.2024
 по результатам эксплуатации во ВНИИЖТ внесены следующие изменения:
 1. добавлена сортировка таблиц. Для этого добавлены C:\xampp\htdocs\citycrm\js\sort\jquery.tablesorter.js.

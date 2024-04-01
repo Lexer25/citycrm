@@ -134,6 +134,7 @@ Kohana::modules(array(
 	 'unittest'   => MODPATH.'unittest',   // Unit testing
 	 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
 	'pagination' => MODPATH . 'pagination', // Paging of results
+	'tuner' => MODPATH . 'tuner', // tuner настройки
 	));
 /*
 Добавляю хранение настроек в базе данных

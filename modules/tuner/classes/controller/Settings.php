@@ -62,7 +62,7 @@ class Controller_Settings extends Controller_Template {
 		//if(Arr::get(Auth::instance()->get_user(), 'ID_PEP') == 1)
 		
 			//получил список групп конфигурации
-			$groupList=Model::factory('setting')->getgrouplist();//список зарегистрированных групп конфигурации
+		$groupList=Model::factory('setting')->getgrouplist();//список зарегистрированных групп конфигурации
 		
 		$fl = $this->session->get('alert', '');
 		$this->session->delete('alert');

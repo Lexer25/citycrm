@@ -110,6 +110,8 @@ if (PHP_SAPI == 'cli') // Try and load minion
 }
 else
 {
+	//echo Debug::vars('113', 'No active '.(time() - Session::instance()->get('last_active')));
+	
 	/**
 	 * Execute the main request. A source of the URI can be passed, eg: $_SERVER['PATH_INFO'].
 	 * If no source is specified, the URI will be automatically detected.

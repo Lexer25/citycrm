@@ -58,7 +58,7 @@
 								} 
 								
 								echo '<br>';
-								if(Session::instance()->get('canModSetting')) echo __('withSelected').' '.Form::submit('deleteKey', __('deleteKey')).Form::submit('updateKeyName', __('updateKeyName'));
+								if(Session::instance()->get('canModSetting') || 1) echo __('withSelected').' '.Form::submit('deleteKey', __('deleteKey')).Form::submit('updateKeyName', __('updateKeyName'));
 								echo '<br>';
 							 echo Form::close();
 							 ?>
@@ -67,8 +67,8 @@
 						</div>
 					</fieldset>
 
-			<?php if(Session::instance()->get('canModSetting')){ ?>		
-												<fieldset>
+			<?php if(Session::instance()->get('canModSetting') || 1){ ?>		
+							<fieldset>
 								<legend><?php echo __('setting.addNewKey'); ?></legend>
 							
 							<br />
@@ -78,11 +78,37 @@
 									echo Form::hidden('group', $group);
 									echo __('setting.addNewKey').' '.Form::input('key[addNewKey]', 'new').'<br>';
 								
-								if(Session::instance()->get('canModSetting')) echo Form::submit(NULL, 'Save');
+								if(Session::instance()->get('canModSetting') || 1) echo Form::submit(NULL, 'Save');
 								echo '<br>';
 							 echo Form::close();
 							 ?>
 							</fieldset>
+							
+			<?php }?>
+				
+		<?php if(Session::instance()->get('canModSetting') || 1){ ?>		
+						<fieldset>
+						<legend><?php echo __('setting.'.$group); ?></legend>
+						<div>
+							<fieldset>
+								<legend><?php echo __('setting.mainoptions'); ?></legend>
+							<?php 
+							echo Form::open('settings/save');
+							echo Form::hidden('group', $group);
+							foreach(Kohana::$config->load($group) as $key=>$value){
+								echo __('setting.'.$key).' '.Form::input('key['.$key.']', Arr::get(Kohana::$config->load($group), $key), array('value'=>$value));
+								echo '<br>';
+								}
+								
+								 echo Form::submit(NULL, 'Save');
+								echo '<br>';
+							echo Form::close();
+							?>
+							
+							</fieldset>
+
+						</div>
+						</fieldset>
 							
 			<?php }?>			
 

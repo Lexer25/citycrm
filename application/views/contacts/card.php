@@ -22,7 +22,8 @@
 			return false;
 		}
 
-		if (!$('#idcard').val().match(/^[0-9a-f]{8}$/i)) {
+		/*if (!$('#idcard').val().match(/^[0-9a-f]{8}$/i)) { */
+		if (!$('#idcard').val().match(/^[0-9a-f]{3,10}$/i)) {
 			$('#error12').show();
 			$('#idcard').focus();
 			return false;
@@ -156,7 +157,8 @@
 												
 											<?php } else {
 											?>
-												<input type="text" size="12" maxlength="8" id="idcard" name="idcard" value="<?php if (isset($card)) echo Arr::get($card, 'ID_CARD'); ?>" />
+												Добавить новую карту
+												<input type="text" size="12" maxlength="10" id="idcard" name="idcard" value="<?php if (isset($card)) echo Arr::get($card, 'ID_CARD'); ?>" />
 												<br />
 											<?php } ?>
 												<span class="error" id="error11" style="color: red; display: none;"><?php echo __('card.emptyid'); ?></span>

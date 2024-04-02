@@ -111,35 +111,33 @@
 						if(Kohana::$config->load('config_newcrm')->get('contactListTabNumView')) echo '<td>'.Arr::get($pep,'TABNUM').'</td>'?>
 						
 						<td><?php 
-							if (Auth::instance()->logged_in('admin') || $pep['CANEDIT'] == 1)
+							if (Auth::instance()->logged_in('admin') && $pep['ID_PEP'] <>1)
 								echo HTML::anchor('contacts/edit/' . $pep['ID_PEP'], iconv('CP1251', 'UTF-8', $pep['NAME'] . ' ' . $pep['SURNAME']));
 							else
-								echo HTML::anchor('contacts/view/' . $pep['ID_PEP'], iconv('CP1251', 'UTF-8', $pep['SURNAME'] . ' ' . $pep['NAME']));
+								echo iconv('CP1251', 'UTF-8', $pep['SURNAME'] . ' ' . $pep['NAME']);
 							//echo iconv('CP1251', 'UTF-8', $pep['NAME'] . ' ' . $pep['SURNAME']); 
 						
 						?></td>
 
 						<td><?php 
-							if (Auth::instance()->logged_in('admin') || $pep['CANEDIT'] == 1)
+							if (Auth::instance()->logged_in('admin') && $pep['ID_PEP'] <>1)
 								echo HTML::anchor('companies/edit/' . $pep['ID_ORG'], iconv('CP1251', 'UTF-8', Arr::get($pep,'ONAME', 'orgname'))); 
 							else 
-								echo HTML::anchor('companies/view/' . $pep['ID_ORG'], iconv('CP1251', 'UTF-8',  Arr::get($pep,'ONAME','orgname')));
+								echo iconv('CP1251', 'UTF-8',  Arr::get($pep,'ONAME','orgname'));
 						?></td>
 						<td>
-							<?php if (Auth::instance()->logged_in('admin') || $pep['CANEDIT'] == 1) { ?>
-							<a href="contacts/edit/<?php echo $pep['ID_PEP']; ?>"><img src="images/icon_edit.png" alt="edit" class="help" title="<?php echo __('tip.edit'); ?>"/></a>
-							<?php } else { ?>
-							<a href="contacts/view/<?php echo Arr::get($pep,'ID_PEP'); ?>"><img src="images/icon_view.png" alt="view" class="help" title="<?php echo __('tip.view'); ?>"/></a>
-							<?php } ?>
-							<?php if (Arr::get($pep,'IS_ACTIVE') == 1) { ?>
-									<a href="javascript:" onclick="if (confirm('<?php echo __('contacts.confirmSetNotActive'); ?>')) location.href='<?php echo URL::base() . 'contacts/fired/' . $pep['ID_PEP']; ?>';">
-									<?php echo HTML::image('images/icon_delete.png', array('title' => __('tip.fired'), 'class' => 'help')); ?>
-							</a>
-							<?php } else {?>
-								<a href="javascript:" onclick="if (confirm('<?php echo __('contacts.restore'); ?>')) location.href='<?php echo URL::base() . 'contacts/restore/' . Arr::get($pep,'ID_PEP'); ?>';">
-									<?php echo HTML::image('images/restore_16.png', array('title' => __('tip.restore'), 'class' => 'help')); ?>
-							</a>
-							<?php }?>
+							<?php if (Auth::instance()->logged_in('admin') && $pep['ID_PEP'] <>1) { ?>
+							<a href="contacts/edit/<?php echo $pep['ID_PEP']; ?>"><img src="images/icon_edit.png" alt="edit" class="help" title="<?php echo __('tip.edit'); ?>"/></a> 
+								<?php if (Arr::get($pep,'IS_ACTIVE') == 1) { ?>
+										<a href="javascript:" onclick="if (confirm('<?php echo __('contacts.confirmSetNotActive'); ?>')) location.href='<?php echo URL::base() . 'contacts/fired/' . $pep['ID_PEP']; ?>';">
+										<?php echo HTML::image('images/icon_delete.png', array('title' => __('tip.fired'), 'class' => 'help')); ?>
+								</a>
+								<?php } else {?>
+									<a href="javascript:" onclick="if (confirm('<?php echo __('contacts.restore'); ?>')) location.href='<?php echo URL::base() . 'contacts/restore/' . Arr::get($pep,'ID_PEP'); ?>';">
+										<?php echo HTML::image('images/restore_16.png', array('title' => __('tip.restore'), 'class' => 'help')); ?>
+								</a>
+								<?php }
+							}?>
 						</td>
 					</tr>
 					<?php } ?>

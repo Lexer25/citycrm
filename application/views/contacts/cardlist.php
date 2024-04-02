@@ -92,14 +92,15 @@ include Kohana::find_file('views','alert');
 							<input type="checkbox" />
 						</td>
 						-->
-						<td><?php echo HTML::anchor('cards/edit/' . $card['ID_CARD'], $card['ID_CARD']); ?></td>
+						<td><?php echo HTML::anchor('cards/edit/' . $card['ID_CARD'], $card['ID_CARD']);
+						if(Arr::get($cardtype, 'id') == 1) echo ' ('.Model::factory('Stat')->reviewKeyCode(Arr::get($card, 'ID_CARD', __('No_card'))).')';						?></td>
 						<td><?php echo iconv('CP1251', 'UTF-8', Arr::get($cardtype, 'smallname')); ?></td> 
 						<td><?php echo $card['TIMESTART']; ?></td>
 						<td><?php echo $card['TIMEEND']; ?></td>
 						<td><?php echo $card['ACTIVE'] == 1 ? __('yes') : __('no'); ?></td>
 						<td>
 							<a href="javascript:" onclick="if (confirm('<?php echo __('cards.confirmdelete'); ?>')) location.href='<?php echo URL::base() . 'contacts/deletecard/' . $card['ID_CARD']; ?>';">
-								<?php echo HTML::image('images/icon_delete.png', array('title' => __('tip.fired'), 'class' => 'help')); ?>
+								<?php echo HTML::image('images/icon_delete.png', array('title' => __('cards.delete'), 'class' => 'help')); ?>
 							</a>
 						</td>
 					</tr>

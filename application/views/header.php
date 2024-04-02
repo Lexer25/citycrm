@@ -10,7 +10,10 @@
 	
 
 	<div id="search">
-		<?php echo HTML::anchor('settings/list', __('settings')) . ' | ' . HTML::anchor('logout', __('logout')); ?>
+		<?php 
+		//echo Debug::vars('14', Kohana::$config->load('config_newcrm')->view_settings );
+		if(Kohana::$config->load('config_newcrm')->view_settings) echo HTML::anchor('settings/list', __('settings')) . ' | ';
+			echo HTML::anchor('logout', __('logout')); ?>
 	</div>
 	<div id="search">
 		<?php echo  __('system.version'). Arr::get(Kohana::$config->load('config_newcrm')->version, 'minor').'.'.Arr::get(Kohana::$config->load('config_newcrm')->version, 'major'); ?>

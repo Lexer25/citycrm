@@ -134,7 +134,9 @@
 										<td>
 											
 											<?php 
+											 //echo Debug::vars('137', $key); 
 											 echo $key->id_card; 
+											 if($key->id_cardtype  == 1) echo ' ('.Model::factory('Stat')->reviewKeyCode($key->id_card).')';
 											echo Form::hidden('idcard',$key->id_card);	
 											?>
 											

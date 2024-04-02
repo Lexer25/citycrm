@@ -102,6 +102,7 @@ class Controller_Contacts extends Controller_Template
 		} else {
 			$pattern = $this->session->get('search_contact', '');
 		}
+				
 		$this->action_index($pattern);
 	}
 	
@@ -125,10 +126,9 @@ class Controller_Contacts extends Controller_Template
 		} else {
 			$contacts ->peopleIsActive=1;
 		}
-		
 		//количество пиплов, доступные текущему авторизованному пользователю
 		$q = $contacts->getCountUser(Arr::get(Auth::instance()->get_user(), 'ID_ORG'), iconv('UTF-8', 'CP1251', $filter));
-		
+		//echo Debug::vars('128', $filter, $q); exit;
 		$pagination = new Pagination(array(
 			'uri_segment' => 2,
 			'total_items' => $q,
@@ -319,6 +319,7 @@ class Controller_Contacts extends Controller_Template
 		$contact_acl = Model::factory('Contact')->contact_acl($id);//список категорий доступа, выданных контакту
 		$check_acl = Model::factory('Contact')->check_acl($id);//получить список категорий доступа родительской организации для сверки с текущим списком категорий для контакта: совпадает или нет? 0 -совпадает, 1 - не совпадает.
 		if ($id != "0" && !$contact) $this->redirect('contacts');
+		if ($id ==1) $this->redirect('contacts');
 		$isAdmin = Auth::instance()->logged_in('admin');
 		$companies = Model::factory('Company')->getNames($isAdmin ? null : Auth::instance()->get_user());
 		$org_tree = Model::Factory('Company')->getOrgList();// получить список организаций.
@@ -746,7 +747,8 @@ class Controller_Contacts extends Controller_Template
 		$id_cardtype	= Arr::get($_POST, 'id_cardtype');
 		$note	= Arr::get($_POST, 'note');
 		
-		
+		//привожу карту из формата длинное десятичное к формату 001A (как они хранятся в базе данных)
+		$idcard=Model::Factory('Stat')->decDigitTo001A($idcard);
 		$key=new Keyk($idcard);
 				$check=$key->check(1);
 				if(is_null($check)){

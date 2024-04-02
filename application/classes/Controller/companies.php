@@ -249,9 +249,12 @@ class Controller_Companies extends Controller_Template
 		if ($id == 0) {
 			$company = new Company();
 			$company->name=$name;
-			$company->parent= ($parent == '')? 1 : $parent;
+			$company->id_parent= ($parent == '')? 1 : $parent;
 			if($company->addOrg()==0) {
+				$company->addOrg();
 				$this->session->set('alert', __('company.saved'));
+				
+				
 			}
 		} else {
 			$company = new Company($id);

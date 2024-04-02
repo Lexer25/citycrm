@@ -200,9 +200,9 @@ class Model_Contact extends Model
 			$sql='select count(*) from people p
 			join organization_getchild (1, ' . $id_org . ') og on og.id_org = p.id_org
             where p."ACTIVE"='.$this->peopleIsActive.'
-			and (p.name containing \''.$filter.'\'
-            or (p.surname containing \''.$filter.'\')
-            or (p.patronymic containing  \''.$filter.'\'))';
+			and (upper(p.name) containing upper(\''.$filter.'\'))
+            or (upper(p.surname) containing upper(\''.$filter.'\'))
+            or (upper(p.patronymic) containing  upper(\''.$filter.'\'))';
 		}
 		
 		

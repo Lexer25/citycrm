@@ -38,9 +38,9 @@ class Controller_Cards extends Controller_Template
 		//$isAdmin = Auth::instance()->logged_in('admin');
 		
 		$cards = Model::factory('Card');
+		if(!is_null($filter)) $filter=Model::Factory('Stat')->decDigitTo001A($filter);
 		
-		
-			$q = $cards->getCountUser(Arr::get(Auth::instance()->get_user(), 'ID_ORG'), iconv('UTF-8', 'CP1251', $filter));
+		$q = $cards->getCountUser(Arr::get(Auth::instance()->get_user(), 'ID_ORG'), iconv('UTF-8', 'CP1251', $filter));
 		
 		$pagination = new Pagination(array(
 			'uri_segment' => 2,
@@ -51,7 +51,7 @@ class Controller_Cards extends Controller_Template
 		));
 		
 		
-			$list = $cards->getListUser(Arr::get(Auth::instance()->get_user(), 'ID_ORG'), Arr::get($_GET, 'page', 1), $this->listsize, iconv('UTF-8', 'CP1251', $filter));
+		$list = $cards->getListUser(Arr::get(Auth::instance()->get_user(), 'ID_ORG'), Arr::get($_GET, 'page', 1), $this->listsize, iconv('UTF-8', 'CP1251', $filter));
 		$catdTypelist = $cards->getcatdTypelist();
 		
 		

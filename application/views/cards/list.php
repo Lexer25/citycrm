@@ -79,7 +79,9 @@ if ($alert) { ?>
 					<tr>
 						
 						<td><?php 
-							echo HTML::anchor('cards/edit/' . $card['ID_CARD'], $card['ID_CARD']); ?></td>
+							echo HTML::anchor('cards/edit/' . $card['ID_CARD'], $card['ID_CARD']);
+							//echo Debug::vars('83', $cardtype);
+							if(Arr::get($cardtype, 'id') == 1) echo ' ('.Model::factory('Stat')->reviewKeyCode(Arr::get($card, 'ID_CARD', __('No_card'))).')'; ?></td>
 						<td><?php echo iconv('CP1251', 'UTF-8', Arr::get($cardtype, 'smallname')); ?></td> 
 						<td><?php echo $card['TIMESTART']; ?></td> 
 						<td><?php echo $card['TIMEEND']; ?></td>
@@ -98,7 +100,7 @@ if ($alert) { ?>
 						?></td>
 						<td>
 							<a href="javascript:" onclick="if (confirm('<?php echo __('cards.confirmdelete'); ?>')) location.href='<?php echo URL::base() . 'cards/delete/' . $card['ID_CARD']; ?>';">
-								<?php echo HTML::image('images/icon_delete.png', array('title' => __('tip.fired'), 'class' => 'help')); ?>
+								<?php echo HTML::image('images/icon_delete.png', array('title' => __('cards.delete'), 'class' => 'help')); ?>
 							</a>
 						</td>
 					</tr>

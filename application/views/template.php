@@ -3,7 +3,7 @@
 <head> 
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 	<title><?php echo Kohana::$config->load('main')->get('orgname');?> </title>
-	<base href="http://localhost/citycrm/" />
+	<base href="http://<?php echo Kohana::$config->load('config_newcrm')->iphost;?>/citycrm/" />
 	<link rel="stylesheet" type="text/css" media="all" href="css/screen.css">
 	<link rel="stylesheet" type="text/css" media="all" href="css/datepicker.css">
 	<link rel="stylesheet" type="text/css" media="all" href="css/tipsy_.css">
@@ -40,7 +40,6 @@
   
 </head>
 <body>
-
 	<div class="content_wrapper">
 <?php include Kohana::find_file('views', 'header'); ?>		
 		<br>

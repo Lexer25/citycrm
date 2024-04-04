@@ -55,6 +55,64 @@ class Model_Stat extends Model
 			->rule('key', 'regex', array(':value', '/[A-F0-9]+/'));//'/[a-fA-F0-9]++$/iD'
 		if($post->check())
 			{
+			 //echo Debug::vars('31', Kohana::$config->load('system')->get('baseFormatRfid')); //exit;	
+			if(Arr::get(Kohana::$config->load('system')->get('baseFormatRfid', 0), 'val')==1)//номер карты хранится в формате 001A
+			{
+					$key=substr(Arr::get($post,'key'),0, 6);
+				
+				 $key_arr=str_split ($key);
+
+				 $numReverse2=array('0', '8','4','C','2','A','6','E','1','9','5','D','3','B','7','F');
+				
+				 
+				 $result1 = hexdec(Arr::get($numReverse2, hexdec(Arr::get($key_arr, 5)))
+							 .Arr::get($numReverse2, hexdec(Arr::get($key_arr,4))))
+							 .','. str_pad(hexdec(Arr::get($numReverse2,hexdec(Arr::get($key_arr, 3)))
+							 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 2)))
+							 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 1)))
+							 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 
+			0)))), 5, '0', STR_PAD_LEFT);
+
+				
+				 $result2 = str_pad(hexdec(Arr::get($numReverse2, 
+						hexdec(Arr::get($key_arr, 5)))
+							 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 4)))
+							 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 3)))
+							 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 2)))
+							 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 1)))
+							 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 
+			0)))), 10, '0', STR_PAD_LEFT);
+			$result=$result2.', '.$result1;
+			}
+			
+			if(Arr::get(Kohana::$config->load('system')->get('baseFormatRfid', 0), 'val')==0)//номер карты хранится в формате hex 8 байт
+			{
+					
+			$result=hexdec(Arr::get($post, 'key')).', '.hexdec(substr(Arr::get($post,'key'),0, 4)).','.hexdec(substr(Arr::get($post,'key'),4, 4));
+			}
+			
+			
+			} else {
+				 //echo Debug::vars('60', $keycode); exit;
+				$result='--';
+				
+			}
+		 
+		 
+
+		return $result;
+	}
+	
+	
+	public function reviewKeyCodeToDec($keycode)// 3.04.2024 преобразование кода HEX к цифрам
+	{
+		 //$keycode='007E3488';
+		 //$keycode='No_card';
+		 $post=Validation::factory(array('key'=>trim($keycode)));
+		 $post->rule('key', 'not_empty')
+			->rule('key', 'regex', array(':value', '/[A-F0-9]+/'));//'/[a-fA-F0-9]++$/iD'
+		if($post->check())
+			{
 			 //echo Debug::vars('31', $keycode); exit;	
 			$key=substr(Arr::get($post,'key'),0, 6);
 
@@ -93,6 +151,8 @@ class Model_Stat extends Model
 
 		return $result;
 	}
+	
+	
 	
 	public function decDigitTo001A($key)// преобразование длинного десятичного числа к формату 001A
 	{

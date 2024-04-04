@@ -48,8 +48,8 @@
 	 echo __('Lic', array(
       		'Lic'=> Kohana::$config->load('lic')->sn
       		)).'<br>';
-				
-				?>
+	echo __('baseFormatRfid :data', array(':data'=>Arr::get(Kohana::$config->load('system')->get('baseFormatRfid', 0), 'val')));			
+	?>
 				
 	</div>
 	

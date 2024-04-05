@@ -1,0 +1,731 @@
+
+C:\xampp\htdocs\citycrm\application\tests>c:\xampp\php\phpunit.bat C:\xampp\htdocs\citycrm\application\tests\convertFormat.php 
+
+Parse error: syntax error, unexpected ')' in C:\xampp\htdocs\citycrm\application\tests\convertFormat.php on line 19
+<style type="text/css">
+#kohana_error { background: #ddd; font-size: 1em; font-family:sans-serif; text-align: left; color: #111; }
+#kohana_error h1,
+#kohana_error h2 { margin: 0; padding: 1em; font-size: 1em; font-weight: normal; background: #911; color: #fff; }
+	#kohana_error h1 a,
+	#kohana_error h2 a { color: #fff; }
+#kohana_error h2 { background: #222; }
+#kohana_error h3 { margin: 0; padding: 0.4em 0 0; font-size: 1em; font-weight: normal; }
+#kohana_error p { margin: 0; padding: 0.2em 0; }
+#kohana_error a { color: #1b323b; }
+#kohana_error pre { overflow: auto; white-space: pre-wrap; }
+#kohana_error table { width: 100%; display: block; margin: 0 0 0.4em; padding: 0; border-collapse: collapse; background: #fff; }
+	#kohana_error table td { border: solid 1px #ddd; text-align: left; vertical-align: top; padding: 0.4em; }
+#kohana_error div.content { padding: 0.4em 1em 1em; overflow: hidden; }
+#kohana_error pre.source { margin: 0 0 1em; padding: 0.4em; background: #fff; border: dotted 1px #b7c680; line-height: 1.2em; }
+	#kohana_error pre.source span.line { display: block; }
+	#kohana_error pre.source span.highlight { background: #f0eb96; }
+		#kohana_error pre.source span.line span.number { color: #666; }
+#kohana_error ol.trace { display: block; margin: 0 0 0 2em; padding: 0; list-style: decimal; }
+	#kohana_error ol.trace li { margin: 0; padding: 0; }
+.js .collapsed { display: none; }
+</style>
+<script type="text/javascript">
+document.documentElement.className = document.documentElement.className + ' js';
+function koggle(elem)
+{
+	elem = document.getElementById(elem);
+
+	if (elem.style && elem.style['display'])
+		// Only works with the "style" attr
+		var disp = elem.style['display'];
+	else if (elem.currentStyle)
+		// For MSIE, naturally
+		var disp = elem.currentStyle['display'];
+	else if (window.getComputedStyle)
+		// For most other browsers
+		var disp = document.defaultView.getComputedStyle(elem, null).getPropertyValue('display');
+
+	// Toggle the state of the "display" style
+	elem.style.display = disp == 'block' ? 'none' : 'block';
+	return false;
+}
+</script>
+<div id="kohana_error">
+	<h1><span class="type">ErrorException [ Parse Error ]:</span> <span class="message">syntax error, unexpected &#039;)&#039;</span></h1>
+	<div id="error661011845baab" class="content">
+		<p><span class="file">APPPATH\tests\convertFormat.php [ 19 ]</span></p>
+		<pre class="source"><code><span class="line"><span class="number">14</span>      * @dataProvider providerStrLen
+</span><span class="line"><span class="number">15</span>      */
+</span><span class="line"><span class="number">16</span>     function testgetName($pattern, $bf, $rf, $out)
+</span><span class="line"><span class="number">17</span>     {
+</span><span class="line"><span class="number">18</span>         $my = new Keyk($length);
+</span><span class="line highlight"><span class="number">19</span> 		$this-&gt;assertEquals($out, $my-&gt;convertFormat($pattern, $bf, $rf,))); 
+</span><span class="line"><span class="number">20</span>         
+</span><span class="line"><span class="number">21</span>     }
+</span><span class="line"><span class="number">22</span> 
+</span><span class="line"><span class="number">23</span> 
+</span><span class="line"><span class="number">24</span> 
+</span></code></pre>		<ol class="trace">
+					<li>
+				<p>
+					<span class="file">
+													{PHP internal call}
+											</span>
+					&raquo;
+					Kohana_Core::shutdown_handler()
+				</p>
+											</li>
+							</ol>
+	</div>
+	<h2><a href="#error661011845baabenvironment" onclick="return koggle('error661011845baabenvironment')">Environment</a></h2>
+	<div id="error661011845baabenvironment" class="content collapsed">
+				<h3><a href="#error661011845baabenvironment_included" onclick="return koggle('error661011845baabenvironment_included')">Included files</a> (90)</h3>
+		<div id="error661011845baabenvironment_included" class="collapsed">
+			<table cellspacing="0">
+								<tr>
+					<td><code>C:\xampp\php\phpunit</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\PHPUnit\Autoload.php</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\File\Iterator\Autoload.php</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\PHP\CodeCoverage\Autoload.php</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\PHP\Token\Stream\Autoload.php</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\Text\Template\Autoload.php</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\PHP\Timer\Autoload.php</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\PHPUnit\Framework\MockObject\Autoload.php</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\PHPUnit\TextUI\Command.php</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\PHPUnit\Util\Getopt.php</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\PHPUnit\Util\Configuration.php</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\PHPUnit\Util\XML.php</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\PHPUnit\Util\Fileloader.php</code></td>
+				</tr>
+								<tr>
+					<td><code>MODPATH\unittest\bootstrap.php</code></td>
+				</tr>
+								<tr>
+					<td><code>APPPATH\bootstrap.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Core.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\I18n.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\I18n.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Exception.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Kohana\Exception.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Log.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Log.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Config.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Config.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Log\File.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Log\File.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Log\Writer.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Log\Writer.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Config\File.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Config\File.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Config\File\Reader.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Config\Reader.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Config\Source.php</code></td>
+				</tr>
+								<tr>
+					<td><code>MODPATH\userguide\init.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Route.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Route.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Arr.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Arr.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\config\userguide.php</code></td>
+				</tr>
+								<tr>
+					<td><code>MODPATH\userguide\config\userguide.php</code></td>
+				</tr>
+								<tr>
+					<td><code>MODPATH\unittest\config\userguide.php</code></td>
+				</tr>
+								<tr>
+					<td><code>MODPATH\orm\config\userguide.php</code></td>
+				</tr>
+								<tr>
+					<td><code>MODPATH\minion\config\userguide.php</code></td>
+				</tr>
+								<tr>
+					<td><code>MODPATH\image\config\userguide.php</code></td>
+				</tr>
+								<tr>
+					<td><code>MODPATH\database\config\userguide.php</code></td>
+				</tr>
+								<tr>
+					<td><code>MODPATH\cache\config\userguide.php</code></td>
+				</tr>
+								<tr>
+					<td><code>MODPATH\auth\config\userguide.php</code></td>
+				</tr>
+								<tr>
+					<td><code>APPPATH\config\userguide.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Config\Group.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Config\Group.php</code></td>
+				</tr>
+								<tr>
+					<td><code>MODPATH\database\classes\Config\Database.php</code></td>
+				</tr>
+								<tr>
+					<td><code>MODPATH\database\classes\Kohana\Config\Database.php</code></td>
+				</tr>
+								<tr>
+					<td><code>MODPATH\database\classes\Config\Database\Writer.php</code></td>
+				</tr>
+								<tr>
+					<td><code>MODPATH\database\classes\Kohana\Config\Database\Writer.php</code></td>
+				</tr>
+								<tr>
+					<td><code>MODPATH\database\classes\Config\Database\Reader.php</code></td>
+				</tr>
+								<tr>
+					<td><code>MODPATH\database\classes\Kohana\Config\Database\Reader.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Config\Writer.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Cookie.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Cookie.php</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\PHPUnit\TextUI\TestRunner.php</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\PHPUnit\Runner\BaseTestRunner.php</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\PHP\CodeCoverage\Filter.php</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\PHPUnit\Runner\StandardTestSuiteLoader.php</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\PHPUnit\Runner\TestSuiteLoader.php</code></td>
+				</tr>
+								<tr>
+					<td><code>C:\xampp\php\pear\PHPUnit\Util\Class.php</code></td>
+				</tr>
+								<tr>
+					<td><code>APPPATH\tests\convertFormat.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Debug.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Debug.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Date.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Date.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\View.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\View.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Response.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\Response.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\HTTP\Response.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\HTTP\Response.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\HTTP\Message.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\HTTP\Message.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\HTTP\Header.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\HTTP\Header.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\views\kohana\error.php</code></td>
+				</tr>
+								<tr>
+					<td><code>MODPATH\tuner\i18n\ru\ru.php</code></td>
+				</tr>
+								<tr>
+					<td><code>APPPATH\i18n\ru\ru.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\HTML.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\HTML.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\URL.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\URL.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\UTF8.php</code></td>
+				</tr>
+								<tr>
+					<td><code>SYSPATH\classes\Kohana\UTF8.php</code></td>
+				</tr>
+							</table>
+		</div>
+				<h3><a href="#error661011845baabenvironment_loaded" onclick="return koggle('error661011845baabenvironment_loaded')">Loaded extensions</a> (46)</h3>
+		<div id="error661011845baabenvironment_loaded" class="collapsed">
+			<table cellspacing="0">
+								<tr>
+					<td><code>Core</code></td>
+				</tr>
+								<tr>
+					<td><code>bcmath</code></td>
+				</tr>
+								<tr>
+					<td><code>calendar</code></td>
+				</tr>
+								<tr>
+					<td><code>ctype</code></td>
+				</tr>
+								<tr>
+					<td><code>date</code></td>
+				</tr>
+								<tr>
+					<td><code>ereg</code></td>
+				</tr>
+								<tr>
+					<td><code>filter</code></td>
+				</tr>
+								<tr>
+					<td><code>ftp</code></td>
+				</tr>
+								<tr>
+					<td><code>hash</code></td>
+				</tr>
+								<tr>
+					<td><code>iconv</code></td>
+				</tr>
+								<tr>
+					<td><code>json</code></td>
+				</tr>
+								<tr>
+					<td><code>mcrypt</code></td>
+				</tr>
+								<tr>
+					<td><code>SPL</code></td>
+				</tr>
+								<tr>
+					<td><code>odbc</code></td>
+				</tr>
+								<tr>
+					<td><code>pcre</code></td>
+				</tr>
+								<tr>
+					<td><code>Reflection</code></td>
+				</tr>
+								<tr>
+					<td><code>session</code></td>
+				</tr>
+								<tr>
+					<td><code>standard</code></td>
+				</tr>
+								<tr>
+					<td><code>mysqlnd</code></td>
+				</tr>
+								<tr>
+					<td><code>tokenizer</code></td>
+				</tr>
+								<tr>
+					<td><code>zip</code></td>
+				</tr>
+								<tr>
+					<td><code>zlib</code></td>
+				</tr>
+								<tr>
+					<td><code>libxml</code></td>
+				</tr>
+								<tr>
+					<td><code>dom</code></td>
+				</tr>
+								<tr>
+					<td><code>PDO</code></td>
+				</tr>
+								<tr>
+					<td><code>bz2</code></td>
+				</tr>
+								<tr>
+					<td><code>SimpleXML</code></td>
+				</tr>
+								<tr>
+					<td><code>wddx</code></td>
+				</tr>
+								<tr>
+					<td><code>xml</code></td>
+				</tr>
+								<tr>
+					<td><code>xmlreader</code></td>
+				</tr>
+								<tr>
+					<td><code>xmlwriter</code></td>
+				</tr>
+								<tr>
+					<td><code>openssl</code></td>
+				</tr>
+								<tr>
+					<td><code>curl</code></td>
+				</tr>
+								<tr>
+					<td><code>fileinfo</code></td>
+				</tr>
+								<tr>
+					<td><code>gd</code></td>
+				</tr>
+								<tr>
+					<td><code>gettext</code></td>
+				</tr>
+								<tr>
+					<td><code>mbstring</code></td>
+				</tr>
+								<tr>
+					<td><code>exif</code></td>
+				</tr>
+								<tr>
+					<td><code>mysql</code></td>
+				</tr>
+								<tr>
+					<td><code>mysqli</code></td>
+				</tr>
+								<tr>
+					<td><code>pdo_mysql</code></td>
+				</tr>
+								<tr>
+					<td><code>PDO_ODBC</code></td>
+				</tr>
+								<tr>
+					<td><code>pdo_sqlite</code></td>
+				</tr>
+								<tr>
+					<td><code>sockets</code></td>
+				</tr>
+								<tr>
+					<td><code>Phar</code></td>
+				</tr>
+								<tr>
+					<td><code>mhash</code></td>
+				</tr>
+							</table>
+		</div>
+																<h3><a href="#error661011845baabenvironment_server" onclick="return koggle('error661011845baabenvironment_server')">$_SERVER</a></h3>
+		<div id="error661011845baabenvironment_server" class="collapsed">
+			<table cellspacing="0">
+								<tr>
+					<td><code>ALLUSERSPROFILE</code></td>
+					<td><pre><small>string</small><span>(14)</span> "C:\ProgramData"</pre></td>
+				</tr>
+								<tr>
+					<td><code>APPDATA</code></td>
+					<td><pre><small>string</small><span>(30)</span> "C:\Users\Andre\AppData\Roaming"</pre></td>
+				</tr>
+								<tr>
+					<td><code>CommonProgramFiles</code></td>
+					<td><pre><small>string</small><span>(35)</span> "C:\Program Files (x86)\Common Files"</pre></td>
+				</tr>
+								<tr>
+					<td><code>CommonProgramFiles(x86)</code></td>
+					<td><pre><small>string</small><span>(35)</span> "C:\Program Files (x86)\Common Files"</pre></td>
+				</tr>
+								<tr>
+					<td><code>CommonProgramW6432</code></td>
+					<td><pre><small>string</small><span>(29)</span> "C:\Program Files\Common Files"</pre></td>
+				</tr>
+								<tr>
+					<td><code>COMPUTERNAME</code></td>
+					<td><pre><small>string</small><span>(15)</span> "DESKTOP-ZET-ART"</pre></td>
+				</tr>
+								<tr>
+					<td><code>ComSpec</code></td>
+					<td><pre><small>string</small><span>(27)</span> "C:\Windows\system32\cmd.exe"</pre></td>
+				</tr>
+								<tr>
+					<td><code>DriverData</code></td>
+					<td><pre><small>string</small><span>(38)</span> "C:\Windows\System32\Drivers\DriverData"</pre></td>
+				</tr>
+								<tr>
+					<td><code>FPS_BROWSER_APP_PROFILE_STRING</code></td>
+					<td><pre><small>string</small><span>(17)</span> "Internet Explorer"</pre></td>
+				</tr>
+								<tr>
+					<td><code>FPS_BROWSER_USER_PROFILE_STRING</code></td>
+					<td><pre><small>string</small><span>(7)</span> "Default"</pre></td>
+				</tr>
+								<tr>
+					<td><code>HOMEDRIVE</code></td>
+					<td><pre><small>string</small><span>(2)</span> "C:"</pre></td>
+				</tr>
+								<tr>
+					<td><code>HOMEPATH</code></td>
+					<td><pre><small>string</small><span>(12)</span> "\Users\Andre"</pre></td>
+				</tr>
+								<tr>
+					<td><code>LOCALAPPDATA</code></td>
+					<td><pre><small>string</small><span>(28)</span> "C:\Users\Andre\AppData\Local"</pre></td>
+				</tr>
+								<tr>
+					<td><code>LOGONSERVER</code></td>
+					<td><pre><small>string</small><span>(17)</span> "\\DESKTOP-ZET-ART"</pre></td>
+				</tr>
+								<tr>
+					<td><code>MOZ_PLUGIN_PATH</code></td>
+					<td><pre><small>string</small><span>(59)</span> "C:\Program Files (x86)\Foxit Software\Foxit Reader\plugins\"</pre></td>
+				</tr>
+								<tr>
+					<td><code>NUMBER_OF_PROCESSORS</code></td>
+					<td><pre><small>string</small><span>(1)</span> "8"</pre></td>
+				</tr>
+								<tr>
+					<td><code>OneDrive</code></td>
+					<td><pre><small>string</small><span>(23)</span> "C:\Users\Andre\OneDrive"</pre></td>
+				</tr>
+								<tr>
+					<td><code>OS</code></td>
+					<td><pre><small>string</small><span>(10)</span> "Windows_NT"</pre></td>
+				</tr>
+								<tr>
+					<td><code>Path</code></td>
+					<td><pre><small>string</small><span>(542)</span> "C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\&nbsp;&hellip;"</pre></td>
+				</tr>
+								<tr>
+					<td><code>PATHEXT</code></td>
+					<td><pre><small>string</small><span>(53)</span> ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"</pre></td>
+				</tr>
+								<tr>
+					<td><code>PHPBIN</code></td>
+					<td><pre><small>string</small><span>(20)</span> "\xampp\php\.\php.exe"</pre></td>
+				</tr>
+								<tr>
+					<td><code>PROCESSOR_ARCHITECTURE</code></td>
+					<td><pre><small>string</small><span>(3)</span> "x86"</pre></td>
+				</tr>
+								<tr>
+					<td><code>PROCESSOR_ARCHITEW6432</code></td>
+					<td><pre><small>string</small><span>(5)</span> "AMD64"</pre></td>
+				</tr>
+								<tr>
+					<td><code>PROCESSOR_IDENTIFIER</code></td>
+					<td><pre><small>string</small><span>(52)</span> "Intel64 Family 6 Model 158 Stepping 10, GenuineIntel"</pre></td>
+				</tr>
+								<tr>
+					<td><code>PROCESSOR_LEVEL</code></td>
+					<td><pre><small>string</small><span>(1)</span> "6"</pre></td>
+				</tr>
+								<tr>
+					<td><code>PROCESSOR_REVISION</code></td>
+					<td><pre><small>string</small><span>(4)</span> "9e0a"</pre></td>
+				</tr>
+								<tr>
+					<td><code>ProgramData</code></td>
+					<td><pre><small>string</small><span>(14)</span> "C:\ProgramData"</pre></td>
+				</tr>
+								<tr>
+					<td><code>ProgramFiles</code></td>
+					<td><pre><small>string</small><span>(22)</span> "C:\Program Files (x86)"</pre></td>
+				</tr>
+								<tr>
+					<td><code>ProgramFiles(x86)</code></td>
+					<td><pre><small>string</small><span>(22)</span> "C:\Program Files (x86)"</pre></td>
+				</tr>
+								<tr>
+					<td><code>ProgramW6432</code></td>
+					<td><pre><small>string</small><span>(16)</span> "C:\Program Files"</pre></td>
+				</tr>
+								<tr>
+					<td><code>PROMPT</code></td>
+					<td><pre><small>string</small><span>(4)</span> "$P$G"</pre></td>
+				</tr>
+								<tr>
+					<td><code>PSModulePath</code></td>
+					<td><pre><small>string</small><span>(93)</span> "C:\Program Files\WindowsPowerShell\Modules;C:\Windows\system32\WindowsPowerShell\v1.0\Modules"</pre></td>
+				</tr>
+								<tr>
+					<td><code>PUBLIC</code></td>
+					<td><pre><small>string</small><span>(15)</span> "C:\Users\Public"</pre></td>
+				</tr>
+								<tr>
+					<td><code>SESSIONNAME</code></td>
+					<td><pre><small>string</small><span>(7)</span> "Console"</pre></td>
+				</tr>
+								<tr>
+					<td><code>SystemDrive</code></td>
+					<td><pre><small>string</small><span>(2)</span> "C:"</pre></td>
+				</tr>
+								<tr>
+					<td><code>SystemRoot</code></td>
+					<td><pre><small>string</small><span>(10)</span> "C:\Windows"</pre></td>
+				</tr>
+								<tr>
+					<td><code>TEMP</code></td>
+					<td><pre><small>string</small><span>(33)</span> "C:\Users\Andre\AppData\Local\Temp"</pre></td>
+				</tr>
+								<tr>
+					<td><code>TMP</code></td>
+					<td><pre><small>string</small><span>(33)</span> "C:\Users\Andre\AppData\Local\Temp"</pre></td>
+				</tr>
+								<tr>
+					<td><code>USERDOMAIN</code></td>
+					<td><pre><small>string</small><span>(15)</span> "DESKTOP-ZET-ART"</pre></td>
+				</tr>
+								<tr>
+					<td><code>USERDOMAIN_ROAMINGPROFILE</code></td>
+					<td><pre><small>string</small><span>(15)</span> "DESKTOP-ZET-ART"</pre></td>
+				</tr>
+								<tr>
+					<td><code>USERNAME</code></td>
+					<td><pre><small>string</small><span>(5)</span> "Andre"</pre></td>
+				</tr>
+								<tr>
+					<td><code>USERPROFILE</code></td>
+					<td><pre><small>string</small><span>(14)</span> "C:\Users\Andre"</pre></td>
+				</tr>
+								<tr>
+					<td><code>windir</code></td>
+					<td><pre><small>string</small><span>(10)</span> "C:\Windows"</pre></td>
+				</tr>
+								<tr>
+					<td><code>PHP_SELF</code></td>
+					<td><pre><small>string</small><span>(18)</span> "\xampp\php\phpunit"</pre></td>
+				</tr>
+								<tr>
+					<td><code>SCRIPT_NAME</code></td>
+					<td><pre><small>string</small><span>(18)</span> "\xampp\php\phpunit"</pre></td>
+				</tr>
+								<tr>
+					<td><code>SCRIPT_FILENAME</code></td>
+					<td><pre><small>string</small><span>(18)</span> "\xampp\php\phpunit"</pre></td>
+				</tr>
+								<tr>
+					<td><code>PATH_TRANSLATED</code></td>
+					<td><pre><small>string</small><span>(18)</span> "\xampp\php\phpunit"</pre></td>
+				</tr>
+								<tr>
+					<td><code>DOCUMENT_ROOT</code></td>
+					<td><pre><small>string</small><span>(0)</span> ""</pre></td>
+				</tr>
+								<tr>
+					<td><code>REQUEST_TIME_FLOAT</code></td>
+					<td><pre><small>float</small> 1712329092.3151</pre></td>
+				</tr>
+								<tr>
+					<td><code>REQUEST_TIME</code></td>
+					<td><pre><small>integer</small> 1712329092</pre></td>
+				</tr>
+								<tr>
+					<td><code>argv</code></td>
+					<td><pre><small>array</small><span>(2)</span> <span>(
+    0 => <small>string</small><span>(18)</span> "\xampp\php\phpunit"
+    1 => <small>string</small><span>(59)</span> "C:\xampp\htdocs\citycrm\application\tests\convertFormat.php"
+)</span></pre></td>
+				</tr>
+								<tr>
+					<td><code>argc</code></td>
+					<td><pre><small>integer</small> 2</pre></td>
+				</tr>
+							</table>
+		</div>
+			</div>
+</div>
+
+C:\xampp\htdocs\citycrm\application\tests>c:\xampp\php\phpunit.bat C:\xampp\htdocs\citycrm\application\tests\convertFormat.php 
+PHPUnit 3.7.21 by Sebastian Bergmann.
+
+Configuration read from C:\xampp\htdocs\citycrm\application\tests\phpunit.xml
+
+E
+
+Time: 0 seconds, Memory: 2.50Mb
+
+There was 1 error:
+
+1) convertFormat::testgetName with data set #0 ('123', 0, 0, '123')
+ErrorException: Undefined variable: length
+
+C:\xampp\htdocs\citycrm\application\tests\convertFormat.php:18
+
+FAILURES!
+Tests: 1, Assertions: 0, Errors: 1.

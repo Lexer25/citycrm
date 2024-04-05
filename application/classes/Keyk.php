@@ -23,6 +23,64 @@ class Keyk
 	public $actionDesc=0;// пояснения к результату выполнения команд
 	
 
+	/*
+		приведение (преобразование) форматов номера карты к формату хранения номера в базе данных.
+	*/
+	public function convertFormat($pattern, $bf=null, $rf=null)
+	{
+			
+			if(!is_null($pattern)){
+			//$bf=Kohana::$config->load('system')->get('baseFormatRfid')? Kohana::$config->load('system')->get('baseFormatRfid') : 0;
+			//$rf=Kohana::$config->load('system')->get('regFormatRfid')? Kohana::$config->load('system')->get('regFormatRfid') : 2;
+			if(is_null($bf)) $bf=Kohana::$config->load('system')->get('baseFormatRfid');
+			if(is_null($rf)) $rf=Kohana::$config->load('system')->get('regFormatRfid');
+			//echo Debug::vars('34', $pattern, $bf, $rf); exit;
+			$temp=$pattern;
+			if($bf==0){//в базе данных номера карт хранятся в формате HEX
+				switch($rf){
+					case 0:
+						//ничего не делать, т.к. форматы одинаковы
+					break;
+					case 1:
+						//привожу 001A к формату HEX. Но это вряд ли потребуется, проще не настраивать рег считыватель на этот формат.
+					break;
+					case 2:
+						//привожу DEC к формату HEX. Значит, считываль работает в формате длинного десятичного числа.
+						//$pattern=strtoupper(dechex($pattern));
+						$pattern=Model::factory('stat')->decDigitToHEX8($pattern);
+					break;
+					default:
+					
+					break;
+					
+				}
+			}
+			
+			if($bf==1){//в базе данных номера карт хранятся в формате 001A
+				switch($rf){
+					case 0:
+						//привожу HEX к формату 001A
+						//такой функции нет.
+						
+					break;
+					case 1:
+						//ничего не делаю, т.к. форматы одинаковы.
+					break;
+					case 2:
+						//привожу длинный DEC к формату HEX. Значит, считываль работает в формате длинного десятичного числа.
+						$pattern=Model::factory('stat')->decDigitTo001A($pattern);
+					break;
+					default:
+					
+					break;
+					
+				}
+			}
+		}	
+		
+		$this->id_card=$pattern;
+		return 0;
+	}
 	
 	
 	public function __construct($card = null)
@@ -128,7 +186,7 @@ class Keyk
 					,'note'=>$this->note
 					,':status'=>0
 					,':is_active'=>1
-					,':flag'=>1
+					,':flag'=>0
 					,':id_cardtype'=>1
 					));
 		//echo Debug::vars('161', $this, $sql); exit; 

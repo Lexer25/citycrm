@@ -56,7 +56,7 @@ class Model_Stat extends Model
 		if($post->check())
 			{
 			 //echo Debug::vars('31', Kohana::$config->load('system')->get('baseFormatRfid')); //exit;	
-			if(Arr::get(Kohana::$config->load('system')->get('baseFormatRfid', 0), 'val')==1)//номер карты хранится в формате 001A
+			if(Kohana::$config->load('system')->get('baseFormatRfid')==1)//если номер карты хранится в формате 001A, то делаем такие преобразования:
 			{
 					$key=substr(Arr::get($post,'key'),0, 6);
 				
@@ -85,7 +85,7 @@ class Model_Stat extends Model
 			$result=$result2.', '.$result1;
 			}
 			
-			if(Arr::get(Kohana::$config->load('system')->get('baseFormatRfid', 0), 'val')==0)//номер карты хранится в формате hex 8 байт
+			if(Kohana::$config->load('system')->get('baseFormatRfid')==0)//если же номер карты хранится в формате hex 8 байт
 			{
 					
 			$result=hexdec(Arr::get($post, 'key')).', '.hexdec(substr(Arr::get($post,'key'),0, 4)).','.hexdec(substr(Arr::get($post,'key'),4, 4));
@@ -176,11 +176,17 @@ class Model_Stat extends Model
 						 .Arr::get($numReverse2, hexdec(Arr::get($key_arr,0))),
 					 6, '0', STR_PAD_LEFT).'001A';
 		
-		//echo Debug::vars('101',$key, dechex ($key), $key_arr, $result2); exit;
-		
-
 		return $result2;
 	}
+	
+	public function decDigitToHEX8($key)// преобразование длинного десятичного числа к hex 8 байт
+	{
+		
+		
+		return STR_PAD(strtoupper(dechex($key)), 8, '0', STR_PAD_LEFT);
+	}
+	
+	
 	
 	public function decCommaTo001A($key)// преобразование числа вида 123,34567  к формату 001A
 	{

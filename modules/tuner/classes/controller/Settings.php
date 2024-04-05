@@ -347,7 +347,7 @@ class Controller_Settings extends Controller_Template {
 		
 		//echo debug::vars('58', $_POST);exit; 
 	
-		//echo Debug::vars('22', Arr::get(Auth::instance()->get_user(), 'ID_PEP'));
+		//echo Debug::vars('22', $this->session->get('alert', ''));exit;
 		//$group='main';
 		$group='main';
 		$mainConfg=Kohana::$config->load($group);
@@ -356,7 +356,7 @@ class Controller_Settings extends Controller_Template {
 		$fl = $this->session->get('alert', '');
 		$this->session->delete('alert');
 		
-			
+		//echo Debug::vars('22', $this->session->get('alert', ''), $fl);exit;	
 		$content = View::factory('setting/main')
 			->bind('alert', $fl)
 			->bind('group', $group)

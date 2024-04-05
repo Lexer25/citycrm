@@ -20,12 +20,35 @@ class Controller_Cards extends Controller_Template
 	{
 		
 		$pattern = trim(Arr::get($_POST, 'q', null));
-		if ($pattern) {
-			$this->session->set('search_card', $pattern);
-		} else {
-			$pattern = $this->session->get('search_card', '');//параметры выборки берутся ИЛИ из POST, или из сессии.
+		$post=Validation::factory($_POST);
+		if($rf=Kohana::$config->load('system')->get('regFormatRfid') == 0){ // если входной формат 0 (HEX)
+		$post->rule('q', 'not_empty')
+					->rule('q', 'regex', array(':value', '/^[A-F0-9]+$/'));
 		}
-		$this->action_index($pattern);
+
+		if($rf=Kohana::$config->load('system')->get('regFormatRfid') == 2){ // если входной формат 2 (DEC)
+			$post->rule('q', 'not_empty')
+					->rule('q', 'digit');
+		}
+
+		if($post->check()){
+
+			if ($pattern) {
+				
+				//5.04.2024 преобразование входного формата номера карты к формату хранения в базе данных
+				$temp4=new Keyk();
+				
+				if($temp4->convertFormat($pattern) == 0) $pattern=$temp4->id_card;
+						
+				$this->session->set('search_card', $pattern);
+				
+			} else {
+				$pattern = $this->session->get('search_card', '');//параметры выборки берутся ИЛИ из POST, или из сессии.
+			}
+			$this->action_index($pattern);
+		} else {
+			$this->action_index();
+		}
 	}
 	
 	/**
@@ -35,13 +58,12 @@ class Controller_Cards extends Controller_Template
 	public function action_index($filter = null)
 	{
 		
-		//$isAdmin = Auth::instance()->logged_in('admin');
+		//echo Debug::vars('46', $filter); exit;
 		
 		$cards = Model::factory('Card');
-		if(!is_null($filter)) $filter=Model::Factory('Stat')->decDigitTo001A($filter);
-		
+	
 		$q = $cards->getCountUser(Arr::get(Auth::instance()->get_user(), 'ID_ORG'), iconv('UTF-8', 'CP1251', $filter));
-		
+		//echo Debug::vars('179',$filter); exit;
 		$pagination = new Pagination(array(
 			'uri_segment' => 2,
 			'total_items' => $q,

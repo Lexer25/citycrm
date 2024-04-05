@@ -310,6 +310,7 @@ class Controller_Contacts extends Controller_Template
 		$id=$this->request->param('id');
 		$force_org=$this->request->query('id_org');//наличие этого параметра означает, что надо выбрать именно указанную организацию для правильной работы дерева организаций.
 		$contact = Model::factory('Contact')->getContact($id);//персональные данные контакта
+		
 		$contact= new Contact($id);
 		if($id == 0) {
 			$contact->is_active=1;
@@ -320,6 +321,7 @@ class Controller_Contacts extends Controller_Template
 		$check_acl = Model::factory('Contact')->check_acl($id);//получить список категорий доступа родительской организации для сверки с текущим списком категорий для контакта: совпадает или нет? 0 -совпадает, 1 - не совпадает.
 		if ($id != "0" && !$contact) $this->redirect('contacts');
 		if ($id ==1) $this->redirect('contacts');
+	
 		$isAdmin = Auth::instance()->logged_in('admin');
 		$companies = Model::factory('Company')->getNames($isAdmin ? null : Auth::instance()->get_user());
 		$org_tree = Model::Factory('Company')->getOrgList();// получить список организаций.
@@ -343,6 +345,7 @@ class Controller_Contacts extends Controller_Template
 			->bind('mode', $mode)
 			//->bind('photo', $photo);
 			;
+			//echo View::factory('profiler/stats');
 	}
 
 	public function action_view()

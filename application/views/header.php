@@ -47,8 +47,19 @@
 	<?php
 	 echo __('Lic', array(
       		'Lic'=> Kohana::$config->load('lic')->sn
-      		)).'<br>';
-	echo __('baseFormatRfid :data', array(':data'=>Arr::get(Kohana::$config->load('system')->get('baseFormatRfid', 0), 'val')));			
+      		)).' ';
+	$format_rfid='unset';
+	if(Kohana::$config->load('system')->get('baseFormatRfid')==0) $format_rfid='HEX';
+	if(Kohana::$config->load('system')->get('baseFormatRfid')==1) $format_rfid='001A';
+	echo __('baseFormatRfid :data', array(':data'=>$format_rfid));	
+	echo ' ';
+	$regformat_rfid='unset';
+	if(Kohana::$config->load('system')->get('regFormatRfid')==0) $regformat_rfid='HEX';
+	if(Kohana::$config->load('system')->get('regFormatRfid')==1) $regformat_rfid='001A';
+	if(Kohana::$config->load('system')->get('regFormatRfid')==2) $regformat_rfid='longDEC';
+	echo __('regFormatRfid :data', array(':data'=>$regformat_rfid));	
+
+	
 	?>
 				
 	</div>

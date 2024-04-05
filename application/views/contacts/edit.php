@@ -90,6 +90,7 @@
 </script>
 
 <?php 
+$tt=microtime(true);
 //echo Debug::vars('93 contact mode', $mode);
 //echo Debug::vars('89 contact', $contact);
 //echo Debug::vars('90', $contact_acl); exit;
@@ -106,7 +107,9 @@ if ($alert) { ?>
 		<?php echo $alert; ?>
 	</p>
 </div>
-<?php } ?>
+<?php } 
+
+?>
 <div class="onecolumn">
 	<div class="header">
 		<span >
@@ -168,8 +171,10 @@ if ($alert) { ?>
 					</div>
 		<?php 
 			break;
-		
-		} ?>
+			
+		}
+
+		?>
 	</div>
 	<br class="clear" />
 	<div class="content">
@@ -280,6 +285,7 @@ if ($alert) { ?>
 							<fieldset>
 						<legend>
 						<?php 
+
 							echo HTML::anchor('companies/edit/'.$contact->id_org,'Родительская организация '.Arr::get(Arr::get($org_tree, $contact->id_org ), 'title' ));?></legend>
 						<?php
 							/*
@@ -316,8 +322,9 @@ if ($alert) { ?>
 								<?php
 								
 								$tree=new Tree();
-									
+									$var2=$tree->array_to_tree($org_tree);
 									echo $tree->out_options($tree->array_to_tree($org_tree), $select_org);
+									
 								?>
 							</select>
 							<br>

@@ -19,8 +19,10 @@ class Controller_Cards extends Controller_Template
 	public function action_search()
 	{
 		
+		//echo Debug::vars('22', $_POST); exit;
 		$pattern = trim(Arr::get($_POST, 'q', null));
 		$post=Validation::factory($_POST);
+		//преобразование формата RFID при поиске в формат хранения в базе данных
 		if($rf=Kohana::$config->load('system')->get('regFormatRfid') == 0){ // если входной формат 0 (HEX)
 		$post->rule('q', 'not_empty')
 					->rule('q', 'regex', array(':value', '/^[A-F0-9]+$/'));
@@ -40,7 +42,7 @@ class Controller_Cards extends Controller_Template
 				
 				if($temp4->convertFormat($pattern) == 0) $pattern=$temp4->id_card;
 						
-				$this->session->set('search_card', $pattern);
+				$this->session->set('search_card', $temp4->id_card);
 				
 			} else {
 				$pattern = $this->session->get('search_card', '');//параметры выборки берутся ИЛИ из POST, или из сессии.
@@ -80,7 +82,9 @@ class Controller_Cards extends Controller_Template
 		//echo Debug::vars('55',$isAdmin, $list ); exit;	
 		$fl = $this->session->get('alert');
 		$this->session->delete('alert');
-	
+		
+		//для правильного отображения номера RFID в разделе поиска привожу его к формату DEC
+		
 		$this->template->content = View::factory('cards/list')
 			->bind('cards', $list)
 			->bind('catdTypelist', $catdTypelist)

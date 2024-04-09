@@ -750,8 +750,9 @@ class Controller_Contacts extends Controller_Template
 		$id_cardtype	= Arr::get($_POST, 'id_cardtype');
 		$note	= Arr::get($_POST, 'note');
 		
-		//привожу карту из формата длинное десятичное к формату 001A (как они хранятся в базе данных)
-		$idcard=Model::Factory('Stat')->decDigitTo001A($idcard);
+		//привожу карту из формата длинное десятичное к формату как они хранятся в базе данных)
+		if($rf=Kohana::$config->load('system')->get('baseFormatRfid') == 1) $idcard=Model::Factory('Stat')->decDigitTo001A($idcard);
+		if($rf=Kohana::$config->load('system')->get('baseFormatRfid') == 0) $idcard=Model::Factory('Stat')->decDigitToHEX8($idcard);
 		$key=new Keyk($idcard);
 				$check=$key->check(1);
 				if(is_null($check)){

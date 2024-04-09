@@ -46,6 +46,7 @@ class Model_Stat extends Model
 	}
 	
 	
+	
 	public function reviewKeyCode($keycode)// преобразование кода 001А к цифрам
 	{
 		 //$keycode='7627DE001A';
@@ -82,13 +83,16 @@ class Model_Stat extends Model
 							 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 1)))
 							 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 
 			0)))), 10, '0', STR_PAD_LEFT);
+			//echo Debug::vars('65', $result1,$result2 ); exit;
 			$result=$result2.', '.$result1;
 			}
 			
 			if(Kohana::$config->load('system')->get('baseFormatRfid')==0)//если же номер карты хранится в формате hex 8 байт
 			{
 					
-			$result=hexdec(Arr::get($post, 'key')).', '.hexdec(substr(Arr::get($post,'key'),0, 4)).','.hexdec(substr(Arr::get($post,'key'),4, 4));
+			$result=str_pad(hexdec(Arr::get($post, 'key')), 10, '0', STR_PAD_LEFT) .', '
+			.str_pad(hexdec(substr(Arr::get($post,'key'),0, 4)), 3, '0',STR_PAD_LEFT) .','
+			.str_pad(hexdec(substr(Arr::get($post,'key'),4, 4)), 5, '0',STR_PAD_LEFT) ;
 			}
 			
 			
@@ -102,6 +106,75 @@ class Model_Stat extends Model
 
 		return $result;
 	}
+	
+	
+	/*
+	9.04.2024
+	Преобразование кода HEX в десятичный длинный DEC
+	*/
+	public function hexToDec($keycode)
+	{
+		 $post=Validation::factory(array('key'=>trim($keycode)));
+		 $post->rule('key', 'not_empty')
+			->rule('key', 'regex', array(':value', '/[0-9]+/'))
+			->rule('key', 'max_length', array(':value', 8))
+			->rule('key', 'min_length', array(':value', 1))
+			;
+		if($post->check())
+			{
+			
+			 $result = str_pad(hexdec(Arr::get($post, 'key')), 10, '0', STR_PAD_LEFT); 
+						
+						
+			} else {
+				 //echo Debug::vars('60', $keycode); exit;
+				$result='--';
+				
+			}
+		return $result;
+	}
+	
+	/*
+	9.04.2024
+	Преобразование кода 001A в десятичный длинный DEC
+	*/
+	public function _001AToDec($keycode)
+	{
+		 //$keycode='007E3488';
+		 //$keycode='No_card';
+		 $post=Validation::factory(array('key'=>trim($keycode)));
+		 $post->rule('key', 'not_empty')
+			->rule('key', 'regex', array(':value', '/[A-F0-9]+/'));//'/[a-fA-F0-9]++$/iD'
+		if($post->check())
+			{
+			 //echo Debug::vars('31', $keycode); exit;	
+			$key=substr(Arr::get($post,'key'),0, 6);
+
+			 $key_arr=str_split ($key);
+
+			 $numReverse2=array('0', '8','4','C','2','A','6','E','1','9','5','D','3','B','7','F');
+
+
+			 
+			 $result1 = hexdec(Arr::get($numReverse2, hexdec(Arr::get($key_arr, 5)))
+						 .Arr::get($numReverse2, hexdec(Arr::get($key_arr,4))))
+						 .','. str_pad(hexdec(Arr::get($numReverse2,hexdec(Arr::get($key_arr, 3)))
+						 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 2)))
+						 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 1)))
+						 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 
+		0)))), 5, '0', STR_PAD_LEFT);
+
+			
+			
+				
+			} else {
+				 //echo Debug::vars('60', $keycode); exit;
+				$result='--';
+				
+			}
+		 return $result;
+	}
+	
 	
 	
 	public function reviewKeyCodeToDec($keycode)// 3.04.2024 преобразование кода HEX к цифрам

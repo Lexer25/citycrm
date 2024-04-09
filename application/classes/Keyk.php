@@ -24,6 +24,7 @@ class Keyk
 	
 
 	/*
+		9.04.2024
 		приведение (преобразование) форматов номера карты к формату хранения номера в базе данных.
 	*/
 	public function convertFormat($pattern, $bf=null, $rf=null)

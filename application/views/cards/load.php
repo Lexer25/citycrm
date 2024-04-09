@@ -77,7 +77,7 @@
 				break;
 				
 				case('edit'):
-					echo __('card.titleLoad', array (':id_card'=>$key->id_card));
+					echo __('card.titleLoad', array (':id_card'=>$key->id_card_on_screen));
 				break;
 				
 				case('fired'):

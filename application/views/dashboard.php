@@ -20,18 +20,7 @@ if (false)
 	echo '<br><fieldset><legend>Test</legend>';
 	echo 'Test';
 
-	//$door=new Door(559);
-	$door=new Door(504);
-	//$door=new Door(111);
-	//echo Debug::vars('27', $door);
-	$dev= new Device($door->parent);
-	echo Debug::vars('27', $dev, $dev->checkConnect()); exit;
-	//echo Debug::vars('27', $door->getKeyList());
-	
-	//$ts2client=new TS2client();
-	//echo Debug::vars('27', $ts2client);
-	//echo Debug::vars('27', $ts2client->startServer());
-	//$ts2client->startServer();
+	echo Debug::vars('23', Kohana::$config->load('system')->get('baseFormatRfid1'), is_null(Kohana::$config->load('system')->get('baseFormatRfid1')));
 	$t1=microtime(true);
 	
 }

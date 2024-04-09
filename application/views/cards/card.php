@@ -77,7 +77,7 @@
 				break;
 				
 				case('edit'):
-					echo __('card.titleEdit', array(':id_card'=>$key->id_card));
+					echo __('card.titleEdit', array(':id_card'=>$key->id_card_on_screen));
 				break;
 				
 				case('fired'):
@@ -135,7 +135,7 @@
 											
 											<?php 
 											 //echo Debug::vars('137', $key); 
-											 echo $key->id_card; 
+											 echo $key->id_card.' '.$key->id_card_on_screen; 
 											 if($key->id_cardtype  == 1) echo ' ('.Model::factory('Stat')->reviewKeyCode($key->id_card).')';
 											echo Form::hidden('idcard',$key->id_card);	
 											?>

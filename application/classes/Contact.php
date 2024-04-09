@@ -67,7 +67,8 @@ class Contact
 		$this->name=Arr::get($query, 'NAME');
 		$this->surname=Arr::get($query, 'SURNAME');
 		$this->patronymic=Arr::get($query, 'PATRONYMIC');
-		$this->photo=Arr::get($query, 'PHOTO');
+		//$this->photo=Arr::get($query, 'PHOTO');
+		$this->photo='';
 		$this->id_org=Arr::get($query, 'ID_ORG');
 		$this->numdoc=Arr::get($query, 'NUMDOC');
 		$this->datedoc=Arr::get($query, 'DATEDOC');

@@ -66,54 +66,27 @@ class Model_Card extends Model
 			return $query->as_array();
 	}
 	
-	public function getListUser($id_org, $page = 1, $perpage = 10, $filter)
+	public function getListUser($id_org, $page = 1, $perpage = 10, $filter, $id_cardtype=1)
 	{
 
 					
 		if(is_null($filter) or $filter=='') {// если фильтра нет, то выбираем всех пиплов из родительской и подчиненной организаций
 		$sql='select FIRST ' . $perpage . ' SKIP ' . ($page - 1) * $perpage . ' 
-				c.id_card,
-					c.id_db,
-					c.id_pep,
-					c.id_accessname,
-					c.timestart,
-					c.timeend,
-					c.note,
-					c.status,
-					c."ACTIVE",
-					c.flag,
-					c.id_cardtype,
-					p.id_org,
-					p.name,
-					p.surname,
-					o.name AS cname
+				c.id_card
 					from people p
 					join card c on c.id_pep=p.id_pep
         join organization o on o.id_org=p.id_org
-		join organization_getchild (1, ' . $id_org . ') og on og.id_org = p.id_org';
+		join organization_getchild (1, ' . $id_org . ') og on og.id_org = p.id_org
+		 where c.id_cardtype='.$id_cardtype;
 		} else {
 			$sql='select FIRST ' . $perpage . ' SKIP ' . ($page - 1) * $perpage . ' 
-				c.id_card,
-					c.id_db,
-					c.id_pep,
-					c.id_accessname,
-					c.timestart,
-					c.timeend,
-					c.note,
-					c.status,
-					c."ACTIVE",
-					c.flag,
-					c.id_cardtype,
-					p.id_org,
-					p.name,
-					p.surname,
-					o.name AS cname
+				c.id_card
 					from people p
 					join card c on c.id_pep=p.id_pep
         join organization o on o.id_org=p.id_org
 		join organization_getchild (1, ' . $id_org . ') og on og.id_org = p.id_org
             where c.id_card= \''.$filter.'\'
-            ';
+             and c.id_cardtype='.$id_cardtype;
 			
 			
 		}
@@ -132,19 +105,21 @@ class Model_Card extends Model
 	$filter - номер карта для поиска
 	
 	*/
-	public function getCountUser($id_org, $filter)
+	public function getCountUser($id_org, $filter, $id_cardtype=1)
 	{
-							//echo Debug::vars('186', $id_org, $filter,  $filter=''); exit;
+		//echo Debug::vars('186', $id_org, $filter,  $filter=''); exit;
 		
 		if(is_null($filter) or $filter=='') {// если фильтра нет, то выбираем все карты из родительской и подчиненной организаций
 		$sql='select count(c.id_card) from people p
 		join card c on c.id_pep=p.id_pep
-		join organization_getchild (1, ' . $id_org . ') og on og.id_org = p.id_org';
+		join organization_getchild (1, ' . $id_org . ') og on og.id_org = p.id_org
+		 where c.id_cardtype='.$id_cardtype;
 		} else {
 			$sql='select count(c.id_card) from people p
 		join card c on c.id_pep=p.id_pep
 		join organization_getchild (1, ' . $id_org . ') og on og.id_org = p.id_org
-            where c.id_card = \''.$filter.'\'';
+            where c.id_card = \''.$filter.'\'
+			 and c.id_cardtype='.$id_cardtype;
             ;
 		}
 		

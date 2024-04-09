@@ -37,7 +37,9 @@ if ($alert) { ?>
 				<input type="text" class="search noshadow" title="<?php echo __('search'); ?>" name="q" id="q" value="<?php if (isset($filter)) echo $filter; ?>" />
 			</form>
 		</div>
-		<span><?php echo __('cards.title'); ?></span>
+		<span><?php echo __('cards.title').' '.Session::instance()->get('identifier');; 
+		
+	?></span>
 	</div>
 	<br class="clear"/>
 	<div class="content">
@@ -78,33 +80,39 @@ if ($alert) { ?>
 			
 				<tbody>
 					<?php foreach ($cards as $card) { 
-						$cardtype=Arr::get($catdTypelist, $card['ID_CARDTYPE']);
+						
+						
+					$key=new Keyk($card['ID_CARD']);
+					$cardtype=Arr::get($catdTypelist, $key->id_cardtype);
+					$contact= new Contact($key->id_pep);
+					$org= new Company($contact->id_org );
+					//echo Debug::vars('85', $contact);	exit;
 						
 					?>
 					<tr>
 						
 						<td><?php 
-							echo HTML::anchor('cards/edit/' . $card['ID_CARD'], $card['ID_CARD']);
+							echo HTML::anchor('cards/edit/' . $key->id_card, $key->id_card).' '.$key->id_card_on_screen;
 							//echo Debug::vars('83', $cardtype);
-							if(Arr::get($cardtype, 'id') == 1) echo ' ('.Model::factory('Stat')->reviewKeyCode(Arr::get($card, 'ID_CARD', __('No_card'))).')'; ?></td>
+							if(Arr::get($cardtype, 'id') == 1) echo ' ('.Model::factory('Stat')->reviewKeyCode($key->id_card).')'; ?></td>
 						<td><?php echo iconv('CP1251', 'UTF-8', Arr::get($cardtype, 'smallname')); ?></td> 
-						<td><?php echo $card['TIMESTART']; ?></td> 
-						<td><?php echo $card['TIMEEND']; ?></td>
-						<td><?php echo $card['ACTIVE'] == '1' ? __('yes') : __('no'); ?> 
+						<td><?php echo $key->timestart; ?></td> 
+						<td><?php echo $key->timeend; ?></td> 
+						<td><?php echo $key->is_active == '1' ? __('yes') : __('no'); ?> 
 						<td><?php 
 							if (Auth::instance()->logged_in('admin'))
-								echo HTML::anchor('contacts/edit/' . $card['ID_PEP'], iconv('CP1251', 'UTF-8', $card['NAME'] . ' ' . $card['SURNAME'])); 
+								echo HTML::anchor('contacts/edit/' . $contact->id_pep, iconv('CP1251', 'UTF-8', $contact->name . ' ' . $contact->surname)); 
 							else 
-								echo HTML::anchor('contacts/view/' . $card['ID_PEP'], iconv('CP1251', 'UTF-8', $card['NAME'] . ' ' . $card['SURNAME']));
+								echo HTML::anchor('contacts/view/' . $contact->id_pep, iconv('CP1251', 'UTF-8', $contact->name . ' ' . $contact->surname)); 
 						?></td>
 						<td><?php 
 							if (Auth::instance()->logged_in('admin'))
-								echo HTML::anchor('companies/edit/' . $card['ID_ORG'], iconv('CP1251', 'UTF-8', $card['CNAME'])); 
+								echo HTML::anchor('companies/edit/' . $org->id_org, iconv('CP1251', 'UTF-8', $org->name)); 
 							else 
-								echo HTML::anchor('companies/view/' . $card['ID_ORG'], iconv('CP1251', 'UTF-8', $card['CNAME']));
+								echo HTML::anchor('companies/view/' . $org->id_org, iconv('CP1251', 'UTF-8', $org->name)); 
 						?></td>
 						<td>
-							<a href="javascript:" onclick="if (confirm('<?php echo __('cards.confirmdelete'); ?>')) location.href='<?php echo URL::base() . 'cards/delete/' . $card['ID_CARD']; ?>';">
+							<a href="javascript:" onclick="if (confirm('<?php echo __('cards.confirmdelete'); ?>')) location.href='<?php echo URL::base() . 'cards/delete/' . $key->id_card; ?>';">
 								<?php echo HTML::image('images/icon_delete.png', array('title' => __('cards.delete'), 'class' => 'help')); ?>
 							</a>
 						</td>

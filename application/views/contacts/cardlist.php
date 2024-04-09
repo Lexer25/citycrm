@@ -85,21 +85,23 @@ include Kohana::find_file('views','alert');
 				</thead>
 				<tbody>
 					<?php foreach ($cards as $card) { 
-					$cardtype=Arr::get($catdTypelist, $card['ID_CARDTYPE']);?>
+					$cardtype=Arr::get($catdTypelist, $card['ID_CARDTYPE']);
+					$key=new Keyk($card['ID_CARD']);
+					?>
 					<tr>
 						<!--
 						<td>
 							<input type="checkbox" />
 						</td>
 						-->
-						<td><?php echo HTML::anchor('cards/edit/' . $card['ID_CARD'], $card['ID_CARD']);
-						if(Arr::get($cardtype, 'id') == 1) echo ' ('.Model::factory('Stat')->reviewKeyCode(Arr::get($card, 'ID_CARD', __('No_card'))).')';						?></td>
+						<td><?php echo HTML::anchor('cards/edit/' . $key->id_card, $key->id_card).' '.$key->id_card_on_screen;
+						if(Arr::get($cardtype, 'id') == 1) echo ' ('.Model::factory('Stat')->reviewKeyCode($key->id_card).')';						?></td>
 						<td><?php echo iconv('CP1251', 'UTF-8', Arr::get($cardtype, 'smallname')); ?></td> 
-						<td><?php echo $card['TIMESTART']; ?></td>
-						<td><?php echo $card['TIMEEND']; ?></td>
-						<td><?php echo $card['ACTIVE'] == 1 ? __('yes') : __('no'); ?></td>
+						<td><?php echo $key->timestart; ?></td>
+						<td><?php echo $key->timeend; ?></td>
+						<td><?php echo $key->is_active == 1 ? __('yes') : __('no'); ?></td>
 						<td>
-							<a href="javascript:" onclick="if (confirm('<?php echo __('cards.confirmdelete'); ?>')) location.href='<?php echo URL::base() . 'contacts/deletecard/' . $card['ID_CARD']; ?>';">
+							<a href="javascript:" onclick="if (confirm('<?php echo __('cards.confirmdelete'); ?>')) location.href='<?php echo URL::base() . 'contacts/deletecard/' . $key->id_card; ?>';">
 								<?php echo HTML::image('images/icon_delete.png', array('title' => __('cards.delete'), 'class' => 'help')); ?>
 							</a>
 						</td>

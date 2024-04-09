@@ -49,15 +49,16 @@
       		'Lic'=> Kohana::$config->load('lic')->sn
       		)).' ';
 	$format_rfid='unset';
-	if(Kohana::$config->load('system')->get('baseFormatRfid')==0) $format_rfid='HEX';
-	if(Kohana::$config->load('system')->get('baseFormatRfid')==1) $format_rfid='001A';
+	if(Kohana::$config->load('system')->get('baseFormatRfid')==0) $format_rfid='0 HEX';
+	if(Kohana::$config->load('system')->get('baseFormatRfid')==1) $format_rfid='1 001A';
 	echo __('baseFormatRfid :data', array(':data'=>$format_rfid));	
 	echo ' ';
 	$regformat_rfid='unset';
-	if(Kohana::$config->load('system')->get('regFormatRfid')==0) $regformat_rfid='HEX';
-	if(Kohana::$config->load('system')->get('regFormatRfid')==1) $regformat_rfid='001A';
-	if(Kohana::$config->load('system')->get('regFormatRfid')==2) $regformat_rfid='longDEC';
-	echo __('regFormatRfid :data', array(':data'=>$regformat_rfid));	
+	if(Kohana::$config->load('system')->get('screenFormatRFID')==0) $regformat_rfid='0 HEX';
+	if(Kohana::$config->load('system')->get('screenFormatRFID')==1) $regformat_rfid='1 001A';
+	if(Kohana::$config->load('system')->get('screenFormatRFID')==2) $regformat_rfid='2 longDEC';
+	echo __('screenFormatRFID :data', array(':data'=>$regformat_rfid));	
+	echo __(' identifier :data', array(':data'=>Session::instance()->get('identifier', 1)));	
 
 	
 	?>

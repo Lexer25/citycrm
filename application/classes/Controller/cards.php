@@ -5,6 +5,7 @@ class Controller_Cards extends Controller_Template
 	public $template = 'template';
 	private $listsize;
 	private $session;
+	private $id_type;
 	
 	public function before()
 	{
@@ -14,19 +15,50 @@ class Controller_Cards extends Controller_Template
 		$this->session = Session::instance();
 		I18n::$lang = $this->session->get('language', 'en-us');
 		$this->listsize = $this->session->get('listsize', 10);
+		$this->id_type = $this->session->get('identifier', 1);
+		
 	}
+	
+	/*
+	9.04.2024 диспетчер режима отображения данных.
+	Тип отображаемых данных хранится в параметрах сессии под именем identifier
+	*/
+	
+	public function action_rfid()
+	{
+		$this->session->set('identifier', '1');
+		$this->action_index();
+		
+	}
+	
+	public function action_grz()
+	{
+		$this->session->set('identifier', '4');
+		$this->action_index();
+		
+	}
+	
+	public function action_uhf()
+	{
+		$this->session->set('identifier', '3');
+		$this->action_index();
+		
+	}
+	
+	
 	
 	public function action_search()
 	{
 		
 		//echo Debug::vars('22', $_POST); exit;
 		$pattern = trim(Arr::get($_POST, 'q', null));
+		$temp=$pattern;
 		$post=Validation::factory($_POST);
 		//преобразование формата RFID при поиске в формат хранения в базе данных
-		if($rf=Kohana::$config->load('system')->get('regFormatRfid') == 0){ // если входной формат 0 (HEX)
+		/* if($rf=Kohana::$config->load('system')->get('regFormatRfid') == 0){ // если входной формат 0 (HEX)
 		$post->rule('q', 'not_empty')
 					->rule('q', 'regex', array(':value', '/^[A-F0-9]+$/'));
-		}
+		} */
 
 		if($rf=Kohana::$config->load('system')->get('regFormatRfid') == 2){ // если входной формат 2 (DEC)
 			$post->rule('q', 'not_empty')
@@ -35,20 +67,18 @@ class Controller_Cards extends Controller_Template
 
 		if($post->check()){
 
-			if ($pattern) {
-				
 				//5.04.2024 преобразование входного формата номера карты к формату хранения в базе данных
 				$temp4=new Keyk();
 				
-				if($temp4->convertFormat($pattern) == 0) $pattern=$temp4->id_card;
+				if($temp4->screenToBase($pattern) == 0) $pattern=$temp4->id_card;
 						
 				$this->session->set('search_card', $temp4->id_card);
 				
-			} else {
-				$pattern = $this->session->get('search_card', '');//параметры выборки берутся ИЛИ из POST, или из сессии.
-			}
+		//echo Debug::vars('46', $temp, $pattern, $temp4); exit;
 			$this->action_index($pattern);
 		} else {
+			
+			//echo Debug::vars('50', $temp, $pattern); exit;
 			$this->action_index();
 		}
 	}
@@ -61,10 +91,11 @@ class Controller_Cards extends Controller_Template
 	{
 		
 		//echo Debug::vars('46', $filter); exit;
+		$this->id_type = $this->session->get('identifier', 1);
 		
 		$cards = Model::factory('Card');
 	
-		$q = $cards->getCountUser(Arr::get(Auth::instance()->get_user(), 'ID_ORG'), iconv('UTF-8', 'CP1251', $filter));
+		$q = $cards->getCountUser(Arr::get(Auth::instance()->get_user(), 'ID_ORG'), iconv('UTF-8', 'CP1251', $filter), $this->id_type);
 		//echo Debug::vars('179',$filter); exit;
 		$pagination = new Pagination(array(
 			'uri_segment' => 2,
@@ -75,7 +106,7 @@ class Controller_Cards extends Controller_Template
 		));
 		
 		
-		$list = $cards->getListUser(Arr::get(Auth::instance()->get_user(), 'ID_ORG'), Arr::get($_GET, 'page', 1), $this->listsize, iconv('UTF-8', 'CP1251', $filter));
+		$list = $cards->getListUser(Arr::get(Auth::instance()->get_user(), 'ID_ORG'), Arr::get($_GET, 'page', 1), $this->listsize, iconv('UTF-8', 'CP1251', $filter), $this->id_type);
 		$catdTypelist = $cards->getcatdTypelist();
 		
 		

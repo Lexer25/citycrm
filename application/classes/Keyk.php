@@ -9,6 +9,7 @@ class Keyk
 	
 	public $id_pep;
 	public $id_card;
+	public $id_card_on_screen;
 	public $timeend;
 	public $timestart;
 
@@ -22,43 +23,52 @@ class Keyk
 	public $actionResult=0;// результат выполнения команд
 	public $actionDesc=0;// пояснения к результату выполнения команд
 	
+	public $baseFormatRfid=0;
+	public $screenFormatRFID=0;
+	
+	
+	
 
 	/*
 		9.04.2024
-		приведение (преобразование) форматов номера карты к формату хранения номера в базе данных.
+		приведение (преобразование) форматов номера карты от формата screen к формату хранения base.
+		$bf - base format базовый формат
+		$sf - screen format - формат вывода номера на экран.
 	*/
-	public function convertFormat($pattern, $bf=null, $rf=null)
+	public function screenToBase($pattern, $bf=null, $sf=null, $id_cardtype=1)
 	{
 			
-			if(!is_null($pattern)){
-			//$bf=Kohana::$config->load('system')->get('baseFormatRfid')? Kohana::$config->load('system')->get('baseFormatRfid') : 0;
-			//$rf=Kohana::$config->load('system')->get('regFormatRfid')? Kohana::$config->load('system')->get('regFormatRfid') : 2;
-			if(is_null($bf)) $bf=Kohana::$config->load('system')->get('baseFormatRfid');
-			if(is_null($rf)) $rf=Kohana::$config->load('system')->get('regFormatRfid');
-			//echo Debug::vars('34', $pattern, $bf, $rf); exit;
+			if(is_null($bf)) $bf=$this->baseFormatRfid;
+			if(is_null($sf)) $sf=$this->screenFormatRFID;
 			$temp=$pattern;
+
+			if($id_cardtype ==1){
+			
+			
 			if($bf==0){//в базе данных номера карт хранятся в формате HEX
-				switch($rf){
+				
+				switch($sf){
 					case 0:
 						//ничего не делать, т.к. форматы одинаковы
 					break;
 					case 1:
-						//привожу 001A к формату HEX. Но это вряд ли потребуется, проще не настраивать рег считыватель на этот формат.
+						//привожу DEC к формату 001A к формату HEX.
 					break;
 					case 2:
 						//привожу DEC к формату HEX. Значит, считываль работает в формате длинного десятичного числа.
 						//$pattern=strtoupper(dechex($pattern));
-						$pattern=Model::factory('stat')->decDigitToHEX8($pattern);
+						$pattern=Model::factory('stat')->decToHex($pattern);
+							
 					break;
 					default:
-					
+						$pattern='---';
 					break;
 					
 				}
 			}
 			
 			if($bf==1){//в базе данных номера карт хранятся в формате 001A
-				switch($rf){
+				switch($sf){
 					case 0:
 						//привожу HEX к формату 001A
 						//такой функции нет.
@@ -69,7 +79,67 @@ class Keyk
 					break;
 					case 2:
 						//привожу длинный DEC к формату HEX. Значит, считываль работает в формате длинного десятичного числа.
-						$pattern=Model::factory('stat')->decDigitTo001A($pattern);
+						$pattern=Model::factory('stat')->_001AToDec($pattern);
+					break;
+					default:
+					
+					break;
+					
+				}
+			}
+		}	
+	
+		$this->id_card=$pattern;
+		return 0;
+	}
+	/*
+		9.04.2024
+		приведение (преобразование) форматов номера карты к формату хранения номера в базе данных.
+		$bf - base format базовый формат
+		$sf - screen format - формат вывода номера на экран.
+	*/
+	public function convertFormat($pattern, $bf=null, $sf=null)
+	{
+			//echo Debug::vars($this->id_cardtype, $pattern, $bf, $sf); exit;
+			$bf=$this->baseFormatRfid;
+			$sf=$this->screenFormatRFID;
+			
+			if($this->id_cardtype ==1){
+			
+			$temp=$pattern;
+			if($bf==0){//в базе данных номера карт хранятся в формате HEX
+				switch($sf){
+					case 0:
+						//ничего не делать, т.к. форматы одинаковы
+					break;
+					case 1:
+						//привожу 001A к формату HEX. Но это вряд ли потребуется, проще не настраивать рег считыватель на этот формат.
+					break;
+					case 2:
+						//привожу DEC к формату HEX. Значит, считываль работает в формате длинного десятичного числа.
+						//$pattern=strtoupper(dechex($pattern));
+						$pattern=Model::factory('stat')->hexToDec($pattern);
+					break;
+					default:
+						$pattern='---';
+					break;
+					
+				}
+			}
+			
+			if($bf==1){//в базе данных номера карт хранятся в формате 001A
+				switch($sf){
+					case 0:
+						//привожу HEX к формату 001A
+						//такой функции нет.
+						
+					break;
+					case 1:
+						//ничего не делаю, т.к. форматы одинаковы.
+					break;
+					case 2:
+						//привожу длинный DEC к формату HEX. Значит, считываль работает в формате длинного десятичного числа.
+						$pattern=Model::factory('stat')->_001AToDec($pattern);
 					break;
 					default:
 					
@@ -79,7 +149,7 @@ class Keyk
 			}
 		}	
 		
-		$this->id_card=$pattern;
+		$this->id_card_on_screen=$pattern;
 		return 0;
 	}
 	
@@ -111,6 +181,10 @@ class Keyk
 		$this->id_cardtype=Arr::get($query, 'ID_CARDTYPE');
 		$this->createdat=Arr::get($query, 'CREATEDAT'); 
 		}
+		
+		if(!is_null(Kohana::$config->load('system')->get('baseFormatRfid'))) $this->baseFormatRfid=Kohana::$config->load('system')->get('baseFormatRfid');
+		if(!is_null(Kohana::$config->load('system')->get('screenFormatRFID'))) $this->screenFormatRFID=Kohana::$config->load('system')->get('screenFormatRFID');
+		$this->convertFormat($this->id_card, $this->baseFormatRfid, $this->screenFormatRFID);//подготовил формат для показа на экран
 	}
 	
 	

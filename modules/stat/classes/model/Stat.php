@@ -110,6 +110,32 @@ class Model_Stat extends Model
 	
 	/*
 	9.04.2024
+	Преобразование кода DEC в HEX
+	*/
+	public function decToHex($keycode)
+	{
+		 $post=Validation::factory(array('key'=>trim($keycode)));
+		 $post->rule('key', 'not_empty')
+			->rule('key', 'regex', array(':value', '/[0-9]+/'))
+			->rule('key', 'max_length', array(':value', 10))
+			->rule('key', 'min_length', array(':value', 1))
+			;
+		if($post->check())
+			{
+			
+			 $result = str_pad(strtoupper(dechex(Arr::get($post, 'key'))), 8, '0', STR_PAD_LEFT); 
+						
+						
+			} else {
+				 //echo Debug::vars('60', $keycode); exit;
+				$result='--';
+				
+			}
+		return $result;
+	}
+	
+	/*
+	9.04.2024
 	Преобразование кода HEX в десятичный длинный DEC
 	*/
 	public function hexToDec($keycode)

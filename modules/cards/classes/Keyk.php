@@ -92,6 +92,33 @@ class Keyk
 		$this->id_card=$pattern;
 		return 0;
 	}
+	
+	/*
+	9.04.2024 поиск идентификатора строгое совпадение
+	
+	*/
+	
+	public function search()
+	{
+		$sql='select c.id_card from card c
+			where c.id_card like \'%'.$this->id_card.'%\'
+			and c.id_cardtype='.$this->id_cardtype;
+			
+		try {
+			$query= DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->as_array()
+				;
+				
+		return $query;
+		} catch (Exception $e) {
+				Log::instance()->add(Log::DEBUG, $e->getMessage());
+				$this->actionDesc=$e->getMessage();
+			}	
+			
+	}
+	
+	
 	/*
 		9.04.2024
 		приведение (преобразование) форматов номера карты к формату хранения номера в базе данных.
@@ -180,6 +207,7 @@ class Keyk
 		$this->flag=Arr::get($query, 'FLAG');
 		$this->id_cardtype=Arr::get($query, 'ID_CARDTYPE');
 		$this->createdat=Arr::get($query, 'CREATEDAT'); 
+		$this->note=Arr::get($query, 'NOTE'); 
 		}
 		
 		if(!is_null(Kohana::$config->load('system')->get('baseFormatRfid'))) $this->baseFormatRfid=Kohana::$config->load('system')->get('baseFormatRfid');
@@ -210,7 +238,7 @@ class Keyk
 	}
 	
 	/*
-	проверяет наличие указанного идентификатора указанного типа.
+	проверяет наличие указанного идентификатора указанного типа в базе данных.
 	ответ - id_pep владельца идентификатора (если она найдена),
 	либо -1 если идентификатор не найден
 	*/
@@ -239,14 +267,14 @@ class Keyk
 	public function addRfid() //функция сохранения карты.
 	{
 		
-		$sql=__('INSERT INTO CARD (ID_CARD,ID_DB,ID_PEP, TIMESTART,TIMEEND,STATUS,"ACTIVE",FLAG,ID_CARDTYPE)
+		$sql=__('INSERT INTO CARD (ID_CARD,ID_DB,ID_PEP, TIMESTART,TIMEEND,NOTE, STATUS,"ACTIVE",FLAG,ID_CARDTYPE)
 					VALUES (
 					\':id_card\'
 					,:id_db
 					,:id_pep
 					, \':timestart\'
 					,\':timeend\'
-					
+					,\':note\'
 					,:status
 					,:is_active
 					,:flag
@@ -266,7 +294,7 @@ class Keyk
 					));
 		//echo Debug::vars('161', $this, $sql); exit; 
 		try {
-				$query = DB::query(Database::INSERT, $sql)
+				$query = DB::query(Database::INSERT,  iconv('UTF-8', 'CP1251', $sql))
 					->execute(Database::instance('fb'));
 				$this->actionResult=0;
 				//$this->actionDesc=__('guest.addRfidOk', array(':id_card'=>$this->id_card));
@@ -370,11 +398,12 @@ WHERE (ID_CARD = '00084AC7') AND (ID_DB = 1);
 			$sql='UPDATE CARD
 			SET TIMESTART = \''.$this->timestart.'\',
 				TIMEEND = \''.$this->timeend.'\',
+				NOTE = \''.$this->note.'\',
 				"ACTIVE" = '.($this->is_active? 1 : 0 ).'
 				WHERE (ID_CARD = \''.$this->id_card.'\') AND (ID_DB = 1)';
 				//echo Debug::vars('242', $this,  $sql); exit;
 			try {
-				DB::query(Database::UPDATE,$sql)	
+				DB::query(Database::UPDATE,iconv('UTF-8','CP1251', $sql))	
 				->execute(Database::instance('fb'));
 				return 0;	
 				

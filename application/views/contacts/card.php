@@ -59,6 +59,13 @@
 	}
 	
 </script>
+  <style>
+   textarea {
+    width: 90%; /* Ширина поля в процентах */
+    height: 200px; /* Высота поля в пикселах */
+    resize: none; /* Запрещаем изменять размер */
+   } 
+  </style>
 <?php if (isset($alert)) { ?>
 <div class="alert_success">
 	<p>
@@ -213,12 +220,22 @@
 											<label for="useenddate"><?php echo __('cards.useenddate'); ?></label>
 										</th>
 									</tr> -->
+									
+									
 									<tr>
-									<th colspan="2">
-										<input type="checkbox" id="cardisactive" name="cardisactive" readonly="readonly" <?php if (!isset($card) || $card['ACTIVE']) echo 'checked="checked" '; ?>/>
+										<th colspan="2">
+											<?php echo '<br><label for="note">'.__('cards.note').'</label><br>';
+												echo Form::textarea('note', iconv('CP1251', 'UTF-8', $contact->note), array('id'=>'note'));
+												?>
+										</th>
+									</tr>
+									<tr>
+										<th colspan="2">
+											<input type="checkbox" id="cardisactive" name="cardisactive" readonly="readonly" <?php if (!isset($card) || $card['ACTIVE']) echo 'checked="checked" '; ?>/>
 										<label for="cardisactive"><?php echo __('cards.active'); ?></label>
-									</th>
-								</tr>
+										</th>
+									</tr>
+									
 								</tbody>
 							</table>
 						</fieldset>

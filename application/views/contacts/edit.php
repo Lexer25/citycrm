@@ -113,7 +113,7 @@ if ($alert) { ?>
 <div class="onecolumn">
 	<div class="header">
 		<span >
-			<?php 
+			<?php //вывод надписи в зависимости от режима показа данных
 			
 			switch($mode) {
 				case('new'):

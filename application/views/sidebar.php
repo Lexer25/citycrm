@@ -48,9 +48,9 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
             <li>
                 <a id="sidebar_cards" href="javascript:"><img src="images/icon_card.png" /><?php echo __('identity'); ?></a>
                 <ul>
-                    <li><? echo HTML::anchor ('cards/rfid', __('sidebar.rfid')); ?></li>
-                    <li><? echo HTML::anchor ('cards/grz', __('sidebar.grz')); ?></li>
-                    <li><? echo HTML::anchor ('cards/uhf', __('sidebar.uhf')); ?></li>
+                    <li><? echo HTML::anchor ('cards/select/rfid', __('sidebar.rfid')); ?></li>
+                    <li><? echo HTML::anchor ('cards/select/grz', __('sidebar.grz')); ?></li>
+                    <li><? echo HTML::anchor ('cards/select/uhf', __('sidebar.uhf')); ?></li>
                 </ul>
             </li>
 

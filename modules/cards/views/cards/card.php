@@ -62,7 +62,7 @@
 <div class="alert_success">
 	<p>
 		<img class="mid_align" alt="success" src="images/icon_accept.png" />
-		<?php echo $alert; ?>
+		<?php //echo $alert; ?>
 	</p>
 </div>
 <?php } ?>
@@ -188,6 +188,13 @@
 											<label for="useenddate"><?php echo __('cards.useenddate'); ?></label>
 										</th>
 									</tr> -->
+											<tr>
+										<th colspan="2">
+											<?php echo '<br><label for="note">'.__('cards.note').'</label><br>';
+												echo Form::textarea('note', iconv('CP1251', 'UTF-8', $key->note), array('id'=>'note'));
+												?>
+										</th>
+									</tr>
 									<tr>
 									<th colspan="2">
 										<input type="checkbox" id="cardisactive" name="cardisactive" readonly="readonly" <?php if (!isset($key) || $key->is_active) echo 'checked="checked" '; ?>/>

@@ -136,6 +136,7 @@ Kohana::modules(array(
 	'pagination' => MODPATH . 'pagination', // Paging of results
 	'tuner' => MODPATH . 'tuner', // tuner настройки
 	'stat' => MODPATH . 'stat', // вспомогательные различные функции
+	'cards' => MODPATH . 'cards', // подключение модуля cards
 	));
 /*
 Добавляю хранение настроек в базе данных

@@ -242,6 +242,34 @@ class Contact
 	}
 	
 	/*
+	10.04.2024 получить фото. Этот метод реализован отдельно, чтобы не захламлять другие методы.
+	Фото передается при явном его запросе.
+	
+	*/
+	
+	public function getPhoto()
+	{
+		$sql='select p.photo from people p
+			where p.id_pep='.$this->id_pep;
+			try {
+						$query = DB::query(Database::SELECT, $sql)
+						->execute(Database::instance('fb'))
+						->get('PHOTO');
+						$this->actionResult=0;
+						$this->photo=$query;
+						
+						
+				} catch (Exception $e) {
+				
+					$this->actionResult=3;
+					Log::instance()->add(Log::DEBUG, '178 '.$e->getMessage());
+					return 3;
+					$this->photo='';
+				}
+	
+	}
+	
+	/*
 	10.01.2024
 	Добавление фотографии для указанного пипла
 	*/

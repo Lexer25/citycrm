@@ -14,7 +14,7 @@
 //echo Debug::vars('2', $cards); exit;
 //echo Debug::vars('2', $catdTypelist); //exit;
 //echo Debug::vars('3', $alert); //exit;
-//echo Debug::vars('4', $filter); //exit;
+echo Debug::vars('4', $filter); //exit;
 //echo Debug::vars('5', $pagination); //exit;
 
 if ($alert) { ?>
@@ -31,8 +31,8 @@ if ($alert) { ?>
 			<form action="cards/search" method="post">
 			<?php
 			//преобразование формата RFID от базы данных к экранной форме
-			if(Kohana::$config->load('system')->get('baseFormatRfid')==0) $filter=Model::factory('stat')->hexToDec($filter);
-			if(Kohana::$config->load('system')->get('baseFormatRfid')==1) $filter=Model::factory('stat')->_001AToDec($filter);
+			//if(Kohana::$config->load('system')->get('baseFormatRfid')==0) $filter=Model::factory('stat')->hexToDec($filter);
+			//if(Kohana::$config->load('system')->get('baseFormatRfid')==1) $filter=Model::factory('stat')->_001AToDec($filter);
 			?>
 				<input type="text" class="search noshadow" title="<?php echo __('search'); ?>" name="q" id="q" value="<?php if (isset($filter)) echo $filter; ?>" />
 			</form>

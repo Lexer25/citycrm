@@ -5,6 +5,8 @@ class Controller_Contacts extends Controller_Template
 	public $template = 'template';
 	private $listsize;
 	private $session;
+	private $rfid_min_length;
+	private $rfid_max_length;
 	
 	public function before()
 	{
@@ -16,6 +18,8 @@ class Controller_Contacts extends Controller_Template
 		I18n::$lang = $this->session->get('language', 'en-us');
 		$this->listsize = $this->session->set('listsize', 100);
 		$this->listsize = $this->session->get('listsize', 100);
+		$this->rfid_min_length=Kohana::$config->load('rfid')->get('min_length');
+		$this->rfid_max_length=Kohana::$config->load('rfid')->get('max_length');
 	}
 	
 	
@@ -309,14 +313,16 @@ class Controller_Contacts extends Controller_Template
 	{
 		$id=$this->request->param('id');
 		$force_org=$this->request->query('id_org');//наличие этого параметра означает, что надо выбрать именно указанную организацию для правильной работы дерева организаций.
-		$contact = Model::factory('Contact')->getContact($id);//персональные данные контакта
+		//$contact = Model::factory('Contact')->getContact($id);//персональные данные контакта
 		
-		$contact= new Contact($id);
+		$contact= new Contact($id);// сразу формирую контакт (т.к. он один, то объем данных сравнительно маленький). Фото в контакте нет!
 		if($id == 0) {
 			$contact->is_active=1;
 			$contact->id_org=1;
+		} else {
+			$contact->getPhoto();
 		}
-		//$photo = Model::factory('Contact')->getPicture($id);//персональные данные контакта
+		
 		$contact_acl = Model::factory('Contact')->contact_acl($id);//список категорий доступа, выданных контакту
 		$check_acl = Model::factory('Contact')->check_acl($id);//получить список категорий доступа родительской организации для сверки с текущим списком категорий для контакта: совпадает или нет? 0 -совпадает, 1 - не совпадает.
 		if ($id != "0" && !$contact) $this->redirect('contacts');
@@ -335,7 +341,7 @@ class Controller_Contacts extends Controller_Template
 		if($contact->id_pep >0 and $contact->is_active==0) $mode='fired';//режим редактирования "удаленного" контакта
 		
 		$this->template->content = View::factory('contacts/edit')
-			->bind('contact', $contact)
+			->bind('contact', $contact) //контакт передается уже как экземпляр класса!!!
 			->bind('alert', $fl)
 			->bind('contact_acl', $contact_acl)
 			->bind('org_tree', $org_tree)
@@ -733,63 +739,146 @@ class Controller_Contacts extends Controller_Template
 	
 	
 	
+	/*
+	редакция 10.04.2024
 	
+	добавление карты:
+	 "hidden" => string(9) "form_sent"
+    "id" => string(5) "14401"
+    "id_cardtype" => string(1) "1"
+    "idcard" => string(6) "123432"
+    "carddatestart" => string(10) "10.04.2024"
+    "carddateend" => string(10) "10.04.2025"
+    "note" => string(0) ""
+    "cardisactive" => string(2) "on"
+	
+	
+	добавление ГРЗ
+	 "hidden" => string(9) "form_sent"
+    "id" => string(5) "14401"
+    "id_cardtype" => string(1) "4"
+    "idcard" => string(6) "345526"
+    "note" => string(10) "мотор"
+    "carddatestart" => string(10) "10.04.2024"
+    "carddateend" => string(10) "10.04.2025"
+    "cardisactive" => string(2) "on"
+	*/
 	
 	public function action_savecard()
 	{
 		//echo Debug::vars('348', $_POST ); exit;
-		$id_pep	= Arr::get($_POST, 'id');
+		$post=Validation::factory($_POST);
+		
+	/* 	$id_pep	= Arr::get($_POST, 'id');
 		$idcard		= str_pad(strtoupper(Arr::get($_POST, 'idcard')), 8, "0", STR_PAD_LEFT);//это при регистрации нового идентификатора
-		$idcard0	= Arr::get($_POST, 'id0', null);// а это передатеся при редактировании карты
+		//$idcard0	= Arr::get($_POST, 'id0', null);// а это передатеся при редактировании карты
 		$datestart	= Arr::get($_POST, 'carddatestart');
 		$dateend	= Arr::get($_POST, 'carddateend', '');
-		$useenddate	= (Arr::get($_POST, 'useenddate') !==NULL)? '1':'0';
-		$cardstate	= Arr::get($_POST, 'cardstate', 0);
+		$useenddate	= (Arr::get($_POST, 'useenddate') !==NULL)? '1':'0';//проверка срока действия карты
+		$cardstate	= Arr::get($_POST, 'cardstate', 0);//это параметр flag 0 - обычная карта, 1 - гостевая.
 		$isactive	= (Arr::get($_POST, 'cardisactive') !==NULL)? '1':'0';
-		$idaccess	= Arr::get($_POST, 'aname');
+		//$idaccess	= Arr::get($_POST, 'aname');
 		$id_cardtype	= Arr::get($_POST, 'id_cardtype');
-		$note	= Arr::get($_POST, 'note');
+		$note	= Arr::get($_POST, 'note');// она же - motor - она же комметарии к карте */
 		
-		//привожу карту из формата длинное десятичное к формату как они хранятся в базе данных)
-		if($rf=Kohana::$config->load('system')->get('baseFormatRfid') == 1) $idcard=Model::Factory('Stat')->decDigitTo001A($idcard);
-		if($rf=Kohana::$config->load('system')->get('baseFormatRfid') == 0) $idcard=Model::Factory('Stat')->decDigitToHEX8($idcard);
-		$key=new Keyk($idcard);
-				$check=$key->check(1);
-				if(is_null($check)){
-					
-					//echo Debug::vars('722 checkOK'); exit;
-				
-					
-					$key->id_card=$idcard;
-							$key->timestart=Arr::get($_POST, 'carddatestart');
-							$key->timeend=Arr::get($_POST, 'carddateend');
-							$key->id_pep=Arr::get($_POST, 'id');
-							
-							//присвоедние карты RFID
-							if($key->addRfid()==0) { ;//сохраняю карту RFID
+		$post->rule('id', 'not_empty')
+					->rule('id', 'digit')
+					->rule('id_cardtype', 'not_empty')
+					->rule('id_cardtype', 'digit')
+					->rule('idcard', 'not_empty')//проверяю только наличие номера карты (или RFID). Сам номеро надо будет проверять отдельно
+					->rule('carddatestart', 'not_empty')
+					->rule('carddatestart', 'date')
+					->rule('carddateend', 'not_empty')
+					->rule('carddateend', 'date')
+					->rule('cardisactive', 'not_empty')
+					->rule('cardisactive', 'alpha_numeric')
+					;
+		if($post->check()){
+			//определяю тип идентификатора для правильной валидации данных
+			//echo Debug::vars('820 validRfid ERR ',$_POST, $post, $this->rfid_min_length, $this->rfid_max_length); exit;
+			switch(Arr::get($post, 'id_cardtype')){
+				case 1://обработка RFID
+					$validRfid=Validation::factory(array('idcard'=>Arr::get($post, 'idcard')));
+					$validRfid->rule('idcard', 'not_empty')
+								->rule('idcard', 'digit')
+								->rule('idcard', 'min_length', array(':value', $this->rfid_min_length))
+								->rule('idcard', 'max_length', array(':value', $this->rfid_max_length))
+								;
+					if($validRfid->check()){
+						
+						//все условия выполнениы, можно сохранять RFID
+						$idcard=Arr::get($post, 'idcard');
+						//echo Debug::vars('803 validRfid OK ',$validRfid, $idcard); exit;
+						if($rf=Kohana::$config->load('system')->get('baseFormatRfid') == 1) $idcard=Model::Factory('Stat')->decDigitTo001A($idcard);
+						if($rf=Kohana::$config->load('system')->get('baseFormatRfid') == 0) $idcard=Model::Factory('Stat')->decDigitToHEX8($idcard);
+						$key=new Keyk($idcard);
+						$check=$key->check(1);
+						
+							if(is_null($check)){
+								$key->id_card=$idcard;
+								$key->timestart=Arr::get($post, 'carddatestart');
+								$key->timeend=Arr::get($post, 'carddateend');
+								$key->id_pep=Arr::get($post, 'id');
+								$key->id_cardtype=Arr::get($post, 'id_cardtype');
+								$key->cardisactive=Arr::get($post, 'cardisactive');
+								$key->note=Arr::get($post, 'note');
+								$key->flag=0;
 								
+								//присвоедние карты RFID
+								if($key->addRfid()==0) { ;//сохраняю карту RFID
 									$alert=__('contact.addRfidOk', array(':id_card'=>$key->id_card));
-							};
-				Session::instance()->set('alert', $alert);
-				
-				} else {
-					//echo Debug::vars('738 checkErr', $check); exit;
-					//карта выдана сотруднику с id_pep=$check
+								} else {
+									$alert=__('contact.saveRfidErr', array(':id_card'=>$key->id_card));
+								};
+								//echo Debug::vars('803 validRfid OK ',$key, $idcard, $alert); exit;
+								
+								$arrAlert[]=array('actionResult'=>0, 'actionDesc'=>$alert);
+								//Session::instance()->set('arrAlert',$arrAlert);
+							} else {
+								//echo Debug::vars('738 checkErr', $check); exit;
+								//карта выдана сотруднику с id_pep=$check
+								
+								$anypeople=new Contact($check);
+								
+								//Session::instance()->set('alert', __('contact.key_occuped_'.$check));
+								$alert=__('contact.key_occuped', array(':idcard'=>$key->id_card_on_screen, ':id_pep'=>$anypeople->id_pep,':name'=>iconv('CP1251', 'UTF-8',$anypeople->name),':surname'=>iconv('CP1251', 'UTF-8',$anypeople->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$anypeople->patronymic)));
+								
+								$arrAlert[]=array('actionResult'=>2, 'actionDesc'=>$alert);
+								
+								//Session::instance()->set('arrAlert',$arrAlert);
+							
+						}
+					} else {
+						
+						$alert=__('contact.validKeyErr', array(':desc'=>implode(",", $validRfid->errors('upload'))));
+						Session::instance()->set('alert', $alert);
+						//echo Debug::vars('843 validRfid ERR ', $alert); exit;
+					}
 					
-					$anypeople=new Contact($check);
-					
-					//Session::instance()->set('alert', __('contact.key_occuped_'.$check));
-					$alert=__('contact.key_occuped', array(':idcard'=>$idcard, ':id_pep'=>$anypeople->id_pep,':name'=>iconv('CP1251', 'UTF-8',$anypeople->name),':surname'=>iconv('CP1251', 'UTF-8',$anypeople->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$anypeople->patronymic)));
-					
-					$arrAlert[]=array('actionResult'=>2, 'actionDesc'=>$alert);
-					
-					Session::instance()->set('arrAlert',$arrAlert);
 				
-				}
+				break;
 				
+				case 4://обработка GRZ
 				
+				break;
+				
+				default:
+				
+				break;
+				
+			}
+			//echo Debug::vars('794 valid OK ',$post); exit;
+		} else {
+			$alert=__('contact.validKeyErr :desc', array(':desc'=>implode(",", $post->errors('upload'))));
+			$arrAlert[]=array('actionResult'=>2, 'actionDesc'=>$alert);
+			//echo Debug::vars('797 valid Err ',$post); exit;
+		}
+						
 		
-		$this->redirect('contacts/cardlist/' . $id_pep);
+					
+		Session::instance()->set('arrAlert',$arrAlert);	
+		
+		$this->redirect('contacts/cardlist/' . Arr::get($post, 'id'));
 	}
 	
 	

@@ -9,7 +9,7 @@ class Cardtype
 	public static function getList()
 	{
 		$query = DB::query(Database::SELECT,
-			'SELECT * FROM accessname order by NAME')
+			'SELECT * FROM cardtype order by NAME')
 			->execute(Database::instance('fb'));
 		return $query->as_array();
 	}

@@ -50,13 +50,14 @@ Class TestCompany_step2 extends Unittest_TestCase
 	public function testAddContact($surname, $name, $patronymic)//проверка добавления организаций в родителя 723 (это Артсек)
 	{
 		//$this->markTestSkipped('must be revisited.');
-		Log::instance()->add(Log::DEBUG, Debug::vars('49', $surname, $name, $patronymic ));
+		//Log::instance()->add(Log::DEBUG, Debug::vars('49', $surname, $name, $patronymic ));
 		$divcode='div_art_res_odt3';
 		$contact=new Contact();
 		$org=new Company();
 		$contact->surname=$surname;
 		$contact->name=$name;
 		$contact->patronymic=$patronymic;
+		//$contact->id_org=$org->getIdOnDivCode($divcode);
 		$contact->id_org=$org->getIdOnDivCode($divcode);
 		$this->assertEquals(0, $contact->addContact());
 

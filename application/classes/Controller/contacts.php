@@ -148,10 +148,13 @@ class Controller_Contacts extends Controller_Template
 		
 		$showphone = $this->session->get('showphone', 0);
 		
+		include Kohana::find_file('views\alerttest','testarralert');
+		
 		$this->template->content = View::factory('contacts/list')
 			->bind('total_items', $q)
 			->bind('people', $list)
 			->bind('alert', $fl)
+			->bind('arrAlert[]', $arrAlert[])
 			->bind('showphone', $showphone)
 			->bind('filter', $filter)
 			->bind('pagination', $pagination);
@@ -796,7 +799,7 @@ class Controller_Contacts extends Controller_Template
 		if($post->check()){
 			//определяю тип идентификатора для правильной валидации данных
 			//echo Debug::vars('820 validRfid ERR ',$_POST, $post, $this->rfid_min_length, $this->rfid_max_length); exit;
-			switch(Arr::get($post, 'id_cardtype')){
+			switch(Arr::get($post, 'id_cardtype')){// обработка карт RFID
 				case 1://обработка RFID
 					$validRfid=Validation::factory(array('idcard'=>Arr::get($post, 'idcard')));
 					$validRfid->rule('idcard', 'not_empty')
@@ -811,6 +814,7 @@ class Controller_Contacts extends Controller_Template
 						//echo Debug::vars('803 validRfid OK ',$validRfid, $idcard); exit;
 						if($rf=Kohana::$config->load('system')->get('baseFormatRfid') == 1) $idcard=Model::Factory('Stat')->decDigitTo001A($idcard);
 						if($rf=Kohana::$config->load('system')->get('baseFormatRfid') == 0) $idcard=Model::Factory('Stat')->decDigitToHEX8($idcard);
+						
 						$key=new Keyk($idcard);
 						$check=$key->check(1);
 						
@@ -840,7 +844,7 @@ class Controller_Contacts extends Controller_Template
 								
 								$anypeople=new Contact($check);
 								
-								//Session::instance()->set('alert', __('contact.key_occuped_'.$check));
+								//echo Debug::vars('817 ', Arr::get($post, 'idcard'), $key->id_card, $key->id_card_on_screen); exit;
 								$alert=__('contact.key_occuped', array(':idcard'=>$key->id_card_on_screen, ':id_pep'=>$anypeople->id_pep,':name'=>iconv('CP1251', 'UTF-8',$anypeople->name),':surname'=>iconv('CP1251', 'UTF-8',$anypeople->surname),':patronymic'=>iconv('CP1251', 'UTF-8',$anypeople->patronymic)));
 								
 								$arrAlert[]=array('actionResult'=>2, 'actionDesc'=>$alert);

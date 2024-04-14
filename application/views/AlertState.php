@@ -11,4 +11,5 @@ $arrayAlt=array('success','info','warning',   'error');//иконки для к�
 
 
 
+
 ?>

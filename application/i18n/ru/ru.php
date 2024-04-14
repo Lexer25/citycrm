@@ -2,6 +2,7 @@
 
 return array
 (
+	'identity'						=> 'Идентификаторы',
 	'Lic'						=> 'Лицензия: Lic',
 	'welcome'						=> 'Добро пожаловать',
     'settings'						=> 'Настройки',
@@ -402,6 +403,9 @@ return array
 	'sidebar.archive'				=> 'Архив гостей',
 	'sidebar.config'				=> 'Настройка',
 	'sidebar.deletedcontact'		=> 'Уволенные контакты',
+	'sidebar.rfid'					=> 'RFID',
+	'sidebar.grz'					=> 'ГРЗ',
+	'sidebar.uhf'					=> 'UHF',
 
 	'cards.title'					=> 'Список идентификаторов',
 	'cards.empty'					=> 'Список карт пуст',
@@ -462,6 +466,13 @@ return array
 	'companies.confirmdelete'		=> 'Вы действительно хотите удалить организацию?',
 	'companies.countChildren'		=> 'Количество нижестоящих компаний',
 	'companies.countContact'		=> 'Количество контактов в компаний',
+	'companies.addOk'				=> 'Организция name успешно добавлена в организацию parentName',
+	'companies.addValidationErr'	=> 'Получена ошибка name',
+	'companies.addDbErr'			=> 'При добавлении организации name возникла ошибка в базе данных. Детали см. лог-файл.',
+
+    'companies.updateOk'				=> 'Обновление организации name выполнено успешно',
+	'companies.updateValidationErr'	=> 'Получена ошибка name',
+	'companies.updateDbErr'			=> 'При добавлении организации name возникла ошибка в базе данных. Детали см. лог-файл.',
 
     'objects.title'                 => 'Объекты',
     'objects.name'                  => 'Название объекта',

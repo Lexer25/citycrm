@@ -1,3 +1,6 @@
+<?php 
+include Kohana::find_file('views','alert');
+?>
 <div class="onecolumn">
 	<div class="header">
 		<span class="error"><?php echo __('company.title') . ': ' . iconv('CP1251', 'UTF-8', $company['NAME']) ?></span>

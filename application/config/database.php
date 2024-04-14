@@ -7,9 +7,9 @@ return array
 		'type'			=> 'pdo',
 		'connection'	=> array(
 			//'dsn'		=> 'odbc:parsec',
-			//'dsn'		=> 'odbc:kalibr_001A',
+			'dsn'		=> 'odbc:kalibr_001A',
 			//'dsn'		=> 'odbc:kalibr',
-			'dsn'		=> 'odbc:vnii_local',
+			//'dsn'		=> 'odbc:vnii_local',
 			//'dsn'		=> 'odbc:wg',
 			'username'	=> 'SYSDBA',
 			'password'	=> 'temp',

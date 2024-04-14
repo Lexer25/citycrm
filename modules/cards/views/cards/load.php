@@ -58,7 +58,9 @@
 	}
 	
 </script>
-<?php if (isset($alert)) { ?>
+<?php
+include Kohana::find_file('views','alert');
+ if (isset($alert)) { ?>
 <div class="alert_success">
 	<p>
 		<img class="mid_align" alt="success" src="images/icon_accept.png" />

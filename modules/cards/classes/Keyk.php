@@ -79,7 +79,7 @@ class Keyk
 					break;
 					case 2:
 						//привожу длинный DEC к формату HEX. Значит, считываль работает в формате длинного десятичного числа.
-						$pattern=Model::factory('stat')->_001AToDec($pattern);
+						$pattern=Model::factory('stat')->decDigitTo001A($pattern);
 					break;
 					default:
 					

@@ -182,13 +182,14 @@ class Model_Stat extends Model
 
 
 			 
-			 $result1 = hexdec(Arr::get($numReverse2, hexdec(Arr::get($key_arr, 5)))
-						 .Arr::get($numReverse2, hexdec(Arr::get($key_arr,4))))
-						 .','. str_pad(hexdec(Arr::get($numReverse2,hexdec(Arr::get($key_arr, 3)))
-						 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 2)))
-						 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 1)))
-						 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 
-		0)))), 5, '0', STR_PAD_LEFT);
+			  $result = str_pad(hexdec(Arr::get($numReverse2, 
+						hexdec(Arr::get($key_arr, 5)))
+							 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 4)))
+							 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 3)))
+							 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 2)))
+							 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 1)))
+							 .Arr::get($numReverse2, hexdec(Arr::get($key_arr, 
+			0)))), 10, '0', STR_PAD_LEFT);
 
 			
 			
@@ -198,6 +199,7 @@ class Model_Stat extends Model
 				$result='--';
 				
 			}
+		//echo Debug::vars('201', $keycode, $result); exit;
 		 return $result;
 	}
 	
@@ -1271,7 +1273,7 @@ class Model_Stat extends Model
 			->execute(Database::instance('fb'))
 			->get('COUNT');
 			
-			echo Debug::vars('817',$id_dev, $count_50, $count_46, $count_65); exit;
+			//echo Debug::vars('817',$id_dev, $count_50, $count_46, $count_65); exit;
 			$mode='TEST_OFF';
 			if($count_50 == 0 and $count_46 == 0 and $count_65!=0) $mode='TEST_ON';
 			//echo Debug::vars('817',$id_dev, $count_50, $count_46, $count_65, $mode);

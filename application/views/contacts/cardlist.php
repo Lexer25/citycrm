@@ -1,8 +1,9 @@
 <?php
 //echo Debug::vars('2', $cards);
 //echo Debug::vars('3', Session::instance());
-$catdTypelist = Model::factory('Card')->getcatdTypelist();//получил список типов идентификаторов
 include Kohana::find_file('views','alert');
+$catdTypelist = Model::factory('Card')->getcatdTypelist();//получил список типов идентификаторов
+
 ?>
 <div class="onecolumn">
 	<div class="header">
@@ -94,8 +95,14 @@ include Kohana::find_file('views','alert');
 							<input type="checkbox" />
 						</td>
 						-->
-						<td><?php echo HTML::anchor('cards/edit/' . $key->id_card, $key->id_card).' '.$key->id_card_on_screen;
-						if(Arr::get($cardtype, 'id') == 1) echo ' ('.Model::factory('Stat')->reviewKeyCode($key->id_card).')';						?></td>
+						<td><?php 
+							$viewFromatForEdit = $key->id_card_on_screen;
+							if(Kohana::$config->load('system')->get('viewFromatForEdit') == 'DEC')$viewFromatForEdit = $key->id_card_on_screen;
+							if(Kohana::$config->load('system')->get('viewFromatForEdit') == '001A')$viewFromatForEdit = $key->id_card;
+							
+							echo HTML::anchor('cards/edit/' . $key->id_card, $viewFromatForEdit);
+							//echo HTML::anchor('cards/edit/' . $key->id_card, $key->id_card).' '.$key->id_card_on_screen;
+						if((Arr::get($cardtype, 'id') == 1) AND (Kohana::$config->load('system')->get('formatViewAll') == 1)) echo ' ('.Model::factory('Stat')->reviewKeyCode($key->id_card).')';						?></td>
 						<td><?php echo iconv('CP1251', 'UTF-8', Arr::get($cardtype, 'smallname')); ?></td> 
 						<td><?php echo $key->timestart; ?></td>
 						<td><?php echo $key->timeend; ?></td>

@@ -14,7 +14,8 @@
 //echo Debug::vars('18', $parents);
 //echo Debug::vars('19', $alert);
 //echo Debug::vars('20', $acl);
-
+$company=new Company($company['ID_ORG']);
+include Kohana::find_file('views','alert');
 if ($alert) { ?>
 <div class="alert_success">
 	<p>
@@ -25,8 +26,10 @@ if ($alert) { ?>
 <?php } ?>
 <div class="onecolumn">
 	<div class="header">
-		<span class="error"><?php echo $company ? __('company.title') . ': ' . iconv('CP1251', 'UTF-8', $company['NAME']) : __('company.new'); ?></span>
-		<?php if (isset($company['ID_ORG'])) { ?>
+		<span class="error"><?php echo $company ? __('company.title') . ': ' . iconv('CP1251', 'UTF-8', $company->name) : __('company.new'); ?></span>
+		<?php if (isset($company->id_org)) { 
+		
+		?>
 		<div class="switch">
 			<table cellpadding="0" cellspacing="0">
 			<tbody>
@@ -36,10 +39,10 @@ if ($alert) { ?>
 					</td>
 
 					<td>
-						<?php echo HTML::anchor('companies/acl/' . $company['ID_ORG'], __('company.acl'), array('class' => 'middle_switch')); ?>
+						<?php echo HTML::anchor('companies/acl/' . $company->id_org, __('company.acl'), array('class' => 'middle_switch')); ?>
 					</td>
 					<td>
-						<?php echo HTML::anchor('companies/people/' . $company['ID_ORG'], __('company.contacts'), array('class' => 'right_switch')); ?>
+						<?php echo HTML::anchor('companies/people/' . $company->id_org, __('company.contacts'), array('class' => 'right_switch')); ?>
 					</td>
 				</tr>
 			</tbody>
@@ -50,11 +53,11 @@ if ($alert) { ?>
 	<br class="clear" />
 	<div class="content">
 		<form action="companies/save" method="post" onsubmit="return validate()">
-			<?php echo Form::hidden('hidden', 'form_sent') . Form::hidden('id', $company['ID_ORG']); ?>
+			<?php echo Form::hidden('hidden', 'form_sent') . Form::hidden('id', $company->id_org); ?>
 			<p>
 				<label for="name"><?php echo __('company.name'); ?></label>
 				<br />
-				<input type="text" id="name" name="name" size="50" value="<?php echo iconv('CP1251', 'UTF-8', $company['NAME']); ?>" />
+				<input type="text" id="name" name="name" size="50" value="<?php echo iconv('CP1251', 'UTF-8', $company->name); ?>" />
 				<br />
 				<span class="error" id="error1" style="color: red; display: none;"><?php echo __('company.emptyname'); ?></span>
 			</p>
@@ -63,7 +66,7 @@ if ($alert) { ?>
 			<p>
 				<label for="code"><?php echo __('company.code'); ?></label>
 				<br />
-				<input type="text" id="code" name="code" size="50" disabled value="<?php echo iconv('CP1251', 'UTF-8', $company['DIVCODE']); ?>" />
+				<input type="text" id="code" name="code" size="50" disabled value="<?php echo iconv('CP1251', 'UTF-8', $company->divcode); ?>" />
 				<br />
 				<span class="error" id="error2" style="color: red; display: none;"><?php echo __('company.emptycode'); ?></span>
 			</p>
@@ -79,7 +82,7 @@ if ($alert) { ?>
 								<option></option>
 								<?php 
 								$tree=new Tree();
-									echo $tree->out_options($tree->array_to_tree($org_tree), Arr::get($company,'ID_PARENT')); 
+									echo $tree->out_options($tree->array_to_tree($org_tree), $company->id_parent); 
 								?>
 				</select>
 			</p>
@@ -95,7 +98,7 @@ if ($alert) { ?>
 			&nbsp;&nbsp;
 			<?php
 				if($company){ ?>
-						<input type="button" value="<?php echo __('button.addpeople'); ?>" onclick="location.href='<?php echo URL::base().'contacts/edit/0?id_org='.Arr::get($company, 'ID_ORG', 1);?>'" />
+						<input type="button" value="<?php echo __('button.addpeople'); ?>" onclick="location.href='<?php echo URL::base().'contacts/edit/0?id_org='.$company->id_org;?>'" />
 				<?php } ?>
 			
 			

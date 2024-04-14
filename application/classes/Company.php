@@ -12,7 +12,11 @@ class Company
 	public $id_parent;//id родительской организации
 	public $divcode;//код подразделения
 	public $time_stamp;//метка времени последнего действия
+	public $errors;//сообщения об ошибке
+	public $regex_pattern = '/[[:^alnum:]]/';//regex регулярное выражение для проверки названия организаций.
 	
+	
+
 	public function __construct($id_org = null)
 	{
 		
@@ -45,41 +49,89 @@ class Company
 		}	
 		
 		
+		} else {
+			$this->id_org=0;
 		}
 	}
 	
 	
 	/*
-	7.01.2024 
-	Добавление новой организации
+	14.04.2024
+	генерация нового id_org
 	*/
-	
-	public function addOrg()
+	private function genIdOrg()
 	{
-		//получаею очередной id_org
 		$query = DB::query(Database::SELECT,
 			'SELECT gen_id(gen_org_id, 1) FROM rdb$database')
 			->execute(Database::instance('fb'))
 			->get('GEN_ID');
+			return $query;
 		
-		$this->id_org=$query;//получил id вставляемой организации
-		$sql=__('INSERT INTO organization (id_org, name, id_parent) VALUES (:id, \':name\', :parent)',
-			array(
-				':id'		=> $this->id_org,
-				':name'		=> $this->name,
-				':parent'	=>  $this->id_parent,
-				));
-		//echo Debug::vars('80', $sql); exit;
-		try{
-			//echo Debug::vars('490', $parent,($parent == '')? null : $parent,  $sql); exit;
-			$query=DB::query(Database::INSERT, iconv('UTF-8', 'CP1251',$sql))
-			->execute(Database::instance('fb'));
-			return 0;
+	}
+	
+	/*
+	7.01.2024 
+	Добавление новой организации
+	
+	string(3) "235"
+	array(4) (
+    "hidden" => string(9) "form_sent"
+    "id" => string(0) ""
+    "name" => string(7) "unitest"
+    "parent" => string(1) "1"
+	
+	->rule('getCardInfo', 'regex', array(':value', '/^[A-F0-9]+$/'));
+
+	*/
+	
+	public function addOrg()
+	{
+		
+		$data=array('id_org'=>$this->id_org, 'name'=>$this->name, 'id_parent'=>$this->id_parent);
+		$validation = Validation::factory($data);
+		$validation->rule('id_org', 'not_empty')
+					->rule('id_org', 'digit')
+					->rule('name', 'not_empty')
+					//->rule('name', 'alpha_numeric')
+					->rule('name', 'regex', array(':value', $this->regex_pattern))
+					->rule('name', 'max_length', array(':value', 50))//проверяю только наличие номера карты (или RFID). Сам номеро надо будет проверять отдельно
+				
+					//->rule('id_parent', 'Company::checIdOrg')
+					;
+		 if($validation->check()){
 			
-		} catch (Exception $e) {
-			Log::instance()->add(Log::DEBUG, '#31 '.$e->getMessage());
-			return 3;
-		}	
+			//Log::instance()->add(Log::DEBUG, '#79 Valid_OK');
+			
+			//получаею очередной id_org		
+			$this->id_org=$this->genIdOrg();//получил id вставляемой организации
+			
+				$sql=__('INSERT INTO organization (id_org, name, id_parent) VALUES (:id, \':name\', :parent)',
+				array(
+					':id'		=> $this->id_org,
+					':name'		=> $this->name,
+					':parent'	=>  $this->id_parent,
+					));
+			//echo Debug::vars('80', $sql); exit;
+			
+			try{
+				
+				$query=DB::query(Database::INSERT, iconv('UTF-8', 'CP1251',$sql))
+				->execute(Database::instance('fb'));
+					
+				return 0;
+				
+			} catch (Exception $e) {
+				
+				
+				$this->errors=$e->getMessage();
+				return 3;
+			}	
+		 } else {
+			// echo Debug::vars('-102-', $this,  $validation->errors('validation')); exit;
+			// Log::instance()->add(Log::DEBUG, '#31 '.$validation->errors());
+			$this->errors=implode(",", $validation->errors('companies'));
+			return 2;
+		 }
 	}
 	
 	
@@ -201,6 +253,37 @@ class Company
 	
 	
 	
+	/*
+		14.02.2024
+		проверка: есть ли id_org в базе данных СКУД?
+		Если divcode не найдет, то ответ TRUE
+		Если найдет - ответ FALSE
+		
+	*/
+	public function checkIdOrg($id_org)
+	{
+		$sql = 'select o.id_org from organization o
+		where o.id_org=\''.$id_org.'\'';
+		
+		try {		
+		
+			$query = DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->count();
+			if($query == 1) return 0;
+			return FALSE;	
+				
+					} catch (Exception $e) {
+				Log::instance()->add(Log::DEBUG, $e->getMessage());
+				
+				return 3;
+			
+		}	
+		
+	}
+	
+	
+	
 	
 	
 	
@@ -214,22 +297,38 @@ class Company
 	public function updateOrg()
 	{
 		
-		$sql=__('UPDATE organization SET name = \':name\', id_parent = :parent WHERE id_org = :id',array(
-				':name' 	=> $this->name,
-				':parent'	=> $this->id_parent,
-				':id'		=> $this->id_org)
-				);
-		//echo Debug::vars('118', $this, $sql); exit;		
-			try{
+			$data=array('id_org'=>$this->id_org, 'name'=>$this->name, 'id_parent'=>$this->id_parent);
+		$validation = Validation::factory($data);
+		$validation->rule('id_org', 'not_empty')
+					->rule('id_org', 'digit')
+					->rule('name', 'not_empty')
+					->rule('name', 'regex', array(':value', $this->regex_pattern))
+					->rule('name', 'max_length', array(':value', 50))//проверяю только наличие номера карты (или RFID). Сам номеро надо будет проверять отдельно
+				
+					//->rule('id_parent', 'Company::checIdOrg')
+					;
+		 if($validation->check()){
+				$sql=__('UPDATE organization SET name = \':name\', id_parent = :parent WHERE id_org = :id',array(
+						':name' 	=> $this->name,
+						':parent'	=> $this->id_parent,
+						':id'		=> $this->id_org)
+						);
+				//echo Debug::vars('118', $this, $sql); exit;		
+					try{
+					
+					$query=DB::query(Database::UPDATE, iconv('UTF-8', 'CP1251',$sql))
+					->execute(Database::instance('fb'));
+					return 0;
+					
+				} catch (Exception $e) {
+					Log::instance()->add(Log::DEBUG, '#31 '.$e->getMessage());
+					return 3;
+				}	
+		 } else {
 			
-			$query=DB::query(Database::UPDATE, iconv('UTF-8', 'CP1251',$sql))
-			->execute(Database::instance('fb'));
-			return 0;
-			
-		} catch (Exception $e) {
-			Log::instance()->add(Log::DEBUG, '#31 '.$e->getMessage());
-			return 3;
-		}	
+			$this->errors=implode(",", $validation->errors('companies'));
+			return 2;
+		 }
 	}
 	
 	/*

@@ -6,6 +6,7 @@ class Controller_Cards extends Controller_Template
 	private $listsize;
 	private $session;
 	private $id_type;
+	public $arrAlert;
 	
 	public function before()
 	{
@@ -68,16 +69,18 @@ class Controller_Cards extends Controller_Template
 		тип идентификатора указан в сессии $this->session->get('identifier')
 		*/
 		//echo Debug::vars('22', $_POST, $this->session->get('identifier')); exit;
-		$pattern = trim(Arr::get($_POST, 'q', null));
+		$pattern = trim(Arr::get($_POST, 'q', null));// убрал лишние знаки вокруг строки поиска
 		$this->session->set('search_card', $pattern);//параметры поиска мы сохраняем, чтобы повторно вывести в строке поиска.
 		$temp=$pattern;
 		$post=Validation::factory($_POST);
 		
-		switch($this->session->get('identifier')){
+		switch($this->session->get('identifier')){ //определяю тип идентификатора для поиска.
 			case 1:// RFID
-				if($rf=Kohana::$config->load('system')->get('regFormatRfid') == 2){ // если входной формат 2 (DEC)
+				if($rf=Kohana::$config->load('system')->get('regFormatRfid') == 2){ // если входной формат 2 (DEC), то проверяю что это число
 					$post->rule('q', 'not_empty')
-						->rule('q', 'digit');
+						->rule('q', 'digit')
+						->rule('q', 'range', array(':value', 100, pow(2,32)))
+						;
 				}
 				if($post->check()){
 
@@ -94,7 +97,7 @@ class Controller_Cards extends Controller_Template
 					//echo Debug::vars('46', $temp, $pattern, $temp4); exit;
 					$this->action_index($var2);
 				} else {
-					
+				echo Debug::vars('100', $_POST, $var2); exit;
 					//$alert=__('card.errDataForSearchRFID', array(':mess'=>$post->errors('upload')));
 					$this->action_index();	
 				}
@@ -170,13 +173,19 @@ class Controller_Cards extends Controller_Template
 		//echo Debug::vars('55',$isAdmin, $list ); exit;	
 		$fl = $this->session->get('alert');
 		$this->session->delete('alert');
+		
+		$arrAlert = $this->session->get('arrAlert');
+		$this->session->delete('arrAlert');
+		
 		$filter=$this->session->get('search_card');
 		//для правильного отображения номера RFID в разделе поиска привожу его к формату DEC
 		
+				
 		$this->template->content = View::factory('cards/list')
 			->bind('cards', $list)
 			->bind('catdTypelist', $catdTypelist)
 			->bind('alert', $fl)
+			->bind('arrAlert', $arrAlert)
 			->bind('filter', $filter)
 			->bind('pagination', $pagination);
 			//echo View::factory('profiler/stats');
@@ -312,8 +321,10 @@ class Controller_Cards extends Controller_Template
 			if($key->update()==0){
 				
 				$alert=__('card.updateOk', array(':idcard'=>Arr::get($validation, 'idcard')));
+				$arrAlert[]=array('actionResult'=>2, 'actionDesc'=>$alert);
 			} else {
 				$alert=__('card.updateErr', array(':idcard'=>Arr::get($validation, 'idcard')));
+				$arrAlert[]=array('actionResult'=>2, 'actionDesc'=>$alert);
 			}
 			
 		} else {

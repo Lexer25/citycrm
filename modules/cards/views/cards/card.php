@@ -58,7 +58,9 @@
 	}
 	
 </script>
-<?php if (isset($alert)) { ?>
+<?php 
+include Kohana::find_file('views','alert');
+if (isset($alert)) { ?>
 <div class="alert_success">
 	<p>
 		<img class="mid_align" alt="success" src="images/icon_accept.png" />
@@ -135,8 +137,17 @@
 											
 											<?php 
 											 //echo Debug::vars('137', $key); 
-											 echo $key->id_card.' '.$key->id_card_on_screen; 
-											 if($key->id_cardtype  == 1) echo ' ('.Model::factory('Stat')->reviewKeyCode($key->id_card).')';
+											 $viewFromatForEdit = $key->id_card_on_screen;
+							if(Kohana::$config->load('system')->get('viewFromatForEdit') == 'DEC')$viewFromatForEdit = $key->id_card_on_screen;
+							if(Kohana::$config->load('system')->get('viewFromatForEdit') == '001A')$viewFromatForEdit = $key->id_card;
+							
+							
+											// echo $key->id_card.' '.$key->id_card_on_screen; 
+											 echo $viewFromatForEdit; 
+											 
+											 
+											 if(($key->id_cardtype == 1) AND (Kohana::$config->load('system')->get('formatViewAll') == 1))  echo ' ('.Model::factory('Stat')->reviewKeyCode($key->id_card).')';
+											 //if($key->id_cardtype  == 1) echo ' ('.Model::factory('Stat')->reviewKeyCode($key->id_card).')';
 											echo Form::hidden('idcard',$key->id_card);	
 											?>
 											

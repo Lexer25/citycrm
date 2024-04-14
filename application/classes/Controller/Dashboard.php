@@ -11,7 +11,9 @@ class Controller_Dashboard extends Controller_Template {
 	
 	public function before()
 	{
-			Log::instance()->add(Log::NOTICE, 'Получил запрос в dashboard');
+		
+		
+			//Log::instance()->add(Log::NOTICE, 'Получил запрос в dashboard');
 			parent::before();
 			
 			if (!Auth::instance()->logged_in()) $this->redirect('login'); 

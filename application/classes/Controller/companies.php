@@ -232,10 +232,19 @@ class Controller_Companies extends Controller_Template
 		$this->redirect('companies/acl/'.$id);
 	}
 	
+	/*
+	14.04.2024 большая доработка 14.04.2024
+	Результат выполнения берется из модели.
+	ошибки:
+	0 - все успешно,
+	2 - ошибка валидации данных, должно быть описание.
+	3 - ошибка при работе с базой данных
+	*/
 	
 	public function action_save()//добавление организации
 	{
 		//echo Debug::vars('235', $_POST); exit;
+		Log::instance()->add(Log::DEBUG, '239 '. Debug::vars($_POST)); //exit;
 		$id		= Arr::get($_POST, 'id');
 		$name	= Arr::get($_POST, 'name');
 		$code	= Arr::get($_POST, 'code');
@@ -244,30 +253,70 @@ class Controller_Companies extends Controller_Template
 		$group	= Arr::get($_POST, 'group');
 
 		//$company = Model::factory('company');
+		$arrAlert=array();
 		
 
-		if ($id == 0) {
+		if ($id == 0) {// если id==0 - это значит, что организации нет, надо регистрировать.
 			$company = new Company();
 			$company->name=$name;
 			$company->id_parent= ($parent == '')? 1 : $parent;
-			if($company->addOrg()==0) {
-				$company->addOrg();
-				$this->session->set('alert', __('company.saved'));
+			$result=$company->addOrg();
+			switch($result) {
+				case 0:
+					$parentOrg=new Company($company->id_parent);
+					$alert=__('companies.addOk', array('name'=>$company->name, 'parentName'=>iconv('CP1251','UTF-8',  $parentOrg->name)));
+					
+				break;
+				case 2://ошибка валидации данных
+					
+					Log::instance()->add(Log::DEBUG,$company->errors);
+					$alert=__('companies.addValidationErr', array('name'=>$company->errors));
+					
+				break;
+				case 3://ошибка вставки в базу данных
 				
+					Log::instance()->add(Log::DEBUG,$company->errors);
+					$alert=__('companies.addDbErr', array('name'=>$company->name));
+				
+				break;
+				default:
+					$alert=__('unknownErr');
+				break;
 				
 			}
-		} else {
+			
+		
+		} else { // если id!=0 - это значит, что выполняется обновлене данных организации
 			$company = new Company($id);
 			$company->id_org=$id;
 			$company->name=$name;
 			//$company->divcode=$code;
 			$company->id_parent= ($parent == '')? 1 : $parent;
-			
-			$company->updateOrg();
-			$this->session->set('alert', __('company.updated'));
+			$result=$company->updateOrg();
+			switch($result) {
+				case 0:
+					$alert=__('companies.updateOk', array('name'=>$company->name));
+					
+				break;
+				case 2://ошибка валидации данных
+					
+					Log::instance()->add(Log::DEBUG,$company->errors);
+					$alert=__('companies.updateValidationErr', array('name'=>$company->errors));
+					
+				break;
+				case 3://ошибка вставки в базу данных
+					Log::instance()->add(Log::DEBUG,$company->errors);
+					$alert=__('companies.updateDbErr', array('name'=>$company->errors));
+				
+				break;
+				default:
+					$alert=__('unknownErr');
+				break;
+				
+				}
 		}
-
-		
+			$arrAlert[]=array('actionResult'=>$result, 'actionDesc'=>$alert);
+			Session::instance()->set('arrAlert',$arrAlert);
 		$this->redirect('companies/edit/' . $id);
 	}
 	
@@ -320,8 +369,9 @@ class Controller_Companies extends Controller_Template
 	
 	public function action_edit()
 	{
+		Log::instance()->add(Log::DEBUG, '324 '. Debug::vars($_POST)); //exit;
 		$id=$this->request->param('id');
-		$isAdmin = Auth::instance()->logged_in('admin');
+		//$isAdmin = Auth::instance()->logged_in('admin');
 		
 		$company = Model::factory('company');
 		$data = $company->getCompany($id);
@@ -334,7 +384,9 @@ class Controller_Companies extends Controller_Template
 		$fl = $this->session->get('alert');
 		$this->session->delete('alert');
 		
-		
+		$arrAlert = $this->session->get('arrAlert'); //извлечь алерт из сессии
+		$this->session->delete('arrAlert');//очистить алерт в сессии
+
 		
 		$this->template->content = View::factory('companies/edit')
 			->bind('company', $data)
@@ -342,6 +394,7 @@ class Controller_Companies extends Controller_Template
 			->bind('org_tree', $org_tree)
 			//->bind('groups', $grps)
 			->bind('alert', $fl)
+			->bind('arrAlert', $arrAlert)
 			->bind('acl', $acls);
 			
 	}

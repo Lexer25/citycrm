@@ -16,7 +16,7 @@ return array(
 		'org'=>true,
 		'contact'=>true,
 		'card'=>true,
-		'guest'=>true,
+		'guest'=>false,
 		'event'=>false,
 		'queue'=>false,
 		'user'=>false,

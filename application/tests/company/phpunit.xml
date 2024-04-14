@@ -1,0 +1,12 @@
+<phpunit colors="false" 
+	bootstrap="C:\xampp\htdocs\citycrm\modules\unittest\bootstrap.php">
+    <testsuites>
+        <testsuite name="CRM Tests">
+             <file>C:\xampp\htdocs\citycrm\application\tests\testClearArtsec.php</file>
+             <file>C:\xampp\htdocs\citycrm\application\tests\TestCompany_divcode_step3.php</file>
+             <file>C:\xampp\htdocs\citycrm\application\tests\TestCompany_divcode_for_dev_step4.php</file>
+             <file>C:\xampp\htdocs\citycrm\application\tests\testAddPeopleInOrg.php</file>
+             
+        </testsuite>
+    </testsuites>
+</phpunit>

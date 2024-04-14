@@ -25,7 +25,9 @@
 }
 
 </style>
-<?php if ($alert) { ?>
+<?php 
+include Kohana::find_file('views','alert');
+if ($alert) { ?>
 <div class="alert_success">
 	<p>
 		<img class="mid_align" alt="success" src="images/icon_accept.png" />
@@ -104,7 +106,7 @@
 							echo '<td>' . HTML::anchor('companies/view/' . $c['ID_ORG'], HTML::image('images/icon_view.png', array('title' => __('tip.view'), 'class' => 'help')));
 						if (Auth::instance()->logged_in('admin') || $c['SUMODELETE'] > 0 || true) { ?>
 							<a href="javascript:" onclick="if (confirm('<?php echo __('companies.confirmdelete'); ?>')) location.href='<?php echo URL::base() . 'companies/delete/' . $c['ID_ORG'].'/'.$c['PARENTID']; ?>';">
-								<?php echo HTML::image('images/icon_delete.png', array('title' => __('tip.fired'), 'class' => 'help')); ?>
+								<?php echo HTML::image('images/icon_delete.png', array('title' => __('tip.delete'), 'class' => 'help')); ?>
 							</a>
 						<?php	
 							echo HTML::anchor('companies/people/' . $c['ID_ORG'], HTML::image('images/icon_contacts.png', array('title' => __('tip.view'), 'class' => 'help')));

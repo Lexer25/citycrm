@@ -2,7 +2,7 @@
 //этот файла должен выводить список сообщений (alert), которые передаются как массив.
 
 if (isset($arrAlert)) { 
-echo Debug::vars('5-5', $arrAlert);
+//echo Debug::vars('5-5', $arrAlert);
 	
 	include Kohana::find_file('views', 'alertState');
 	
@@ -18,7 +18,7 @@ echo Debug::vars('5-5', $arrAlert);
 	}
 } else {
 	
-	echo __('no_arrAlert');
+	//echo __('no_arrAlert');
 }
 
 ?>

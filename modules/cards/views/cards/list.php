@@ -14,9 +14,9 @@
 //echo Debug::vars('2', $cards); exit;
 //echo Debug::vars('2', $catdTypelist); //exit;
 //echo Debug::vars('3', $alert); //exit;
-echo Debug::vars('4', $filter); //exit;
+//echo Debug::vars('4', $filter); //exit;
 //echo Debug::vars('5', $pagination); //exit;
-
+include Kohana::find_file('views','alert');
 if ($alert) { ?>
 <div class="alert_success">
 	<p>
@@ -92,9 +92,16 @@ if ($alert) { ?>
 					<tr>
 						
 						<td><?php 
-							echo HTML::anchor('cards/edit/' . $key->id_card, $key->id_card).' '.$key->id_card_on_screen;
+								$viewFromatForEdit = $key->id_card_on_screen;
+							if(Kohana::$config->load('system')->get('viewFromatForEdit') == 'DEC')$viewFromatForEdit = $key->id_card_on_screen;
+							if(Kohana::$config->load('system')->get('viewFromatForEdit') == '001A')$viewFromatForEdit = $key->id_card;
+							
+							echo HTML::anchor('cards/edit/' . $key->id_card, $viewFromatForEdit);
+							
+							//echo HTML::anchor('cards/edit/' . $key->id_card, $key->id_card).' '.$key->id_card_on_screen;
 							//echo Debug::vars('83', $cardtype);
-							if(Arr::get($cardtype, 'id') == 1) echo ' ('.Model::factory('Stat')->reviewKeyCode($key->id_card).')'; ?></td>
+								if((Arr::get($cardtype, 'id') == 1) AND (Kohana::$config->load('system')->get('formatViewAll') == 1))  echo ' ('.Model::factory('Stat')->reviewKeyCode($key->id_card).')'; ?>
+							</td>
 						<td><?php echo iconv('CP1251', 'UTF-8', Arr::get($cardtype, 'smallname')); ?></td> 
 						<td><?php echo $key->timestart; ?></td> 
 						<td><?php echo $key->timeend; ?></td> 

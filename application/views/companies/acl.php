@@ -93,7 +93,7 @@
 <?php 
 //echo Debug::vars('89', $company);
 //echo Debug::vars('90', $company_acl);
-
+include Kohana::find_file('views','alert');
 if ($alert) { ?>
 <div class="alert_success">
 	<p>

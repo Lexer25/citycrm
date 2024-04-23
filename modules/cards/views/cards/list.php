@@ -33,7 +33,17 @@ if ($alert) { ?>
 				<input type="text" class="search noshadow" title="<?php echo __('search'); ?>" name="q" id="q" value="<?php if (isset($filter)) echo $filter; ?>" />
 			</form>
 		</div>
-		<span><?php echo __('cards.title').' '.Session::instance()->get('identifier');; 
+		<span><?php 
+		switch(Session::instance()->get('identifier')){
+			case 1:
+				echo __('cards.titleRFID'); 
+			break;
+			case 1:
+				echo __('cards.titleGRZ'); 
+			break;
+			default:
+		break;
+		}			
 		
 	?></span>
 	</div>

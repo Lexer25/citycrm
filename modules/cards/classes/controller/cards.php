@@ -95,8 +95,10 @@ class Controller_Cards extends Controller_Template
 					//echo Debug::vars('46', $temp, $pattern, $temp4); exit;
 					$this->action_index($var2);
 				} else {
-				//echo Debug::vars('100', $_POST, $var2); exit;
-					$alert=__('card.errDataForSearchRFID', array(':mess'=>$post->errors('upload')));
+					//echo Debug::vars('100', $_POST, $var2); exit;
+					$alert=__(implode(",", $post->errors('validateCard')));
+					$arrAlert[]=array('actionResult'=>2, 'actionDesc'=>$alert);
+					Session::instance()->set('arrAlert',$arrAlert);
 					$this->action_index();	
 				}
 			

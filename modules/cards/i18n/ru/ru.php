@@ -2,6 +2,8 @@
 return array
 (
 	'cards.title'					=> 'Список идентификаторов',
+	'cards.titleRFID'					=> 'Список идентификаторов RFID',
+	'cards.titleGRZ'					=> 'Список идентификаторов GRZ',
 	'cards.empty'					=> 'Список карт пуст',
 	'cards.code'					=> 'Код идентификатора',
 	'cards.datestart'				=> 'Дата начала действия',
@@ -49,4 +51,5 @@ return array
 	'card.history'					=> 'История',
 	'cards.id_cardtype'				=> 'Тип идентификатора',
 	'cards.note'					=> 'Служебные записи об идентификаторе',
+	'card.errDataForSearchRFID'	=>'Неправильный формат идентификатора в запросе :mess'
 );

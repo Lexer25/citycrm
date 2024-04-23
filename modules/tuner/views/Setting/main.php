@@ -1,4 +1,6 @@
-<?php if ($alert) { ?>
+<?php 
+//echo Debug::vars('2', $group); exit;
+if ($alert) { ?>
 <div class="alert_success">
 	<p>
 		<img class="mid_align" alt="success" src="images/icon_accept.png" />
@@ -21,29 +23,9 @@
 		</div>
 		<span><?php echo __('setting.main_title');?></span>
 
-		<div class="switch">
-			<table cellpadding="0" cellspacing="0">
-			<tbody>
-				<tr>
-					<td>
-						<?php
-							echo HTML::anchor('settings/main', __('setting.mainConfig'), array('class' => 'left_switch', 'disabled'=>'disabled')); 
-						 	
-						?>
-					</td>
-					<td>
-						<?php
-							echo HTML::anchor('settings/list', __('setting.listConfig'), array('class' => 'left_switch', 'disabled'=>'disabled')); 
-						 	
-						?>
-					</td>
-					<td>
-						<a href="javascript:" class="right_switch active"><?php echo __('setting'); ?></a>
-					</td>
-				</tr>
-			</tbody>
-			</table>
-		</div>
+		<?php
+			include Kohana::find_file('views\Setting','topbuttonbar');
+		?>
 
 	</div>
 	<br class="clear"/>
@@ -57,13 +39,12 @@
 		<fieldset>
 						<legend><?php echo __('setting.'.$group); ?></legend>
 						<div>
-							<fieldset>
-								<legend><?php echo __('setting.mainoptions'); ?></legend>
+							
 							<?php 
 							echo Form::open('settings/save');
 							echo Form::hidden('group', $group);
 							foreach($mainConfg as $key=>$value){
-								echo __('setting.'.$key).' '.Form::input('key['.$key.']', Arr::get($mainConfg, $key), array('value'=>$value));
+								echo $key.' '.__('setting.'.$key).' '.Form::input('key['.$key.']', Arr::get($mainConfg, $key), array('value'=>$value)). Kohana::message('messmain', $key);
 								echo '<br>';
 								}
 								
@@ -72,11 +53,14 @@
 							echo Form::close();
 							?>
 							
-							</fieldset>
+					
 
 						</div>
 						</fieldset>
-	<?php }?>
+	<?php }
+	
+	echo Kohana::message('messmain', 'formatDescription');
+	?>
 
 	</div>
 </div>

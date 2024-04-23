@@ -367,6 +367,39 @@ class Controller_Settings extends Controller_Template {
 		 
 	 }
 	 
+	 /*
+	 23.04.2024 настройка форматов хранения идентификаторов.:
+	 
+	 
+	 */
+	
+	public function action_keyFormatConfig()
+	 {
+		
+		
+		//echo debug::vars('58', $_POST);exit; 
+	
+		//echo Debug::vars('22', $this->session->get('alert', ''));exit;
+		//$group='main';
+		$group='system';
+		$mainConfg=Kohana::$config->load($group);
+			
+
+		$fl = $this->session->get('alert', '');
+		$this->session->delete('alert');
+		
+		//echo Debug::vars('22', $this->session->get('alert', ''), $fl);exit;	
+		$content = View::factory('setting/main')
+			->bind('alert', $fl)
+			->bind('group', $group)
+			->bind('mainConfg', $mainConfg)
+			->bind('activeButton', $group)
+			;
+        $this->template->content = $content;
+
+		 
+	 }
+	 
 	
 	
 

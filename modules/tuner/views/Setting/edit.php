@@ -14,32 +14,10 @@
 			</form>
 		</div>
 		<span><?php echo __('setting.keytitle').' '.$group;?></span>
-		<?php if (TRUE) { ?>
-		<div class="switch">
-			<table cellpadding="0" cellspacing="0">
-			<tbody>
-				<tr>
-					<td>
-						<?php
-							echo HTML::anchor('settings/main', __('setting.main'), array('class' => 'left_switch', 'disabled'=>'disabled')); 
-						 	
-						?>
-					</td>
-					<td>
-						<?php
-							echo HTML::anchor('settings/list', __('setting.list'), array('class' => 'left_switch', 'disabled'=>'disabled')); 
-						 	
-						?>
-					</td>
-					<td>
-						<a href="javascript:" class="right_switch active"><?php echo __('setting'); ?></a>
-					</td>
-				</tr>
-			</tbody>
-			</table>
-		</div>
-		<?php } ?>
-	</div>
+		<?php
+			include Kohana::find_file('views\Setting','topbuttonbar');
+		?>
+
 	<br class="clear"/>
 	<div class="content">
 					<fieldset>

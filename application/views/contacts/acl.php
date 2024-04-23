@@ -166,35 +166,56 @@ if ($alert) { ?>
 		
 		<div style="padding-left: 15px">
 		
-
+		Категории доступа<br>	
+		<div style="padding-left: 15px">
+		
+		<?php
+			$column=4;// количество колонок в таблице
+			$accessNameList=AccessName::getList();
+			$row= ceil(count($accessNameList)/$column);
+			$aaa=array_chunk($accessNameList, ceil(count($accessNameList)/$column));
+			//echo Debug::vars('145', ceil (101/4), $aaa); exit;
+			
+			//echo count($accessNameList);
+			$res=array();
+				foreach($contact_acl as $key=>$value)
+				{
+					$res[]=Arr::get($value, 'ID_ACCESSNAME');
+				}
+		
+		//echo Debug::vars('186', Arr::get($aaa, 0)); exit
+		?>
+		
 		
 					<div>
-					<table style="margin: 0">
-				<tr>
+					<table>
+						<tr>
 
-	
-					<td style="padding-left: 80px; vertical-align: top;">
-					<div>
+ 
+														  
+		  
 						
 						<?php
-							//echo Debug::vars('296', AccessName::getList());
-							echo __('Категории доступа (всего ancount)<br>', array('ancount'=>count(AccessName::getList())));
-							$res=array();
-							foreach($contact_acl as $key=>$value)
-							{
-								$res[]=Arr::get($value, 'ID_ACCESSNAME');
-								
-							}
-							
-							foreach (AccessName::getList() as $key=>$value)
+						/*
+						вывод категорий доступа вертикальными колонками
+						
+						*/
+						//echo Debug::vars('145', $column); //exit;
+						for ($i=0; $i<$column;  $i++)
+						{
+							echo '<td>';
+	   
+							foreach (Arr::get($aaa, $i) as $key=>$value)
 							{
 								echo Form::checkbox('aclList['.Arr::get($value, 'ID_ACCESSNAME').']', 1, in_array (Arr::get($value, 'ID_ACCESSNAME'), $res)).' '. iconv('CP1251', 'UTF-8', Arr::get($value, 'NAME', '')).'<br>';
 							}
+							echo '</td>';
+						}
 						?>
-						</div>
-					</td>
-				</tr>
-			</table>
+						</tr>
+		  
+		 
+					</table>
 					</div>
 <div>
 			<br />

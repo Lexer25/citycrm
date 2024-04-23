@@ -78,6 +78,11 @@ class Controller_Companies extends Controller_Template
 				'ACCESSNAME'	=> $isAdmin,
 			);
 	
+		// готовлю список организаций в виде иерархического дерева
+		$org_tree = Model::Factory('Company')->getOrgList();// я получил список организаций.
+		//echo Debug::vars('63', $org_tree); exit;
+		$org_tree=Model::Factory('treeorg')->make_tree($org_tree, 1);//формирую иерархический список
+		
 		
 		$this->template->content = View::factory('companies/list')
 			->bind('companies', $list)

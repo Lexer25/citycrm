@@ -52,8 +52,6 @@ class Controller_Cards extends Controller_Template
 				
 			}
 		
-		//$this->session->set('identifier', '1');
-		
 		
 		}
 	$this->action_index();
@@ -97,8 +95,8 @@ class Controller_Cards extends Controller_Template
 					//echo Debug::vars('46', $temp, $pattern, $temp4); exit;
 					$this->action_index($var2);
 				} else {
-				echo Debug::vars('100', $_POST, $var2); exit;
-					//$alert=__('card.errDataForSearchRFID', array(':mess'=>$post->errors('upload')));
+				//echo Debug::vars('100', $_POST, $var2); exit;
+					$alert=__('card.errDataForSearchRFID', array(':mess'=>$post->errors('upload')));
 					$this->action_index();	
 				}
 			

@@ -29,11 +29,7 @@ if ($alert) { ?>
 	<div class="header">
 		<div id="search"<?php if (isset($hidesearch)) echo ' style="display: none;"'; ?>>
 			<form action="cards/search" method="post">
-			<?php
-			//преобразование формата RFID от базы данных к экранной форме
-			//if(Kohana::$config->load('system')->get('baseFormatRfid')==0) $filter=Model::factory('stat')->hexToDec($filter);
-			//if(Kohana::$config->load('system')->get('baseFormatRfid')==1) $filter=Model::factory('stat')->_001AToDec($filter);
-			?>
+			
 				<input type="text" class="search noshadow" title="<?php echo __('search'); ?>" name="q" id="q" value="<?php if (isset($filter)) echo $filter; ?>" />
 			</form>
 		</div>

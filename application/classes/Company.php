@@ -89,18 +89,16 @@ class Company
 		
 		$data=array('id_org'=>$this->id_org, 'name'=>$this->name, 'id_parent'=>$this->id_parent);
 		$validation = Validation::factory($data);
-		$validation->rule('id_org', 'not_empty')
-					->rule('id_org', 'digit')
-					->rule('name', 'not_empty')
+		/* $validation->rule('id_org', 'not_empty')
+					->rule('id_org', 'digit') */
+		$validation->rule('name', 'not_empty')
 					//->rule('name', 'alpha_numeric')
-					->rule('name', 'regex', array(':value', $this->regex_pattern))
-					->rule('name', 'max_length', array(':value', 50))//проверяю только наличие номера карты (или RFID). Сам номеро надо будет проверять отдельно
+					//->rule('name', 'regex', array(':value', $this->regex_pattern))
+					->rule('name', 'max_length', array(':value', 50))//
 				
 					//->rule('id_parent', 'Company::checIdOrg')
 					;
 		 if($validation->check()){
-			
-			//Log::instance()->add(Log::DEBUG, '#79 Valid_OK');
 			
 			//получаею очередной id_org		
 			$this->id_org=$this->genIdOrg();//получил id вставляемой организации
@@ -111,7 +109,8 @@ class Company
 					':name'		=> $this->name,
 					':parent'	=>  $this->id_parent,
 					));
-			//echo Debug::vars('80', $sql); exit;
+			//echo Debug::vars('80', $sql); //exit;
+			Log::instance()->add(Log::DEBUG, '113 '.$sql);
 			
 			try{
 				

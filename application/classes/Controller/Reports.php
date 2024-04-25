@@ -437,5 +437,43 @@ class Controller_Reports extends Controller_Template
 		
 		
 	}
+
+	/*
+	25.04.2024 Подготовка отчета по разрешенных точках прохода.
 	
+	*/
+	public function action_doorList()
+	{
+		//echo Debug::vars('447', $_POST, Session::instance(), Arr::get($this->session->get('auth_user_crm', ''), 'ID_PEP')); //exit;
+		$post=Validation::factory($_POST);
+		$post->rule('id_pep', 'not_empty')
+				->rule('id_pep', 'digit')
+				;
+				$reporttype='';
+		if($post->check()){
+			echo Debug::vars('453', Arr::get($post, 'savecvs'), Arr::get($post, 'savexls'), Arr::get($post, 'savepdf'));
+			if(Arr::get($post, 'savecvs')) $reporttype= 'Make cvs';
+			if(Arr::get($post, 'savexls')) $reporttype= 'Make xls';
+			if(Arr::get($post, 'savepdf')) $reporttype= 'Make pdf';
+		
+			
+			echo Debug::vars('454 Надо строить отчет Набор точек прохода для id_pep='.Arr::get($post, 'id_pep')
+				,'Отчет построил user id_pep='. Arr::get($this->session->get('auth_user_crm', ''), 'ID_PEP')
+				,'тип отчета '.$reporttype
+				,'время построения отчета '. date('d.m.Y H:m:i') 
+				,'Тип отчета '. Arr::get($post, 'todo') 
+				,'набор точек прохода '
+				, unserialize(Arr::get($post, 'doorList')));
+				//. (Arr::get($post, 'doorList')));
+				exit;
+		}else{
+			$message=implode(",", $post->errors('reportValidation'));
+			echo Debug::vars('456 ',  $message); exit;
+			$this->redirect('errorpage?err=' . urlencode($message));
+			
+		}			
+		
+		
+		
+	}
 }

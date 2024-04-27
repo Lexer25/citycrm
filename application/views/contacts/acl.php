@@ -331,3 +331,5 @@ echo Form::open('reports/doorList');
 				
 			echo Form::close();
 			?>
+</div>
+			

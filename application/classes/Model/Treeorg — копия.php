@@ -40,39 +40,36 @@ public function getTree($dataset) {//Функция построения дер�
 }
 
 
-	public function tplMenu($category){ //Шаблон для вывода меню в виде дерева
-		
-		$menu = '<li>
-			<a href="#" title="'. $category['title'] .'">'. 
-			$category['title'].'</a>';
-		
-		if(is_array(Arr::get($category, 'childs')))
+public function tplMenu($category){ //Шаблон для вывода меню в виде дерева
+	
+	$menu = '<li>
+		<a href="#" title="'. $category['title'] .'">'. 
+		$category['title'].'</a>';
+	
+	if(is_array(Arr::get($category, 'childs')))
+	{
+		//echo Debug::vars('39', $category);
+		if (Arr::get($category, 'parent') == 0) 
 		{
-			//echo Debug::vars('39', $category);
-			if (Arr::get($category, 'parent') == 0) 
-			{
-				$menu = '<li><details open><summary>(id='.Arr::get($category, 'id').') '.Arr::get($category, 'title').'</summary>';
-			} else {
-				$menu = '<li><details><summary>(id='.Arr::get($category, 'id').') '.Arr::get($category, 'title').'</summary>';
-			}
+			$menu = '<li><details open><summary>'.Arr::get($category, 'title').'</summary>';
 		} else {
-			
-			//if((Arr::get($category, 'busy') != $this->id_parking) and (is_null(Arr::get($category, 'busy'))))
-			if(Arr::get($category, 'busy') != $this->id_parking) $menu = '<li>'.Arr::get($category, 'title');// организация занята, нельзя управлять
-			if(Arr::get($category, 'busy') == $this->id_parking) $menu = '<li>'.Arr::get($category, 'title'); // должна стоять галочка, разрешено снимать.
-			if(is_null(Arr::get($category, 'busy'))) $menu = '<li>'.Arr::get($category, 'title'); // свободна, галочка снята, можно выбирать.
+			$menu = '<li><details><summary>'.Arr::get($category, 'title').'</summary>';
 		}
-
-		if(isset($category['childs'])){
-				$menu .= '<ul>'. $this->showCat($category['childs']) .'</ul>';
-			}
-		$menu .= '</li>';
+	} else {
 		
-		return $menu;
+		//if((Arr::get($category, 'busy') != $this->id_parking) and (is_null(Arr::get($category, 'busy'))))
+		if(Arr::get($category, 'busy') != $this->id_parking) $menu = '<li>'.Arr::get($category, 'title');// организация занята, нельзя управлять
+		if(Arr::get($category, 'busy') == $this->id_parking) $menu = '<li>'.Arr::get($category, 'title'); // должна стоять галочка, разрешено снимать.
+		if(is_null(Arr::get($category, 'busy'))) $menu = '<li>'.Arr::get($category, 'title'); // свободна, галочка снята, можно выбирать.
 	}
 
-
-
+	if(isset($category['childs'])){
+			$menu .= '<ul>'. $this->showCat($category['childs']) .'</ul>';
+		}
+	$menu .= '</li>';
+	
+	return $menu;
+}
 
 public function tplMenu2($category){ //Шаблон для вывода меню в виде списка select
 	
@@ -118,12 +115,16 @@ public function tplMenu_anchor($category){ //Шаблон для вывода м
 		//echo Debug::vars('39', $category);
 		if (Arr::get($category, 'parent') == 0) 
 		{
-			$menu = '<li><details open><summary>(id='.Arr::get($category, 'id').') '.Arr::get($category, 'title').'123</summary>';
+			$menu = '<li><details open><summary>(id='.Arr::get($category, 'id').') '.Arr::get($category, 'title').'</summary>';
 		} else {
-			$menu = '<li><details><summary>'.HTML::anchor('companies/edit/'. Arr::get($category, 'id'), Arr::get($category, 'title')).'</summary>';
+			$menu = '<li><details><summary>(id='.Arr::get($category, 'id').') '.Arr::get($category, 'title').'</summary>';
 		}
 	} else {
-		$menu = '<li>'.HTML::anchor('companies/edit/'. Arr::get($category, 'id'), Arr::get($category, 'title')); // свободна, галочка снята, можно выбирать.
+		
+		//if((Arr::get($category, 'busy') != $this->id_parking) and (is_null(Arr::get($category, 'busy'))))
+		if(Arr::get($category, 'busy') != $this->id_parking) $menu = '<li>'.Form::radio('id_org_for_add_garage['.Arr::get($category, 'id').']', Arr::get($category, 'id'), TRUE, array("disabled"=>"disabled")).'(id='.Arr::get($category, 'id').') '.Arr::get($category, 'title');// организация занята, нельзя управлять
+		if(Arr::get($category, 'busy') == $this->id_parking) $menu = '<li>'.Form::radio('id_org_for_add_garage['.Arr::get($category, 'id').']', Arr::get($category, 'id'), TRUE).'(id='.Arr::get($category, 'id').') '.Arr::get($category, 'title'); // должна стоять галочка, разрешено снимать.
+		if(is_null(Arr::get($category, 'busy'))) $menu = '<li>'.Form::radio('id_org_for_add_garage['.Arr::get($category, 'id').']', Arr::get($category, 'id'), FALSE).'(id='.Arr::get($category, 'id').') '.Arr::get($category, 'title'); // свободна, галочка снята, можно выбирать.
 	}
 
 	if(isset($category['childs'])){
@@ -144,8 +145,7 @@ public function tplMenu_anchor($category){ //Шаблон для вывода м
 	public function showCat($data){ //Рекурсивно считываем наш шаблон
 	$string = '';
 	foreach($data as $item){
-		//$string .= $this->tplMenu($item);
-		$string .= $this->tplMenu_anchor($item);
+		$string .= $this->tplMenu($item);
 	}
 	return $string;
 }

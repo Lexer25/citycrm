@@ -48,6 +48,7 @@ where an.id_accessname='.$id_org;
 	*/
 	public function  getDoorIdList()
 	{
+		$result=array();
 		$sql='select distinct a.id_dev from access a
 			where a.id_accessname='.$this->id_accessname;
 		

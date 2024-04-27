@@ -21,7 +21,15 @@
 
 	<div id="account_info">
 		<img src="images/icon_online.png" alt="Online" class="mid_align"/>
-		<?php echo __('welcome') . ', <strong><i>' . iconv('CP1251', 'UTF-8', Session::instance()->get('username') .Session::instance()->get('role')). '</i></strong>'; ?> 
+		<?php 
+			$huser=Session::instance()->get('auth_user_crm');
+			$userAdmin=new Contact(Arr::get($huser, 'ID_PEP'));
+			//echo Debug::vars($huser, Arr::get($huser, 'ID_PEP'), iconv('CP1251', 'UTF-8', $userAdmin->surname));
+			echo __('welcome') . ', <strong><i>' . iconv('CP1251', 'UTF-8', 
+				$userAdmin->name. ' '
+				.$userAdmin->surname. ' '
+				.$userAdmin->patronymic)
+				. '</i></strong>'; ?> 
 	</div>
 	<div>
 	<?php

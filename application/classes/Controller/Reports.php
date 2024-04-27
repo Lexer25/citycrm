@@ -444,7 +444,7 @@ class Controller_Reports extends Controller_Template
 	*/
 	public function action_doorList()
 	{
-		//echo Debug::vars('447', $_POST, Session::instance(), Arr::get($this->session->get('auth_user_crm', ''), 'ID_PEP')); //exit;
+		echo Debug::vars('447', $_POST, Session::instance(), Arr::get($this->session->get('auth_user_crm', ''), 'ID_PEP'), Arr::get($this->session->get('auth_user_crm', ''), 'NAME')); //exit;
 		$post=Validation::factory($_POST);
 		$post->rule('id_pep', 'not_empty')
 				->rule('id_pep', 'digit')

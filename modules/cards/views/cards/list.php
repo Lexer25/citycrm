@@ -98,7 +98,7 @@ if ($alert) { ?>
 					<tr>
 						
 						<td><?php 
-								$viewFromatForEdit = $key->id_card_on_screen;
+							$viewFromatForEdit = $key->id_card_on_screen;
 							if(Kohana::$config->load('system')->get('viewFromatForEdit') == 'DEC')$viewFromatForEdit = $key->id_card_on_screen;
 							if(Kohana::$config->load('system')->get('viewFromatForEdit') == '001A')$viewFromatForEdit = $key->id_card;
 							

@@ -193,6 +193,8 @@ return array
 	'report.deviation'			=> 'Недоработал',
 	'report.time_work'			=> 'Пробыл на работе',
 	'report.fio'				=> ':surname :name :patronymic',
+	'report.doorlist.title'				=> 'Отчет перечень точек прохода для контакта :surname :name  :patronymic',
+	'report.datestamp'=>'Отчет подготовлен :timestamp',
 	
 	
 	'sidebar.companieslist'			=> 'Список организаций',

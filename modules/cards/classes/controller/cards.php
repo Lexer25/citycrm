@@ -20,9 +20,9 @@ class Controller_Cards extends Controller_Template
 		
 	}
 	
-	/*
-	9.04.2024 диспетчер режима отображения данных.
-	Тип отображаемых данных хранится в параметрах сессии под именем identifier
+	/**
+	*9.04.2024 диспетчер режима отображения данных.
+	*Тип отображаемых данных хранится в параметрах сессии под именем identifier
 	*/
 	
 	public function action_select()
@@ -140,14 +140,14 @@ class Controller_Cards extends Controller_Template
 	{
 		
 		//echo Debug::vars('46', $filter); exit;
-		$this->id_type = $this->session->get('identifier', 1);
+		$this->id_type = $this->session->get('identifier', 1);//получил тип идентификатора для отображения
 		
 		
 		
 		$cards = Model::factory('Card');
 		if(is_null($filter)){// если списка нет, то выбираю все, что разрешено авторизованному пользователю
-		//$q = $cards->getCountUser(Arr::get(Auth::instance()->get_user(), 'ID_ORG'), iconv('UTF-8', 'CP1251', $filter), $this->id_type);
-		$q = $cards->getCountUser(Arr::get(Auth::instance()->get_user(), 'ID_ORG'), iconv('UTF-8', 'CP1251', $filter), $this->id_type);
+		
+		$q = $cards->getCountUser(Arr::get(Auth::instance()->get_user(), 'ID_ORG'), iconv('UTF-8', 'CP1251', $filter), $this->id_type);//подсчет количества карт, доступных текущему пользователю. Это необходимо для правильного разбиения на страницы
 		//echo Debug::vars('179',$filter); exit;
 		
 		$list = $cards->getListUser(Arr::get(Auth::instance()->get_user(), 'ID_ORG'), Arr::get($_GET, 'page', 1), $this->listsize, iconv('UTF-8', 'CP1251', $filter), $this->id_type);
@@ -170,7 +170,7 @@ class Controller_Cards extends Controller_Template
 		$catdTypelist = $cards->getcatdTypelist();
 		
 		
-		//echo Debug::vars('55',$isAdmin, $list ); exit;	
+		//echo Debug::vars('55', $list ); exit;	
 		$fl = $this->session->get('alert');
 		$this->session->delete('alert');
 		
@@ -178,7 +178,7 @@ class Controller_Cards extends Controller_Template
 		$this->session->delete('arrAlert');
 		
 		$filter=$this->session->get('search_card');
-		//для правильного отображения номера RFID в разделе поиска привожу его к формату DEC
+		//для правильного отображения номера RFID в разделе поиска беру данные из сессии
 		
 				
 		$this->template->content = View::factory('cards/list')

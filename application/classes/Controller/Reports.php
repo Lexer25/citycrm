@@ -83,8 +83,8 @@ class Controller_Reports extends Controller_Template
 					
 				break;
 			}
-			// Create new PHPExcel object
-				$xls = new PHPExcel();
+		// Create new PHPExcel object
+		$xls = new PHPExcel();
 		$objPHPExcel = new PHPExcel();
 		$xls=$objPHPExcel->setActiveSheetIndex(0);
 			
@@ -322,7 +322,7 @@ class Controller_Reports extends Controller_Template
 	}
 	
 	
-	/*
+	/**action_savecsv
 	25.01.2024
 	Сохранение отчета в файл csv
 	*/
@@ -444,28 +444,28 @@ class Controller_Reports extends Controller_Template
 	*/
 	public function action_doorList()
 	{
-		echo Debug::vars('447', $_POST, Session::instance(), Arr::get($this->session->get('auth_user_crm', ''), 'ID_PEP'), Arr::get($this->session->get('auth_user_crm', ''), 'NAME')); //exit;
+			
+		//echo Debug::vars('447', $_POST, Session::instance(), Arr::get($this->session->get('auth_user_crm', ''), 'ID_PEP'), Arr::get($this->session->get('auth_user_crm', ''), 'NAME')); //exit;
 		$post=Validation::factory($_POST);
 		$post->rule('id_pep', 'not_empty')
 				->rule('id_pep', 'digit')
 				;
 				$reporttype='';
 		if($post->check()){
-			echo Debug::vars('453', Arr::get($post, 'savecvs'), Arr::get($post, 'savexls'), Arr::get($post, 'savepdf'));
-			if(Arr::get($post, 'savecvs')) $reporttype= 'Make cvs';
-			if(Arr::get($post, 'savexls')) $reporttype= 'Make xls';
-			if(Arr::get($post, 'savepdf')) $reporttype= 'Make pdf';
+			//echo Debug::vars('453', Arr::get($post, 'savecvs'), Arr::get($post, 'savexls'), Arr::get($post, 'savepdf'));
+			//echo Debug::vars('455', Kohana::find_file('classes\Controller\report','reportDoorListCVS'));
+			if(Arr::get($post, 'savecvs')) include Kohana::find_file('classes\Controller\report','reportDoorListCVS') ;
+			if(Arr::get($post, 'savexls')) include Kohana::find_file('classes\Controller\report','reportDoorListXLSX') ;
+			//if(Arr::get($post, 'savepdf')) include Kohana::find_file('classes\Controller\report','reportDoorListPDF') ;
+			if(Arr::get($post, 'savepdf')) include Kohana::find_file('classes\Controller\report','reportDomPDF') ;
 		
-			
-			echo Debug::vars('454 Надо строить отчет Набор точек прохода для id_pep='.Arr::get($post, 'id_pep')
-				,'Отчет построил user id_pep='. Arr::get($this->session->get('auth_user_crm', ''), 'ID_PEP')
-				,'тип отчета '.$reporttype
-				,'время построения отчета '. date('d.m.Y H:m:i') 
-				,'Тип отчета '. Arr::get($post, 'todo') 
-				,'набор точек прохода '
-				, unserialize(Arr::get($post, 'doorList')));
-				//. (Arr::get($post, 'doorList')));
-				exit;
+				
+				
+				//echo Debug::vars('29', $file_name); exit;
+				$this->redirect('/report');
+				
+		
+				
 		}else{
 			$message=implode(",", $post->errors('reportValidation'));
 			echo Debug::vars('456 ',  $message); exit;

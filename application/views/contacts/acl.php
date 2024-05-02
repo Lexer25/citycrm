@@ -89,11 +89,9 @@
 		}
 	}
 </script>
-
 <?php 
 //echo Debug::vars('89', $contact);
 //echo Debug::vars('90', $contact_acl);
-
 if ($alert) { ?>
 <div class="alert_success">
 	<p>
@@ -190,7 +188,6 @@ if ($alert) { ?>
 					<div>
 					<table>
 						<tr>
-
  
 														  
 		  
@@ -223,9 +220,7 @@ if ($alert) { ?>
 			if($contact->is_active) {
 			?>
 			<input type="submit" value="<?php echo __('button.save'); ?>" />
-			&nbsp;&nbsp;
 			<input type="button" value="<?php echo __('button.cancel'); ?>" onclick="document.forms[0].reset()" />
-			&nbsp;&nbsp;
 			<input type="button" value="<?php echo __('button.backtolist'); ?>" onclick="location.href='<?php echo URL::base(); ?>contacts'" />
 			<?php }?>
 		</form>
@@ -234,6 +229,7 @@ if ($alert) { ?>
 Таблица точек прохода и категорий доступа
 <?php
 $doorAll=array();
+$outDoorList=array();//массив для вывода на печать
 foreach($contact_acl as $key=>$value){
 	$access=new Access(Arr::get($value,'ID_ACCESSNAME'));
 	$result=$access->getDoorIdList();
@@ -252,12 +248,9 @@ foreach($contact_acl as $key=>$value){
 //echo Debug::vars('245',$doorAll); //exit;
 //echo Debug::vars('249', array_values($doorAll)); exit;
 // теперь строю таблицу
-
 echo Form::open('reports/doorList');
 //echo Form::open('reports/savecsv');
-
 ?>
-
 	<table class="data tablesorter-blue" width="60%" cellpadding="0" cellspacing="0" id="tablesorter" >
 			<tbody>
 				<tr>
@@ -283,9 +276,11 @@ echo Form::open('reports/doorList');
 					echo '<td>'.++$i.'</td>';
 					$door=new Door($value);
 					echo '<td>'. iconv('CP1251', 'UTF-8',$door->name).' ('.$door->id.')</td>';//тут надо название двери
+					
+					$outDoorList[]=array('sn'=>$i, 'id_door'=>$door->id, 'name'=>$door->name);
 					foreach($contact_acl as $key=>$value){
 						echo '<td>';
-							//echo $door->id;
+							
 							//echo Debug::vars(in_array($door->id, Arr::get($doorList,Arr::get($value,'ID_ACCESSNAME'))));
 							if(in_array($door->id, Arr::get($doorList,Arr::get($value,'ID_ACCESSNAME')))){
 								echo HTML::image('images\icon_accept.png');
@@ -307,26 +302,17 @@ echo Form::open('reports/doorList');
 			</table>
 			<?php
 				echo Form::hidden('id_pep', $contact->id_pep); 
-				//echo Form::hidden('forsave', serialize ($report->result)); 
-		//		echo Form::hidden('todo', 'savecvs'); 
-				echo Form::submit('savecvs', __('button.savecsv'));
-	//			echo Form::close();
 		
-		//		echo Form::open('reports/savexlsx');
-				//echo Form::hidden('id_pep', $contact->id_pep); 
-				//echo Form::hidden('forsave', serialize ($report)); 
-		//		echo Form::hidden('todo', 'savexls'); 
+				echo Form::submit('savecvs', __('button.savecsv'));
+	
 				echo Form::submit('savexls', __('button.savexlsx'));
-		//		echo Form::close();
-				
-		//		echo Form::open('reports/savepdf');
-				//echo Form::hidden('id_pep', $contact->id_pep); 
-				//echo Form::hidden('forsave', serialize ($report)); 
-		//		echo Form::hidden('todo', 'savepdf'); 
+	
 				echo Form::submit('savepdf', __('button.savepdf'));
-		//		echo Form::close();
+	
 		
 				echo Form::hidden('doorList', serialize($doorAll)); 
+			//echo Debug::vars('314', $outDoorList);exit;
+				echo Form::hidden('outDoorList', iconv('CP1251', 'UTF-8', serialize($outDoorList))); 
 				
 				
 			echo Form::close();

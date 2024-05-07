@@ -416,17 +416,6 @@ class Controller_Reports extends Controller_Template
 				
 				
 				$this->template->content = $content;
-				
-						
-		//$html = View::factory('dashboard');	
-	//echo Debug::vars('74', $html); exit;
-	// Create class instance PDF
-	//$pdf = PDF::factory($this->template->content);
-	
-	
-	// Render and save PDF
-	//$pdf = $pdf->render()->save('your/path/upload', 'filename'); 
-	
 	
 				
 				return;
@@ -445,7 +434,7 @@ class Controller_Reports extends Controller_Template
 	public function action_doorList()
 	{
 			
-		//echo Debug::vars('447', $_POST, Session::instance(), Arr::get($this->session->get('auth_user_crm', ''), 'ID_PEP'), Arr::get($this->session->get('auth_user_crm', ''), 'NAME')); //exit;
+		//echo Debug::vars('447', $_POST, Session::instance(), Arr::get($this->session->get('auth_user_crm', ''), 'ID_PEP'), Arr::get($this->session->get('auth_user_crm', ''), 'NAME')); exit;
 		$post=Validation::factory($_POST);
 		$post->rule('id_pep', 'not_empty')
 				->rule('id_pep', 'digit')
@@ -457,12 +446,45 @@ class Controller_Reports extends Controller_Template
 			if(Arr::get($post, 'savecvs')) include Kohana::find_file('classes\Controller\report','reportDoorListCVS') ;
 			if(Arr::get($post, 'savexls')) include Kohana::find_file('classes\Controller\report','reportDoorListXLSX') ;
 			//if(Arr::get($post, 'savepdf')) include Kohana::find_file('classes\Controller\report','reportDoorListPDF') ;
-			if(Arr::get($post, 'savepdf')) include Kohana::find_file('classes\Controller\report','reportDomPDF') ;
-		
+			//if(Arr::get($post, 'savepdf')) include Kohana::find_file('classes\Controller\report','reportDomPDF') ;
+			if(Arr::get($post, 'savepdf')){
+				$forsave=unserialize(iconv('UTF-8', 'CP1251', Arr::get($post, 'outDoorList')));
+				
+				$id_pep=Arr::get($post, 'id_pep');
+				
+				$dataHeader=View::Factory('report\doorlist\header');
+				$dataReport=View::Factory('\report\doorlist\report')
+					->bind('dataForSave', $forsave);
+				$dataFooter=View::Factory('\report\doorlist\footer');
+				//echo Debug::vars('462', $header, $report, $footer); exit;
+				$content=View::Factory('\report\doorlist\reportPDF')
+				
+				->bind('dataHeader', $dataHeader)
+				->bind('dataReport', $dataReport)
+				->bind('dataFooter', $dataFooter)
+				;
 				
 				
-				//echo Debug::vars('29', $file_name); exit;
-				$this->redirect('/report');
+require_once APPPATH . 'vendor/dompdf/src/Autoloader.php';
+require_once APPPATH . 'vendor/dompdf/src/Dompdf.php';
+Dompdf\Autoloader::register();
+//use Dompdf\Dompdf;
+
+			
+				$dompdf = new Dompdf\Dompdf();
+			//echo Debug::vars('34', $dompdf); exit;
+				
+				$dompdf->load_html($content);
+				$dompdf->render();
+				$dompdf->stream("new_file.pdf");
+
+
+				$this->template->content = $content;
+			}		
+				
+				
+				
+				return;
 				
 		
 				

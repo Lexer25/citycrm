@@ -1,7 +1,5 @@
 <?php 
-	$html = '
-
-		<!DOCTYPE html>
+	$html = '<!DOCTYPE html>
 	
 		<html>
 	
@@ -14,7 +12,8 @@
 		
 			<body>
 			
-				<p>Привет, <span style="color: green">Мир</span>!</p>
+				<p>hi <span style="color: green">АБВГД</span>!</p>
+				<p>hi <span style="color: green">ABCDE</span>!</p>
 			
 			</body>
 		
@@ -22,17 +21,17 @@
 	
 ';
 
+require Kohana::find_file('vendor', 'dompdf/src/Autoloader','php');
 
-echo Debug::vars('3',Kohana::find_file('vendor\\dompdf\\src', 'Dompdf', 'php') ); //exit;
-//echo Debug::vars('3',Kohana::find_file('vendor\\dompdf\\src', 'dompdf_config.inc', 'php') ); //exit;
+Dompdf\Autoloader::register();
+use Dompdf\Dompdf;
 
-//include_once Kohana::find_file('vendor', 'dompdf_config.inc', 'php');
-include_once Kohana::find_file('vendor\\dompdf\\src', 'Dompdf', 'php'); //exit;
-//require_once("dompdf/dompdf_config.inc.php");
-//include_once 'C:\xampp\htdocs\citycrm\application\vendor\dompdf\src\Dompdf.php';
 
 $dompdf = new Dompdf();
-echo Debug::vars('34', $html); exit;
-	$dompdf->load_html('hello world');
+//echo Debug::vars('34', $html); exit;
+//	$dompdf->load_html('hello world<br>');
+	$dompdf->setPaper('A4', 'portrait');
+	//$dompdf->load_html($html);
+	$dompdf->loadHtml($html);
 	$dompdf->render();
 	$dompdf->stream("new_file.pdf");

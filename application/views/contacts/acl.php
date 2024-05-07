@@ -251,6 +251,10 @@ foreach($contact_acl as $key=>$value){
 echo Form::open('reports/doorList');
 //echo Form::open('reports/savecsv');
 ?>
+	
+	
+	</table>
+	
 	<table class="data tablesorter-blue" width="60%" cellpadding="0" cellspacing="0" id="tablesorter" >
 			<tbody>
 				<tr>
@@ -300,6 +304,16 @@ echo Form::open('reports/doorList');
 				?>
 			</tbody>
 			</table>
+			
+	<table class="data tablesorter-blue"  width="100%" cellpadding="0" cellspacing="0" id="reportHeader" >
+		<tr>
+		<td>Param1</td>
+		<td>val1</td>
+		<td>Time execited</td>
+		<td>0,2 sec</td>
+	</tr>
+		
+	</table>
 			<?php
 				echo Form::hidden('id_pep', $contact->id_pep); 
 		

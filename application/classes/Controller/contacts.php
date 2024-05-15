@@ -361,8 +361,9 @@ class Controller_Contacts extends Controller_Template
 	{
 		$id=$this->request->param('id');
 		$contact = Model::factory('Contact')->getContact($id);
+		
 		if (!$contact) $this->redirect('contacts');
-		$companies = Model::factory('Company')->getNames(true);
+		$companies = Model::factory('Company')->getNames($id);
 		
 		$this->template->content = View::factory('contacts/view')
 			->bind('contact', $contact)

@@ -33,18 +33,22 @@
 	</div>
 	<div>
 	<?php
+	if(isset(Kohana::$config->load('database')->fb)){
 	 echo __('string_about :db, PHP :phpver, :fver', array(
       		'db'=> Arr::get(
       			Arr::get(
       					Kohana::$config->load('database')->fb,
-      					'connection'
+      					'connection' 
       					),
       		'dsn'),
       		'ver'=> Kohana::$config->load('artonitcity_config')->ver,
       		'developer'=> Kohana::$config->load('artonitcity_config')->developer,
 			'phpver'=>phpversion(),
 			'fver'=>Kohana::version(),
-      		)).'<br>';
+			)).'<br>';
+		} else {
+		echo __('No_db_config');
+		}
 				
 				?>
 				

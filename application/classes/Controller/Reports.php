@@ -435,6 +435,9 @@ class Controller_Reports extends Controller_Template
 	{
 			
 		//echo Debug::vars('447', $_POST, Session::instance(), Arr::get($this->session->get('auth_user_crm', ''), 'ID_PEP'), Arr::get($this->session->get('auth_user_crm', ''), 'NAME')); exit;
+		//$dataReportTitle=
+		
+		
 		$post=Validation::factory($_POST);
 		$post->rule('id_pep', 'not_empty')
 				->rule('id_pep', 'digit')
@@ -443,6 +446,10 @@ class Controller_Reports extends Controller_Template
 		if($post->check()){
 			//echo Debug::vars('453', Arr::get($post, 'savecvs'), Arr::get($post, 'savexls'), Arr::get($post, 'savepdf'));
 			//echo Debug::vars('455', Kohana::find_file('classes\Controller\report','reportDoorListCVS'));
+			$huser=Arr::get(Session::instance()->get('auth_user_crm'), 'ID_PEP');
+			$id_pep=Arr::get($post, 'id_pep');
+			
+			//echo Debug::vars('439', Arr::get($post, 'id_pep'), $huser);exit;
 			if(Arr::get($post, 'savecvs')) include Kohana::find_file('classes\Controller\report','reportDoorListCVS') ;
 			if(Arr::get($post, 'savexls')) include Kohana::find_file('classes\Controller\report','reportDoorListXLSX') ;
 			//if(Arr::get($post, 'savepdf')) include Kohana::find_file('classes\Controller\report','reportDoorListPDF') ;
@@ -452,34 +459,67 @@ class Controller_Reports extends Controller_Template
 				
 				$id_pep=Arr::get($post, 'id_pep');
 				
-				$dataHeader=View::Factory('report\doorlist\header');
+/* 				$dataHeader=View::Factory('report\doorlist\header');
 				$dataReport=View::Factory('\report\doorlist\report')
 					->bind('dataForSave', $forsave);
 				$dataFooter=View::Factory('\report\doorlist\footer');
 				//echo Debug::vars('462', $header, $report, $footer); exit;
 				$content=View::Factory('\report\doorlist\reportPDF')
-				
-				->bind('dataHeader', $dataHeader)
-				->bind('dataReport', $dataReport)
-				->bind('dataFooter', $dataFooter)
+					->bind('dataHeader', $dataHeader)//заголово отчета
+					->bind('dataReport', $dataReport)//отчет (таблица или иные данные)
+					->bind('dataFooter', $dataFooter)//нижняя часть отчета */
 				;
+				 $content=View::Factory('\report\doorlist\reportdoorlist')
+					->bind('dataForSave', $forsave)
+					->bind('id_pep', $id_pep)
+					->bind('id_admin', $huser)
+					; 
+				//$content=View::Factory('\report\doorlist\west_garden');	
+				//if(false){ // переключатель: true - делать экспорт в pdf, false - выводит отчет на экран браузера
+				if(true){ // переключатель: true - делать экспорт в pdf, false - выводит отчет на экран браузера
 				
-				
-require_once APPPATH . 'vendor/dompdf/src/Autoloader.php';
-require_once APPPATH . 'vendor/dompdf/src/Dompdf.php';
-Dompdf\Autoloader::register();
-//use Dompdf\Dompdf;
-
+					//require_once APPPATH . 'vendor/dompdf/src/Autoloader.php';
+					require_once APPPATH . 'vendor/dompdf/autoload.inc.php';
+					//require_once APPPATH . 'vendor/dompdf/src/Dompdf.php';
+					Dompdf\Autoloader::register();
 			
-				$dompdf = new Dompdf\Dompdf();
-			//echo Debug::vars('34', $dompdf); exit;
-				
-				$dompdf->load_html($content);
-				$dompdf->render();
-				$dompdf->stream("new_file.pdf");
+			/* $dompdf = new Dompdf\src\Dompdf();
+			$dompdf->set_option('isRemoteEnabled', TRUE);
+			$dompdf->setPaper('A4', 'portrait');
+			$dompdf->loadHtml($html, 'UTF-8');
+			$dompdf->render(); */
+								
+					$dompdf = new Dompdf\Dompdf();
+					$dompdf->setPaper("A4");				
+					$dompdf->loadHtml($content, 'UTF-8');
+					$dompdf->render();
+					
+			
+		$color = array(0, 0, 0);
+		$font = null;
+		$size = 8;
+$text = "Стр. {PAGE_NUM} из {PAGE_COUNT}";
 
+$canvas = $dompdf->getCanvas();
+$pageWidth = $canvas->get_width();
+$pageHeight = $canvas->get_height();
+$width=10;
+
+
+		$canvas = $dompdf->get_canvas();
+		$canvas->page_text($pageWidth/2, $pageHeight - 40, $text, $font, $size, $color);
+
+
+$dompdf->stream();
+					
+
+	
+					} else {
 
 				$this->template->content = $content;
+				
+				
+				}
 			}		
 				
 				

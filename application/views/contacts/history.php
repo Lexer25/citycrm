@@ -8,7 +8,7 @@
 					<td>
 						<?php
 							if ($contact['CANEDIT'] == 0) 
-								echo HTML::anchor('contacts/view/' . $id, __('contact.common'), array('class' => 'left_switch'));
+								echo HTML::anchor('contacts/edit/' . $id, __('contact.common'), array('class' => 'left_switch'));
 							else
 								echo HTML::anchor('contacts/edit/' . $id, __('contact.common'), array('class' => 'left_switch')); 
 						?>

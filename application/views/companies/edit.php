@@ -11,6 +11,14 @@
 </script>
 <?php 
 //echo Debug::vars('17', $company);
+
+
+// готовлю список организаций в виде иерархического дерева
+	//	$org_tree_local = Model::Factory('Company')->getOrgListForOnce(Arr::get($company, 'ID_ORG'));// я получил список организаций.
+	//	echo Debug::vars('63', $org_tree_local); //exit;
+	//	echo Model::Factory('treeorg')->make_tree($org_tree_local, 1);//формирую иерархический список
+		
+		
 //echo Debug::vars('18', $parents);
 //echo Debug::vars('19', $alert);
 //echo Debug::vars('20', $acl);

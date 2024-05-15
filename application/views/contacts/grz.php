@@ -73,7 +73,7 @@ if (isset($alert)) { ?>
 					<td>
 						<?php
 							if ($contact['CANEDIT'] == 0) 
-								echo HTML::anchor('contacts/view/' . $contact['ID_PEP'], __('contact.common'), array('class' => 'left_switch'));
+								echo HTML::anchor('contacts/edit/' . $contact['ID_PEP'], __('contact.common'), array('class' => 'left_switch'));
 							else
 								echo HTML::anchor('contacts/edit/' . $contact['ID_PEP'], __('contact.common'), array('class' => 'left_switch')); 
 						?>

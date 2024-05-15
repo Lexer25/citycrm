@@ -34,5 +34,6 @@ return array(
 		'check'=>false,
 		),
 	'curl_place'=>'C:\xampp\curl.exe -L',
+	'countAclListColumn'=>'4',
 	
 );

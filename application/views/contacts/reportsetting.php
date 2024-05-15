@@ -10,7 +10,6 @@
 	}
 </script>
 <?php 
-echo Debug::vars('17', $id_pep);
 //echo Debug::vars('18', $parents);
 //echo Debug::vars('19', $alert);
 //echo Debug::vars('20', $acl);
@@ -24,10 +23,23 @@ if ($alert) { ?>
 		<?php echo $alert; ?>
 	</p>
 </div>
-<?php } ?>
+<?php } 
+?>
 <div class="onecolumn">
 	<div class="header">
-		<span class="error"><?php echo $contact ? __('report.title') . ': ' . iconv('CP1251', 'UTF-8', $contact->name) . ' '.$contact->id_org : __('contact.new'); ?></span>
+		<span class="error"><?php 
+		
+		if ($contact){
+			echo __('report.title', array(
+			':surname'=>iconv('CP1251', 'UTF-8', $contact->surname),
+			':name'=>iconv('CP1251', 'UTF-8', $contact->name), 
+			':patronymic'=>iconv('CP1251', 'UTF-8', $contact->patronymic),
+			':timefrom'=>(isset($key->timestart))? $key->timestart : date("d.m.Y"),
+			':timeTo'=>(isset($key->timeend))? $key->timeend : date("d.m.Y")
+			));
+			} else {
+				echo $contact->id_org ;
+			}				?></span>
 
 	</div>
 	<br class="clear" />

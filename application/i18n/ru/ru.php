@@ -194,7 +194,9 @@ return array
 	'report.time_work'			=> 'Пробыл на работе',
 	'report.fio'				=> ':surname :name :patronymic',
 	'report.doorlist.title'				=> 'Отчет перечень точек прохода для контакта :surname :name  :patronymic',
-	'report.datestamp'=>'Отчет подготовлен :timestamp',
+	'report.datestamp'			=>'Отчет подготовлен :timestamp',
+	'report.datestart'			=>'Дата начала отчета',
+	'report.dateend'			=>'Дата завершения отчета',
 	
 	
 	'sidebar.companieslist'			=> 'Список организаций',
@@ -334,6 +336,7 @@ return array
 	'contact.titlefiredContact'		=> 'Просмотр удаленного контакта :surname :name :patronymic',
 	
 	'contacts.compareacl'			=>'Категория доступа',
+	'contact.worktime'			=>'Рабочее время',
 	
 	
 	'contact.email'					=> 'Адрес электронной почты',
@@ -508,6 +511,7 @@ return array
 	'button.savecsv'				=> 'Экспорт cvs',
 	'button.savexlsx'				=> 'Экспорт xlsx',
 	'button.savepdf'				=> 'Экспорт pdf',
+	'button.report1'				=> 'Подготовить отчет Рабочего времени',
 	
 
 	'settings.title'				=> 'Настройки',

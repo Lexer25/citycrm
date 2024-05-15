@@ -112,7 +112,7 @@
 					<td>
 						<?php
 							if (true) 
-								echo HTML::anchor('contacts/view/' . $contact->id_pep, __('contact.common'), array('class' => 'left_switch'));
+								echo HTML::anchor('contacts/edit/' . $contact->id_pep, __('contact.common'), array('class' => 'left_switch'));
 							else
 								echo HTML::anchor('contacts/edit/' . $contact->id_pep, __('contact.common'), array('class' => 'left_switch')); 
 						?>

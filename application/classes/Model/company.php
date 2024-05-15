@@ -42,6 +42,52 @@ class Model_Company extends Model
 		
 	}
 	
+	
+	public function getOrgListForOnce($id_org) //список организаций (квартир) начиная с указанной.
+	{
+		
+		/* $remote  = Database::instance('fb');
+		echo $remote->list_tables();exit;
+		echo $remote->list_columns('people');exit; */
+		
+		//https://xhtml.ru/2022/html/tree-views/		
+		$sql='SELECT  og.id_org, og.name, og.id_parent, og.flag FROM ORGANIZATION_GETCHILD(1, '.$id_org.')  og order by og.name';
+             //   left join  hl_orgaccess hlo on hlo.id_org = og.id_org
+             //   order by og.id_org ';
+		$res=array();	
+		try
+		{
+			$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+			
+			/* $res[1]= array(
+			"id" => 1,
+			"title" => "Все",
+			"parent" => 0 
+			);*/
+		foreach ($query as $key=>$value)
+		{
+			//echo Debug::vars('58', $value); exit;
+			$res[Arr::get($value, 'ID_ORG')]['id']=Arr::get($value, 'ID_ORG');
+			$res[Arr::get($value, 'ID_ORG')]['title']=iconv('windows-1251','UTF-8', Arr::get($value, 'NAME'));
+			$res[Arr::get($value, 'ID_ORG')]['parent']=Arr::get($value, 'ID_PARENT');
+			$res[Arr::get($value, 'ID_ORG')]['busy']=Arr::get($value, 'ID_GARAGE');
+			
+		}
+			
+			//echo Debug::vars('126', Arr::get($res, 1), $res); exit;
+			return $res;
+		} catch (Exception $e) {
+			Log::instance()->add(Log::ERROR, $e);
+		}
+		
+	}
+	
+	
+	
+	
+	
 	public function getCountAdmin($filter)
 	{
 		$query = DB::query(Database::SELECT, 
@@ -397,7 +443,6 @@ where ssa.id_org='. $id_org;
 		if ($user) {
 			$g = array();
 			$s = "SELECT DISTINCT id_group FROM users_groups WHERE id_user = $user";
-			
 			$q = DB::query(Database::SELECT, $s)
 				->execute(Database::instance('default'));
 			foreach ($q->as_array() as $key => $value) {

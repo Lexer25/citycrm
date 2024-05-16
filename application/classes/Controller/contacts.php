@@ -32,10 +32,19 @@ class Controller_Contacts extends Controller_Template
 	{
 		//echo Debug::vars('29', $this->request->param('id')); exit;
 		$id_pep= $this->request->param('id'); 
+		
+		$topbuttonbar=View::factory('contacts/topbuttonbar', array(
+			'id_pep'=> $id_pep,
+			'_is_active'=> 'worktime',
+			))
+		;
+		
+		
 		$this->template->content = View::factory('contacts/reportsetting')
 				->bind('id_pep', $id_pep)
 				->bind('mode', $mode)
-				->bind('alert', $fl);
+				->bind('alert', $fl)
+				->bind('topbuttonbar', $topbuttonbar);
 		
 	}
 	
@@ -343,6 +352,12 @@ class Controller_Contacts extends Controller_Template
 		if($contact->id_pep >0 and $contact->is_active==1) $mode='edit';//режим редактирования существующего контакта
 		if($contact->id_pep >0 and $contact->is_active==0) $mode='fired';//режим редактирования "удаленного" контакта
 		
+		$topbuttonbar=View::factory('contacts/topbuttonbar', array(
+			'id_pep'=> $contact->id_pep,
+			'_is_active'=> 'edit',
+			))
+		;
+		
 		$this->template->content = View::factory('contacts/edit')
 			->bind('contact', $contact) //контакт передается уже как экземпляр класса!!!
 			->bind('alert', $fl)
@@ -352,6 +367,7 @@ class Controller_Contacts extends Controller_Template
 			->bind('check_acl', $check_acl)
 			->bind('companies', $companies)
 			->bind('mode', $mode)
+			->bind('topbuttonbar', $topbuttonbar)// передал панель кнопок управления
 			//->bind('photo', $photo);
 			;
 			//echo View::factory('profiler/stats');
@@ -378,11 +394,21 @@ class Controller_Contacts extends Controller_Template
 		$contact = Model::factory('Contact')->getContact($id);//Получаю контакт по его id
 		if (!$contact) $this->redirect('contacts');//если контакта нет, то перенаправление на список контактов 
 		$data = History::getHistory($id);// беру историю для указанного контакта историю (контроллер History.php, метод getHistory($user))
-		//echo Debug::vars('381', $data); exit;
+		//echo Debug::vars('381', $id); exit;
+		
+		$topbuttonbar=View::factory('contacts/topbuttonbar', array(
+			'id_pep'=> $id,
+			'_is_active'=> 'history',
+			))
+		;
+		
+		
 		$this->template->content = View::factory('contacts/history')//вызываю вью contacts/history.php
 			->bind('contact', $contact)
 			->bind('data', $data)
-			->bind('id', $id);
+			->bind('id', $id)
+			->bind('topbuttonbar', $topbuttonbar)
+			;
 	}
 	
 	/*
@@ -600,6 +626,12 @@ class Controller_Contacts extends Controller_Template
 		if($contact->id_pep >0 and $contact->is_active==1) $mode='edit';//режим редактирования существующего контакта
 		if($contact->id_pep >0 and $contact->is_active==0) $mode='fired';//режим редактирования "удаленного" контакта
 		
+		$topbuttonbar=View::factory('contacts/topbuttonbar', array(
+			'id_pep'=> $contact->id_pep,
+			'_is_active'=> 'cardlist',
+			))
+		;
+		
 		
 		$this->template->content = View::factory('contacts/cardlist')
 			->bind('contact', $contact)
@@ -607,6 +639,7 @@ class Controller_Contacts extends Controller_Template
 			->bind('alert', $fl)
 			->bind('arrAlert', $arrAlert)
 			->bind('mode', $mode)
+			->bind('topbuttonbar', $topbuttonbar)
 			->bind('id', $id);
 	}
 	
@@ -635,12 +668,20 @@ class Controller_Contacts extends Controller_Template
 		$fl = $this->session->get('alert');
 		$this->session->delete('alert');
 		
+		$topbuttonbar=View::factory('contacts/topbuttonbar', array(
+			'id_pep'=> $contact->id_pep,
+			'_is_active'=> 'acl',
+			))
+		;
+		
 		$this->template->content = View::factory('contacts/acl')
 			->bind('contact', $contact)
 			->bind('alert', $fl)
 			->bind('mode', $mode)
 			->bind('contact_acl', $contact_acl)
-			->bind('companies', $companies);
+			->bind('companies', $companies)
+			->bind('topbuttonbar', $topbuttonbar)
+			;
 	}
 	
 	

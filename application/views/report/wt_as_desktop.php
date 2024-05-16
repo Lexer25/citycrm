@@ -29,6 +29,7 @@ if ($alert) { ?>
 	<div class="header">
 
 		<span><?php echo __('report.title', array(':surname'=>iconv('CP1251', 'UTF-8',$pep->surname),':name'=>iconv('CP1251', 'UTF-8',$pep->name),':patronymic'=>iconv('CP1251', 'UTF-8',$pep->patronymic), ':timefrom'=>$report->timestart, ':timeTo'=>$report->timeend)); ?></span>
+		<?php echo $topbuttonbar;?>
 	</div>
 		<?php
 				echo Form::open('reports/savecsv');

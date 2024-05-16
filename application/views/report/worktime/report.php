@@ -1806,7 +1806,7 @@ $company_admin=new Company($id_admin->id_org);
 <table style="width: 100%" class="header">
 <tr>
 <td style="width: 50%; vertical-align: middle;">
-<h1 style="text-align: left">Перечень точек прохода для сотрудника</h1>
+<h1 style="text-align: left">Отчет: Учет рабочего времени сотрудника</h1>
 </td>
 
 <td style="width: 50%; text-align: right;">
@@ -1822,7 +1822,7 @@ $company_admin=new Company($id_admin->id_org);
 <td class="label">Сотрудник</td>
 <td class="field"><?php echo iconv('CP1251', 'UTF-8', $pep->surname.' '.$pep->name.' '.$pep->patronymic);?></td>
 <td class="label">Отчет подготовил</td>
-<td class="field">Сидоров Владимир Вячеславович</td>
+<td class="field"><?php echo iconv('CP1251', 'UTF-8', $id_admin->surname.' '.$id_admin->name.' '.$id_admin->patronymic);?></td>
 </tr>
 <tr>
 <td class="label">Подразделение:</td>
@@ -1853,9 +1853,23 @@ $company_admin=new Company($id_admin->id_org);
 <table class="list" style="width: 99%; margin-top: 1em;">
 
 <tr class="head">
-<td class="center" style="width: 15%">№ п/п</td>
-<td class="center" style="width: 15%">id</td>
-<td class="left" style="width: 50%" colspan="2">Название точки прохода</td>
+<td class="center">№ п/п</td>
+<td class="center">date</td>
+<td class="center">currentDay</td>
+<td class="center"><?php echo __('report.time_in');?></td>
+<td class="center"><?php echo __('report.time_out');?></td>
+<td class="center"><?php echo __('report.time_work');?></td>
+<!--<td class="center">time_on wor</td>
+<td class="center">timeStartNormative</td>
+<td class="center">timeEndNormative</td>
+<td class="center">timeDinnerNormative</td>
+<td class="center">timeLongWorkDayNormative</td>
+<td class="center">time_startCount</td>
+<td class="center">time_endtCount</td>
+<td class="center">time_work</td>-->
+<td class="center"><?php echo __('report.lateness');?></td>
+<td class="center"><?php echo __('report.deviation');?></td>
+
 
 
 
@@ -1863,13 +1877,29 @@ $company_admin=new Company($id_admin->id_org);
 
 
 <?php
-	 //echo Debug::vars('1936', $dataForSave); exit;
+	// echo Debug::vars('1936',count($dataForSave->result),  $dataForSave->result); exit;
 	$countDoor=count($dataForSave);
-	foreach ($dataForSave as $key=>$value){
+	$i=0;
+	foreach ($dataForSave->result as $key=>$value){
+		//echo Debug::vars('1869',$value);exit;
 		echo '<tr class="list_row">';
-			echo '<td class="center">'.Arr::get($value, 'sn').'</td>';
-			echo '<td class="center">'.Arr::get($value, 'id_door').'</td>';
-			echo '<td class="left" colspan="2" >'.iconv('CP1251', 'UTF-8', Arr::get($value, 'name')).'</td>';
+			echo '<td class="center">'.++$i.'</td>';
+			echo '<td class="center">'.Arr::get($value, 'date').'</td>';
+			echo '<td class="center">'.Arr::get($value, 'currentDay').'</td>';
+			echo '<td class="center">'.Model::factory('ReportWorkTime')->trt(Arr::get($value, 'time_in')).'</td>';//пришел
+			echo '<td class="center">'.Model::factory('ReportWorkTime')->trt(Arr::get($value, 'time_out')).'</td>';//ушел
+			echo '<td class="center">'.Model::factory('ReportWorkTime')->trt(Arr::get($value, 'time_on_work')).'</td>';//время на работе
+			//echo '<td class="center">'.Model::factory('ReportWorkTime')->trt(Arr::get($value, 'time_on wor')).'</td>';
+			//echo '<td class="center">'.Model::factory('ReportWorkTime')->trt(Arr::get($value, 'timeStartNormative')).'</td>';
+			//echo '<td class="center">'.Model::factory('ReportWorkTime')->trt(Arr::get($value, 'timeEndNormative')).'</td>';
+			//echo '<td class="center">'.Model::factory('ReportWorkTime')->trt(Arr::get($value, 'timeDinnerNormative')).'</td>';
+			//echo '<td class="center">'.Model::factory('ReportWorkTime')->trt(Arr::get($value, 'timeLongWorkDayNormative')).'</td>';
+			//echo '<td class="center">'.Model::factory('ReportWorkTime')->trt(Arr::get($value, 'time_startCount')).'</td>';
+			//echo '<td class="center">'.Model::factory('ReportWorkTime')->trt(Arr::get($value, 'time_endtCount')).'</td>';
+			//echo '<td class="center">'.Model::factory('ReportWorkTime')->trt(Arr::get($value, 'time_work')).'</td>';
+			echo '<td class="center">'.Model::factory('ReportWorkTime')->trt(Arr::get($value, 'lateness')).'</td>';
+			echo '<td class="center">'.Model::factory('ReportWorkTime')->trt(Arr::get($value, 'deviation')).'</td>';
+			
 
 			
 
@@ -1938,3 +1968,4 @@ $company_admin=new Company($id_admin->id_org);
 	
 </body>
 </html>
+

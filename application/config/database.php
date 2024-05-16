@@ -8,8 +8,8 @@ return array
 		'connection'	=> array(
 			//'dsn'		=> 'odbc:kalibr_001A',
 			//'dsn'		=> 'odbc:kalibr',
-			//'dsn'		=> 'odbc:vnii_local',
-			'dsn'		=> 'odbc:SDUO',
+			'dsn'		=> 'odbc:vnii_local',
+			//'dsn'		=> 'odbc:SDUO',
 			
 			'username'	=> 'SYSDBA',
 			'password'	=> 'temp',

@@ -237,16 +237,16 @@ class Model_ReportWorkTime extends Model
 			echo Debug::vars($key, $value);
 						
 			$rep[0]=Arr::get($value, 'date'); //"date" => string(10) "2023-12-01"
-			$rep[1]=Arr::get($value,'currentDay');//"currentDay" => string(1) "5"
-			$rep[2]=$this->trt(Arr::get($value,'time_in'));//"time_in" => integer 27489
-			$rep[3]=$this->trt(Arr::get($value,'time_out'));//"time_out" => integer 54547
-			$rep[4]=$this->trt(Arr::get($value,'time_out') - Arr::get($value,'time_in'));//отработал
-			$rep[5]=$this->trt(Arr::get($value,'timeStartNormative'));//"timeStartNormative" => integer 28800
-			$rep[6]=$this->trt(Arr::get($value,'timeEndNormative'));//"timeEndNormative" => integer 60300
-			$rep[7]=$this->trt(Arr::get($value,'timeDinnerNormative'));//"timeDinnerNormative" => integer 2700
-			$rep[8]=$this->trt(Arr::get($value,'timeLongWorkDayNormative'));//"timeLongWorkDayNormative" => integer 31500
-			$rep[9]=$this->trt(Arr::get($value,'time_startCount'));//"time_startCount" => integer 28800
-			$rep[10]=$this->trt(Arr::get($value,'time_out'));//"time_endtCount" => integer 54547
+			//$rep[1]=Arr::get($value,'currentDay');//"currentDay" => string(1) "5"
+			$rep[2]=$this->trt(Arr::get($value,'time_in'));//пришел
+			$rep[3]=$this->trt(Arr::get($value,'time_out'));//ушел
+			$rep[4]=$this->trt(Arr::get($value,'time_out') - Arr::get($value,'time_in'));//был на работе
+			$rep[5]=$this->trt(Arr::get($value,'timeStartNormative'));//начало рабочего дня
+			$rep[6]=$this->trt(Arr::get($value,'timeEndNormative'));//конец рабочего дня
+			$rep[7]=$this->trt(Arr::get($value,'timeDinnerNormative'));//начало обеденного перерыва
+			$rep[8]=$this->trt(Arr::get($value,'timeLongWorkDayNormative'));//длительность рабочего перерыва
+			$rep[9]=$this->trt(Arr::get($value,'time_startCount'));//начало отсчета?
+			$rep[10]=$this->trt(Arr::get($value,'time_out'));//время ухода
 			
 			// расчет фактического рабочего времени работы $var3
 			

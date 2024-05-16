@@ -133,28 +133,10 @@ if ($alert) { ?>
 				?>
 		
 		</span>
-		<?php if ($contact) { ?>
-		<div class="switch">
-			<table cellpadding="0" cellspacing="0">
-			<tbody>
-				<tr>
-					<td>
-						<?php echo HTML::anchor('contacts/edit/' . $contact->id_pep, __('contact.common'), array('class' => 'left_switch')); ?>
-					</td>
-					<td>
-						<a href="javascript:" class="middle_switch active"><?php echo __('contact.acl'); ?></a>
-					</td>
-					<td>
-						<?php echo HTML::anchor('contacts/cardlist/' . $contact->id_pep, __('contact.cardlist'), array('class' => 'middle_switch')); ?>
-					</td>
-					<td>
-						<?php echo HTML::anchor('contacts/history/' . $contact->id_pep, __('contact.history'), array('class' => 'right_switch')); ?>
-					</td>
-				</tr>
-			</tbody>
-			</table>
-		</div>
-		<?php } ?>
+		<?php if ($contact) {
+			echo $topbuttonbar;
+			
+		} ?>
 	</div>
 	<br class="clear" />
 	<div class="content">

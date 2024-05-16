@@ -1,31 +1,9 @@
 <div class="onecolumn">
 	<div class="header">
 		<span><?php echo __('contact.history') . ' - ' . iconv('CP1251', 'UTF-8', $contact['NAME'] . ' ' . $contact['SURNAME']); ?></span>
-		<div class="switch">
-			<table cellpadding="0" cellspacing="0">
-			<tbody>
-				<tr>
-					<td>
-						<?php
-							if ($contact['CANEDIT'] == 0) 
-								echo HTML::anchor('contacts/edit/' . $id, __('contact.common'), array('class' => 'left_switch'));
-							else
-								echo HTML::anchor('contacts/edit/' . $id, __('contact.common'), array('class' => 'left_switch')); 
-						?>
-					</td>
-					<td>
-						<?php echo HTML::anchor('contacts/acl/' . $id, __('contact.acl'), array('class' => 'middle_switch')); ?>
-					</td>
-					<td>
-						<?php echo HTML::anchor('contacts/cardlist/' . $contact['ID_PEP'], __('contact.cardlist'), array('class' => 'middle_switch')); ?>
-					</td>
-					<td>
-						<a href="javascript:" class="right_switch active"><?php echo __('contact.history'); ?></a>
-					</td>
-				</tr>
-			</tbody>
-			</table>
-		</div>
+<?php
+	echo $topbuttonbar;	
+	?>
 	</div>
 	<br class="clear" />
 	<div class="content">

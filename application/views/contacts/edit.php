@@ -145,32 +145,8 @@ if ($alert) { ?>
 		<?php 	switch($mode) {
 				case('edit'):
 				case('fired'):
-				 ?>
-					<div class="switch">
-						<table cellpadding="0" cellspacing="0">
-						<tbody>
-							<tr>
-								<td>
-									<a href="javascript:" class="left_switch active"><?php echo __('contact.common'); ?></a>
-								</td>
-								<td>
-									<?php echo HTML::anchor('contacts/acl/' . $contact->id_pep, __('contact.acl'), array('class' => 'middle_switch')); ?>
-								</td>
-								<td>
-									<?php echo HTML::anchor('contacts/cardlist/' . $contact->id_pep, __('contact.cardlist'), array('class' => 'middle_switch')); ?>
-								</td>
-								<td>
-									<?php echo HTML::anchor('contacts/worktime/' . $contact->id_pep, __('contact.worktime'), array('class' => 'middle_switch')); ?>
-								</td>
-								<td>
-									<?php echo HTML::anchor('contacts/history/' . $contact->id_pep, __('contact.history'), array('class' => 'right_switch')); ?>
-								</td>
-							</tr>
-						</tbody>
-						</table>
-					</div>
-		<?php 
-			break;
+					echo $topbuttonbar;
+					break;
 			
 		}
 

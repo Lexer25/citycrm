@@ -41,6 +41,10 @@ if ($alert) { ?>
 				echo $contact->id_org ;
 			}				?></span>
 
+
+	<?php
+		echo $topbuttonbar;
+	?>	
 	</div>
 	<br class="clear" />
 	<div class="content">

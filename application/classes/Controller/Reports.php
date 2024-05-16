@@ -23,10 +23,10 @@ class Controller_Reports extends Controller_Template
 	
 	/*
 	28.01.2024
-	Сохранение отчета в pdf
+	Сохранение отчета Учет рабочего времени в pdf
 	*/
 	
-	public function action_savepdf ()
+	public function action_saveXLSpdf ()
 	{
 		$id_pep=Arr::get($_POST, 'id_pep');
 		$forsave=unserialize(Arr::get($_POST, 'forsave'));
@@ -210,8 +210,109 @@ class Controller_Reports extends Controller_Template
 		
 	}
 	
+	/**
+	*подготовка журнала учетра рабочего времени в dompdf
+	*'это сделано для того, чтобы отчеты были оформлены в едином формате
+	*/
+	public function action_savepdf ()
+	{
+		//echo Debug::vars('447', $_POST, Session::instance(), Arr::get($this->session->get('auth_user_crm', ''), 'ID_PEP'), Arr::get($this->session->get('auth_user_crm', ''), 'NAME')); exit;
+		//$dataReportTitle=
+		
+		
+		$post=Validation::factory($_POST);
+		$post->rule('id_pep', 'not_empty')
+				->rule('id_pep', 'digit')
+				;
+				$reporttype='';
+		if($post->check()){
+			//echo Debug::vars('453', Arr::get($post, 'savecvs'), Arr::get($post, 'savexls'), Arr::get($post, 'savepdf'));
+			//echo Debug::vars('455', Kohana::find_file('classes\Controller\report','reportDoorListCVS'));
+			$huser=Arr::get(Session::instance()->get('auth_user_crm'), 'ID_PEP');
+			$id_pep=Arr::get($post, 'id_pep');
+			
+			//echo Debug::vars('439', Arr::get($post, 'id_pep'), $huser);exit;
+			if(Arr::get($post, 'savecvs')) include Kohana::find_file('classes\Controller\report','reportDoorListCVS') ;
+			if(Arr::get($post, 'savexls')) include Kohana::find_file('classes\Controller\report','reportDoorListXLSX') ;
+			//if(Arr::get($post, 'savepdf')) include Kohana::find_file('classes\Controller\report','reportDoorListPDF') ;
+			//if(Arr::get($post, 'savepdf')) include Kohana::find_file('classes\Controller\report','reportDomPDF') ;
+			if(Arr::get($post, 'savepdf') OR true){
+				//echo Debug::vars('244', unserialize(Arr::get($post, 'forsave')));exit;
+				$forsave=unserialize(Arr::get($post, 'forsave'));
+				
+				$id_pep=Arr::get($post, 'id_pep');
+				
+
+				 $content=View::Factory('\report\worktime\report')
+					->bind('dataForSave', $forsave)
+					->bind('id_pep', $id_pep)
+					->bind('id_admin', $huser)
+					; 
+				
+				//if(false){ // переключатель: true - делать экспорт в pdf, false - выводит отчет на экран браузера
+				if(true){ // переключатель: true - делать экспорт в pdf, false - выводит отчет на экран браузера
+				
+					//require_once APPPATH . 'vendor/dompdf/src/Autoloader.php';
+					require_once APPPATH . 'vendor/dompdf/autoload.inc.php';
+					//require_once APPPATH . 'vendor/dompdf/src/Dompdf.php';
+					Dompdf\Autoloader::register();
+			
+			/* $dompdf = new Dompdf\src\Dompdf();
+			$dompdf->set_option('isRemoteEnabled', TRUE);
+			$dompdf->setPaper('A4', 'portrait');
+			$dompdf->loadHtml($html, 'UTF-8');
+			$dompdf->render(); */
+								
+					$dompdf = new Dompdf\Dompdf();
+					$dompdf->setPaper("A4");				
+					$dompdf->loadHtml($content, 'UTF-8');
+					$dompdf->render();
+					
+			
+		$color = array(0, 0, 0);
+		$font = null;
+		$size = 8;
+$text = "Стр. {PAGE_NUM} из {PAGE_COUNT}";
+
+$canvas = $dompdf->getCanvas();
+$pageWidth = $canvas->get_width();
+$pageHeight = $canvas->get_height();
+$width=10;
+
+
+		$canvas = $dompdf->get_canvas();
+		$canvas->page_text($pageWidth/2, $pageHeight - 40, $text, $font, $size, $color);
+
+
+$dompdf->stream();
+					
+
 	
-	
+					} else {
+
+				$this->template->content = $content;
+				
+				
+				}
+			}		
+				
+				
+				
+				return;
+				
+		
+				
+		}else{
+			$message=implode(",", $post->errors('reportValidation'));
+			echo Debug::vars('456 ',  $message); exit;
+			$this->redirect('errorpage?err=' . urlencode($message));
+			
+		}			
+		
+		
+		
+		
+	}
 	
 	/*
 	27.01.2024
@@ -407,12 +508,22 @@ class Controller_Reports extends Controller_Template
 		);
 		if($report->getReportWT() == 0){
 			
+			$topbuttonbar=View::factory('contacts/topbuttonbar', array(
+			'id_pep'=> $id_pep,
+			'_is_active'=> 'worktime',
+			))
+		;
+		
+		
+			
 			$content = View::factory('report/wt_as_desktop')
 				->bind('id_pep', $id_pep)
 				->bind('report', $report)
 				->bind('duration', $duration)
 				->bind('workTimeOrder', $workTimeOrder)
-				->bind('alert', $fl);
+				->bind('alert', $fl)
+				->bind('topbuttonbar', $topbuttonbar)
+				;
 				
 				
 				$this->template->content = $content;

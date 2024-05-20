@@ -18,9 +18,9 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
 				<li>
 					<a id="sidebar_companies" href="javascript:"><img src="images/icon_companies.png" /><?php echo __('companies'); ?></a>
 					<ul>
-						<li><? echo HTML::anchor ('companies', __('sidebar.companieslist')); ?></li>
+						<li><?php echo HTML::anchor ('companies', __('sidebar.companieslist')); ?></li>
 						<?php if (Auth::instance()->logged_in('admin')) { ?>
-						<li><? echo HTML::anchor ('companies/edit/0', __('sidebar.addcompany')); ?></li>
+						<li><?php echo HTML::anchor ('companies/edit/0', __('sidebar.addcompany')); ?></li>
 						<?php }?>
 					</ul>
 				</li>
@@ -32,10 +32,10 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
 				<li>
 					<a id="sidebar_contacts" href="javascript:"><img src="images/icon_contacts.png" /><?php echo __('contacts'); ?></a>
 					<ul>
-						<li><? echo HTML::anchor ('contacts/activeOnlyList', __('sidebar.contactslist')); ?></li>
+						<li><?php echo HTML::anchor ('contacts/activeOnlyList', __('sidebar.contactslist')); ?></li>
 						<?php if (Auth::instance()->logged_in('admin')) { ?>
-						<li><? echo HTML::anchor ('contacts/edit/0', __('sidebar.addcontact')); ?></li>
-						<li><? echo HTML::anchor ('contacts/deletedList', __('sidebar.deletedcontact')); ?></li>
+						<li><?php echo HTML::anchor ('contacts/edit/0', __('sidebar.addcontact')); ?></li>
+						<li><?php echo HTML::anchor ('contacts/deletedList', __('sidebar.deletedcontact')); ?></li>
 						<?php } ?>
 					</ul>
 				</li>
@@ -48,9 +48,9 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
             <li>
                 <a id="sidebar_cards" href="javascript:"><img src="images/icon_card.png" /><?php echo __('identity'); ?></a>
                 <ul>
-                    <li><? echo HTML::anchor ('cards/select/rfid', __('sidebar.rfid')); ?></li>
-                    <li><? //echo HTML::anchor ('cards/select/grz', __('sidebar.grz')); ?></li>
-                    <li><? //echo HTML::anchor ('cards/select/uhf', __('sidebar.uhf')); ?></li>
+                    <li><?php echo HTML::anchor ('cards/select/rfid', __('sidebar.rfid')); ?></li>
+                    <li><?php //echo HTML::anchor ('cards/select/grz', __('sidebar.grz')); ?></li>
+                    <li><?php //echo HTML::anchor ('cards/select/uhf', __('sidebar.uhf')); ?></li>
                 </ul>
             </li>
 
@@ -65,12 +65,12 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
                 <a id="sidebar_guests" href="javascript:"><img src="images/icon_guest.png" /><?php echo __('guests'); ?></a>
                 <ul>
                    
-						<li><? echo HTML::anchor ('guests/guest', __('sidebar.guestslist')); ?></li>
+						<li><?php echo HTML::anchor ('guests/guest', __('sidebar.guestslist')); ?></li>
 						<?php if (Auth::instance()->logged_in('admin')) { ?>
-						<li><? echo HTML::anchor ('guests/archive', __('sidebar.archive')); ?></li>
-						<li><? //echo HTML::anchor ('guests/edit/0', __('sidebar.addguest')); ?></li>
-						<li><? echo HTML::anchor ('guests/issue', __('sidebar.addguest')); ?></li>
-						<li><? echo HTML::anchor ('guests/config', __('sidebar.config')); ?></li>
+						<li><?php echo HTML::anchor ('guests/archive', __('sidebar.archive')); ?></li>
+						<li><?php //echo HTML::anchor ('guests/edit/0', __('sidebar.addguest')); ?></li>
+						<li><?php echo HTML::anchor ('guests/issue', __('sidebar.addguest')); ?></li>
+						<li><?php echo HTML::anchor ('guests/config', __('sidebar.config')); ?></li>
 						<?php } ?>
 					
                 </ul>
@@ -86,8 +86,8 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
 				<li>
 					<a id="sidebar_eventlog" href="javascript:"><img src="images/icon_note_view.png" /><?php echo __('eventlog'); ?></a>
 					<ul>
-						<li><? echo HTML::anchor ('eventlog/alarm', __('eventlog.alarmlog')); ?></li>
-						<li><? echo HTML::anchor ('eventlog/index', __('eventlog.full')); ?></li>
+						<li><?php echo HTML::anchor ('eventlog/alarm', __('eventlog.alarmlog')); ?></li>
+						<li><?php echo HTML::anchor ('eventlog/index', __('eventlog.full')); ?></li>
 					</ul>
 					 </ul>
 				 </li>
@@ -98,8 +98,8 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
 				<li>
 				<a id="sidebar_queue" href="javascript:"><img src="images/icon_data_out.png" /><?php echo __('queue.full'); ?></a>
 				<ul>
-						<li><? echo HTML::anchor ('queue/index', __('queue.full')); ?></li>
-						<li><? echo HTML::anchor ('queue/listqueue', __('queue.list')); ?></li>
+						<li><?php echo HTML::anchor ('queue/index', __('queue.full')); ?></li>
+						<li><?php echo HTML::anchor ('queue/listqueue', __('queue.list')); ?></li>
 
 				</ul>
 				</li>
@@ -113,8 +113,8 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
 				<li>
 					<a id="sidebar_users" href="javascript:"><img src="images/icon_users.png" /><?php echo __('users'); ?></a>
 					<ul>
-						<li><? echo HTML::anchor ('users', __('sidebar.userlist')); ?></li>
-						<li><? echo HTML::anchor ('users/edit/0', __('sidebar.adduser')); ?></li>
+						<li><?php echo HTML::anchor ('users', __('sidebar.userlist')); ?></li>
+						<li><?php echo HTML::anchor ('users/edit/0', __('sidebar.adduser')); ?></li>
 					</ul>
 				</li>
 			<?php };?>
@@ -125,21 +125,34 @@ $configModule=Kohana::$config->load('config_newcrm')->module;
 				<li>
 					<a id="sidebar_users" href="javascript:"><img src="images/icon_users.png" /><?php echo __('device'); ?></a>
 					<ul>
-						<li><? echo HTML::anchor ('devices', __('device.devicelist')); ?></li>
-						<li><? echo HTML::anchor ('devices/edit/0', __('device.adddevice')); ?></li>
+						<li><?php echo HTML::anchor ('devices', __('device.devicelist')); ?></li>
+						<li><?php echo HTML::anchor ('devices/edit/0', __('device.adddevice')); ?></li>
 					</ul>
 				</li>
 			<?php };?>
+			
+			<?php	if(Arr::get($configModule, 'doors'))
+			{ ?>	
+				<li>
+					<a id="sidebar_users" href="javascript:"><img src="images/icon_users.png" /><?php echo __('doors'); ?></a>
+					<ul>
+						<li><?php echo HTML::anchor ('doors', __('doors.list')); ?></li>
+						<li><?php //echo HTML::anchor ('doors/edit/0', __('doors.add')); ?></li>
+					</ul>
+				</li>
+			<?php };?>
+			
+			
 		<?php } ;
 		if(Arr::get($configModule, 'user'))
 		{ ?>	
 			<li>
 				<a id="sidebar_stats" href="javascript:"><img src="images/icon_stat.png" /><?php echo __('stat'); ?></a>
 				<ul>
-					<li><? echo HTML::anchor ('stats/about', __('stat.form1')); ?></li>
-					<li><? echo HTML::anchor ('stats/queue_message', __('stat.title.que_but')); ?></li>
-					<li><? echo HTML::anchor ('stats/device', __('stat.form2')); ?></li>
-					<li><? echo HTML::anchor ('stats/events', __('stat.form3')); ?></li>
+					<li><?php echo HTML::anchor ('stats/about', __('stat.form1')); ?></li>
+					<li><?php echo HTML::anchor ('stats/queue_message', __('stat.title.que_but')); ?></li>
+					<li><?php echo HTML::anchor ('stats/device', __('stat.form2')); ?></li>
+					<li><?php echo HTML::anchor ('stats/events', __('stat.form3')); ?></li>
 				</ul>
 			</li>
 		<?php };?>

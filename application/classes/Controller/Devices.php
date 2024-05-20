@@ -31,10 +31,11 @@ public $template = 'template';
 			'auto_hide' => true,
 		));
 		
-		$org_tree = Model::Factory('Company')->getOrgList();// я получил список организаций.
+		//$org_tree = Model::Factory('Company')->getOrgList();// я получил список организаций.
+		$org_tree = Model::Factory('Device')->getdeviceListForTree();// я получил список контроллеров и точек прохода.
 		//echo Debug::vars('63', $org_tree); exit;
 		$org_tree=Model::Factory('treeorg')->make_tree($org_tree, 1);//формирую иерархический список
-		
+		//echo Debug::vars('38', $org_tree);exit;
 		$fl = $this->session->get('alert');
 		$this->session->delete('alert');
 		

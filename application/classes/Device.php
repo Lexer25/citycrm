@@ -52,6 +52,10 @@ class Device
 		}
 	}
 	
+	
+	/**
+	*20.05.2024 возвращает список дочерних девайсов (фактически - id точек прохода)
+	*/
 	public function getChild()
 	{
 	$sql='select d2.id_dev from device d

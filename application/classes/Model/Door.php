@@ -3,6 +3,33 @@
 class Model_Door extends Model
 {
 	
+	/**
+	* получить список всех дверей
+	*/
+	public function getDoorList()
+	{
+		$res=array();
+		$sql='select d.id_dev  from device d
+			where d.id_reader is not null';
+		try
+		{
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'));
+			foreach($query as $key=>$value)
+			{
+				$res[]=Arr::get($value, 'ID_DEV');
+			}
+			return $res;
+
+		} catch (Exception $e) {
+			//HTTP::redirect('errorpage?err=368_'.$e->getMessage()); // тут выводилось сообщение вида 368_SQLSTATE[IM001]: Driver does not support this function: driver does not support lastInsertId()
+		return 3;
+		}
+
+		
+	}
+	
+	
 	public function findIdDoor ($search) // поиск двери по названию
 	{
 	if ($search == NULL) return NULL;
@@ -183,6 +210,21 @@ class Model_Door extends Model
 	public function getEnableCardType($devtype)//список допустимых типов карт для указанного типа контроллера
 	{
 		$sql='select dc.id_cardtype from devtype_cardtype dc where dc.id_devtype='.$devtype;
+		$query = DB::query(Database::SELECT, $sql)
+		->execute(Database::instance('fb'))
+		->as_array();
+		return $query;
+	
+	}
+	
+	public function getkeyListForDoor($id_dev)//Список идентификаторов для загрузки в точку прохода
+	{
+		$sql='select distinct c.id_card from ss_accessuser ssa
+			join access a on ssa.id_accessname=a.id_accessname
+			join card c on c.id_pep=ssa.id_pep  and c."ACTIVE">0
+			join device d on d.id_dev=a.id_dev
+			join devtype_cardtype dc on dc.id_devtype=d.id_devtype and dc.id_cardtype=c.id_cardtype
+			where a.id_dev='.$id_dev;
 		$query = DB::query(Database::SELECT, $sql)
 		->execute(Database::instance('fb'))
 		->as_array();

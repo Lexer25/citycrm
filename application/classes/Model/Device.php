@@ -1045,6 +1045,70 @@ class Model_Device extends Model
 		return $query;
 	}
 	
+	
+	/**
+	*Получение списка контроллеров и точек прохода
+	* 17.05.2024
+	*входной массив имеет формат (`id`, `title`, `parent`)
+	*/
+	public function getdeviceListForTree()	{
+		
+		$res=array();//результирующий массив
+		$res2=array();//результирующий массив
+		
+		$sql='select d.id_dev, d.name, d.id_ctrl, d.id_reader  from device d
+			where d.id_reader is null';
+		
+	
+		try
+		{
+			$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+
+			
+		foreach ($query as $key=>$value)
+		{
+			//echo Debug::vars('58', $value); exit;
+			$res[Arr::get($value, 'ID_DEV')]['id']=Arr::get($value, 'ID_DEV');
+			$res[Arr::get($value, 'ID_DEV')]['title']=iconv('windows-1251','UTF-8', Arr::get($value, 'NAME'));
+			$res[Arr::get($value, 'ID_DEV')]['parent']=0;
+		}
+	//echo Debug::vars('1081', $res, $query); exit;
+			//добавляю точки прохода со ссылкой на родительский контроллер
+	 	foreach ($query as $key=>$value)
+		{
+			
+			$device=new Device(Arr::get($value,'ID_DEV'));
+			$device->getChild();
+			//echo Debug::vars('1088', $key, $value, Arr::get($value,'ID_DEV'), $device->getChild(), $device); exit;
+			foreach($device->child as $key2=>$value2)
+			{
+				//echo Debug::vars('1091',$key2,$value2 );//exit;
+				$door=new Door($value2);
+				//echo Debug::vars('1094',$door);exit;
+				$res[$value2]['id']=$door->id;
+				$res[$value2]['title']=iconv('windows-1251','UTF-8', $door->name);
+				$res[$value2]['parent']=Arr::get($value,'ID_DEV');
+				
+			}
+			
+			
+			
+		}	 
+		
+			//echo Debug::vars('1095', $res, '$res2', $res2); exit;
+			return $res;
+		} catch (Exception $e) {
+			Log::instance()->add(Log::ERROR, $e);
+			echo Debug::vars('1105 Fatal err tree', $e); exit;
+		}
+	}
+	
+	
+
+	
+	
 	public function getDoorList($id_server=FALSE)// 28.03.2020 список id_dev точек прохода для указанного сервера.
 	{
 		$sql='select d.id_dev from device d where d.id_reader is null and d."ACTIVE">0 and d.id_devtype in (1,2)';

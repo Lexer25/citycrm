@@ -597,4 +597,18 @@ return array
 	
 	'form.editContact'				=>'Редактирование контакта',
 	'form.select_file_enabled_in_edit_mode'				=>'Выбор файла с изображением доступен только в режиме редактирования контакта',
+	
+	
+	'doors.title'						=> 'Точка прохода ',
+	'doors.common'						=> 'Свойства',
+	'doors.contactlist'					=> 'Сотрудники',
+	'doors.KeyCount'					=> 'Количество сотрудников',
+	'doors.list'						=> 'Точки прохода',
+	'doors'								=> 'Точки прохода',
+	
+	
+	'door.name'							=> 'Название точки прохода',
+	'door.parentname'					=> 'Название контроллера СКУД',
+	'door.is_active'					=> 'Активность',
+	'door.title'						=> 'Точка прохода',
 );

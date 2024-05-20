@@ -22,6 +22,7 @@ return array(
 		'user'=>false,
 		'stat'=>false,
 		'devices'=>false,
+		'doors'=>true,
 		),
 	
 		

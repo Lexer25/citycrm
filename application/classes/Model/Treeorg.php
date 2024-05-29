@@ -118,7 +118,8 @@ public function tplMenu_anchor($category){ //Шаблон для вывода м
 		//echo Debug::vars('39', $category);
 		if (Arr::get($category, 'parent') == 0) 
 		{
-			$menu = '<li><details open><summary>(id='.Arr::get($category, 'id').') '.Arr::get($category, 'title').'123</summary>';
+			//$menu = '<li><details open><summary>(id='.Arr::get($category, 'id').') '.Arr::get($category, 'title').'</summary>';
+			$menu = '<li><details open><summary>'.Arr::get($category, 'title').'</summary>';
 		} else {
 			$menu = '<li><details><summary>'.HTML::anchor('companies/edit/'. Arr::get($category, 'id'), Arr::get($category, 'title')).'</summary>';
 		}

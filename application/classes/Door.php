@@ -18,6 +18,7 @@ class Door
 	private $result_err='Err';
 	public $result;//результат выполнение метода OK - выполнен правильно, Err - выполнен с ошибкой
 	public $rdesc;// результат выполнения метода: набор данных или ошибок
+	public $contactCount;// Количество контактов в организации
 	
 	
 	/*
@@ -110,6 +111,7 @@ class Door
 			$this->is_active=Arr::get($query, 'IS_ACTIVE');
 			$this->parent=Arr::get($query, 'PARENT');
 			$this->is_present = (Arr::get($query, 'ID_DEV'))? TRUE : FALSE;
+			$this->getContactCount();// подсчитал количество контактов в точке прохода
 		
 		} catch (Exception $e) {
 
@@ -298,6 +300,35 @@ class Door
 				$this->result=$this->result_err;
 				$this->rdesc=$e->getMessage();				
 			}
+	}
+	
+	
+	public function getContactCount()
+	{
+	        
+	        $sql='select count(ssa.id_pep) from access ac
+                join ss_accessuser ssa on ssa.id_accessname=ac.id_accessname
+                join people p on p.id_pep=ssa.id_pep and p."ACTIVE">0
+                where ac.id_dev='.$this->id;
+	        //Log::instance()->add(Log::DEBUG, 'Line 70 '. $sql);
+	        try
+	        {
+	            $query = DB::query(Database::SELECT, $sql)
+	                ->execute(Database::instance('fb'))
+	                ->get('COUNT')
+	                ;
+	           
+	                $this->contactCount=$query;
+	           
+	            
+	        } catch (Exception $e) {
+	            
+	            Log::instance()->add(Log::DEBUG, 'Line 40 '. $e->getMessage());
+	            $this->$contactCount=-1;
+	        }
+	  
+	        
+	    
 	}
 	
 }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MessDetectorOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PHPCSFixerOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PHPCodeSnifferOptionsConfiguration">
+    <option name="highlightLevel" value="WARNING" />
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/application/vendor/PHPExcel-1.8/Examples" />
+      <path value="$PROJECT_DIR$/application/vendor/PHPExcel-1.8/Classes" />
+      <path value="$PROJECT_DIR$/application/vendor/PHPExcel-1.8/Documentation" />
+      <path value="$PROJECT_DIR$/application/vendor/mpdf/mpdf" />
+      <path value="$PROJECT_DIR$/application/vendor/mpdf/psr-log-aware-trait" />
+      <path value="$PROJECT_DIR$/application/vendor/mpdf/psr-http-message-shim" />
+      <path value="$PROJECT_DIR$/application/vendor/myclabs/deep-copy" />
+      <path value="$PROJECT_DIR$/application/vendor/setasign/fpdi" />
+      <path value="$PROJECT_DIR$/application/vendor/paragonie/random_compat" />
+      <path value="$PROJECT_DIR$/application/vendor/TCPDF/examples" />
+      <path value="$PROJECT_DIR$/application/vendor/composer" />
+      <path value="$PROJECT_DIR$/application/vendor/TCPDF/include" />
+      <path value="$PROJECT_DIR$/application/vendor/TCPDF/tools" />
+      <path value="$PROJECT_DIR$/application/vendor/TCPDF/config" />
+      <path value="$PROJECT_DIR$/application/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/application/vendor/TCPDF/fonts" />
+      <path value="$PROJECT_DIR$/application/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/application/vendor/dompdf/src" />
+      <path value="$PROJECT_DIR$/application/vendor/dompdf/vendor" />
+      <path value="$PROJECT_DIR$/application/vendor/tc-lib-pdf-main/.github" />
+      <path value="$PROJECT_DIR$/application/vendor/tc-lib-pdf-main/test" />
+      <path value="$PROJECT_DIR$/application/vendor/tc-lib-pdf-main/resources" />
+      <path value="$PROJECT_DIR$/application/vendor/dompdf/lib" />
+      <path value="$PROJECT_DIR$/application/vendor/tc-lib-pdf-main/src" />
+      <path value="$PROJECT_DIR$/application/vendor/tc-lib-pdf-main/examples" />
+    </include_path>
+  </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="8.0">
+    <option name="suggestChangeDefaultLanguageLevel" value="false" />
+  </component>
+  <component name="PhpStanOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PsalmOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+</project>

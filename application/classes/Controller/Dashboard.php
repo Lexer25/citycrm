@@ -26,7 +26,7 @@ class Controller_Dashboard extends Controller_Template {
 			
 		
 			//Log::instance()->add(Log::NOTICE, 'База данных вот какая: '.Session::instance()->get('skud_number'));
-			include Kohana::find_file('classes/controller','check_db_connect');
+			//include Kohana::find_file('classes/controller','check_db_connect');
 			
 
 	}

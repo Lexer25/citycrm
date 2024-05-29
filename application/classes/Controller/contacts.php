@@ -385,17 +385,52 @@ class Controller_Contacts extends Controller_Template
 			->bind('contact', $contact)
 			->bind('companies', $companies);
 	}
-	
 
+
+    /** готовит данные для истории сотрудника.
+     * параметры выборки сохраняются в cookie
+     * @return void
+     */
+	public function action_gethistory()
+    {
+        $post=Validation::factory($_POST);
+        $post->rule('reportdatestart', 'not_empty')
+            ->rule('reportdateend', 'not_empty')
+            ->rule('id_pep', 'not_empty')
+        ;
+        if($post->check()){
+            //echo Debug::vars('399 OK');
+            //параметры запрос сохраняю в куках
+            Cookie::set('reportdatestart', Arr::get($post, 'reportdatestart'));
+            Cookie::set('reportdateend', Arr::get($post, 'reportdateend'));
+
+            //exit;
+        } else {
+            Cookie::delete('reportdatestart');
+            Cookie::delete('reportdateend');
+        }
+
+        $this->redirect('contacts/history/'.Arr::get($post, 'id_pep'));
+    }
 	
+	/**
+	 * Вывод событий для текущего сотрудника
+	 */
 	public function action_history()
 	{
 		$id=$this->request->param('id');
+
+        //echo Debug::vars('394', $id,  $post); exit;
 		$contact = Model::factory('Contact')->getContact($id);//Получаю контакт по его id
 		if (!$contact) $this->redirect('contacts');//если контакта нет, то перенаправление на список контактов 
-		$data = History::getHistory($id);// беру историю для указанного контакта историю (контроллер History.php, метод getHistory($user))
-		//echo Debug::vars('381', $id); exit;
-		
+		$history = new History;
+        $history->id_pep=$id;
+        $history->dateFrom=Cookie::get('reportdatestart', date('d.M.Y'));
+        $history->dateTo=Cookie::get('reportdateend', date('d.M.Y'));
+        $data= $history->getHistory();// беру историю для указанного контакта историю (контроллер History.php, метод getHistory($user))
+        $history->getEventPeriod();// беру диапазон дат
+		//echo Debug::vars('381', $_POST); exit;
+
 		$topbuttonbar=View::factory('contacts/topbuttonbar', array(
 			'id_pep'=> $id,
 			'_is_active'=> 'history',
@@ -403,11 +438,22 @@ class Controller_Contacts extends Controller_Template
 		;
 		
 		
+		$exportbuttonbar=View::factory('report/topbuttonbar', array(
+			'id_pep'=> $id,
+			'_is_active'=> 'history',
+			))
+		;
+		
+		
+
+        //echo Debug::vars('394', $id,  $post); //exit;
 		$this->template->content = View::factory('contacts/history')//вызываю вью contacts/history.php
 			->bind('contact', $contact)
 			->bind('data', $data)
 			->bind('id', $id)
 			->bind('topbuttonbar', $topbuttonbar)
+			->bind('exportbuttonbar', $exportbuttonbar)
+			->bind('about', $history)
 			;
 	}
 	

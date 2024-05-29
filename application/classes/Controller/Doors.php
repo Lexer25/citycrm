@@ -26,9 +26,7 @@ class Controller_Doors extends Controller_Template {
 	 
 	public function action_export()
 	{
-	//echo Debug::vars('447', $_POST, Session::instance(), Arr::get($this->session->get('auth_user_crm', ''), 'ID_PEP'), Arr::get($this->session->get('auth_user_crm', ''), 'NAME')); exit;
-	//echo Debug::vars('447', $_POST, Session::instance()); exit;
-			//$dataReportTitle=
+	
 			
 			
 			$post=Validation::factory($_POST);
@@ -66,11 +64,7 @@ class Controller_Doors extends Controller_Template {
 						//require_once APPPATH . 'vendor/dompdf/src/Dompdf.php';
 						Dompdf\Autoloader::register();
 				
-				/* $dompdf = new Dompdf\src\Dompdf();
-				$dompdf->set_option('isRemoteEnabled', TRUE);
-				$dompdf->setPaper('A4', 'portrait');
-				$dompdf->loadHtml($html, 'UTF-8');
-				$dompdf->render(); */
+			
 									
 						$dompdf = new Dompdf\Dompdf();
 						$dompdf->setPaper("A4");				
@@ -99,15 +93,17 @@ class Controller_Doors extends Controller_Template {
 		
 						} else {
 
+//echo Debug::vars('98'); exit;
 					$this->template->content = $content;
+					//$this->redirect('doors/doorcontactlist/'.Arr::get($post, 'id_door'));
 					
 					
 					}
 				}		
 					
 					
-					
-					return;
+					exit;					
+				//	return;
 					
 			
 					

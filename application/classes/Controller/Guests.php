@@ -422,7 +422,16 @@ class Controller_Guests extends Controller_Template
 		$id=$this->request->param('id');
 		$contact = Model::factory('Contact')->getContact($id);//Получаю контакт по его id
 		if (!$contact) $this->redirect('guests');//если контакта нет, то перенаправление на список контактов 
-		$data = History::getHistory($id);// беру историю для указанного контакта историю (контроллер History.php, метод getHistory($user))
+		//$data = History::getHistory($id);// беру историю для указанного контакта историю (контроллер History.php, метод getHistory($user))
+
+        $history = new History;
+        $history->id_pep=$id;
+        $history->dateFrom=Cookie::get('reportdatestart', date('d.M.Y'));
+        $history->dateTo=Cookie::get('reportdateend', date('d.M.Y'));
+        $data= $history->getHistory();// беру историю для указанного контакта историю (контроллер History.php, метод getHistory($user))
+        $history->getEventPeriod();// беру диапазон дат
+
+
 		
 		$this->template->content = View::factory('guests/history')//вызываю вью contacts/history.php
 			->bind('contact', $contact)

@@ -21,6 +21,8 @@ if (false)
 	echo 'Test';
 
 	echo Debug::vars('23', Kohana::$config->load('system')->get('baseFormatRfid1'), is_null(Kohana::$config->load('system')->get('baseFormatRfid1')));
+	echo Debug::vars('24', Kohana::$config->load('main'));
 	$t1=microtime(true);
+    echo Kohana::$environment;
 	
 }

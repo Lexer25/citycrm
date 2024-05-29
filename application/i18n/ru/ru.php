@@ -2,6 +2,8 @@
 
 return array
 (
+	'npp'						=> '№ п/п',
+	'id_dev'						=> 'id по базе данных СКУД',
 	'identity'						=> 'Идентификаторы',
 	'Lic'						=> 'Лицензия: Lic',
 	'welcome'						=> 'Добро пожаловать',
@@ -10,6 +12,7 @@ return array
 	'home'							=> 'Домой',
 	'companies'						=> 'Организации',
 	'objects'						=> 'Объекты',
+	'contacts'						=> 'Контакты',
 	'contacts'						=> 'Контакты',
 	'cards'							=> 'Карты',
 	'users'							=> 'Пользователи',
@@ -176,7 +179,8 @@ return array
 	'event.desc.48'				=>'"Сотрудник не пропущен повторно"',
 	'event.desc.50'				=>'"Действительная карточка"',
 	'event.desc.65'				=>'"Недействительная карточка"',
-	
+	'event.availableEventPeriod'=>'У сотрудника имеются :countEvent событий в период с :eventFromDate по :eventToDate',
+
 	
 	
 	
@@ -184,6 +188,7 @@ return array
 	'stat.report.header2'		=>'www.artonit.ru',
 	
 	'report.title'				=> 'Отчет Учет рабочего времени для контакта :surname :name  :patronymic за период c :timefrom по :timeTo',
+	'report.nameEventReport'	=> 'Отчет Учет рабочего времени за период :dateFrom по :dateTo',
 	'report.date'				=> 'Дата',
 	'report.org'				=> 'Отдел',
 	'report.pepname'			=> 'ФИО',
@@ -512,6 +517,7 @@ return array
 	'button.savexlsx'				=> 'Экспорт xlsx',
 	'button.savepdf'				=> 'Экспорт pdf',
 	'button.report1'				=> 'Подготовить отчет Рабочего времени',
+	'button.reportEvents'				=> 'Подготовить отчет Журнал событий',
 	
 
 	'settings.title'				=> 'Настройки',
@@ -602,7 +608,7 @@ return array
 	'doors.title'						=> 'Точка прохода ',
 	'doors.common'						=> 'Свойства',
 	'doors.contactlist'					=> 'Сотрудники',
-	'doors.KeyCount'					=> 'Количество сотрудников',
+	'doors.KeyCount'					=> 'Количество сотрудников  :count',
 	'doors.list'						=> 'Точки прохода',
 	'doors'								=> 'Точки прохода',
 	

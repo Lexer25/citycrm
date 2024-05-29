@@ -286,14 +286,6 @@ echo Form::open('reports/doorList');
 				?>
 			</tbody>
 			</table>
-			
-	<table class="data tablesorter-blue"  width="100%" cellpadding="0" cellspacing="0" id="reportHeader" >
-		<tr>
-		<td>Param1</td>
-		<td>val1</td>
-		<td>Time execited</td>
-		<td>0,2 sec</td>
-	</tr>
 		
 	</table>
 			<?php

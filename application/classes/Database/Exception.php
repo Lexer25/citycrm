@@ -5,8 +5,7 @@ class Database_Exception extends Kohana_Database_Exception {
 	public static function handler(Exception $e) 
 	{
 		
-		echo Debug::vars('5', 'Database_Exception extends Kohana_Database_Exception'); exit;
-		$this->redirect('errorpage?err='.Text::limit_chars($e->getMessage()));
+		
 	}
 	
 }

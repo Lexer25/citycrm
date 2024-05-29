@@ -7,6 +7,9 @@ class Controller_Logout extends Controller {
 		Auth::instance()->logout();
 		Session::instance()->delete('username');
 		Session::instance()->delete('viewDeletePeopleOnly');
+		Session::instance()->delete('viewDeletePeopleOnly');
+		Cookie::delete('reportdatestart');
+        Cookie::delete('reportdateend');
 		$this->redirect('/');
 	}
 

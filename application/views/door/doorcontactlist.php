@@ -2,6 +2,7 @@
 
 //echo Debug::vars('3', $id_door, $enable_card_list, $keys); exit;
 $door=new Door($id_door);
+$forsave=array();
 ?>
 <script type="text/javascript">
 
@@ -53,7 +54,7 @@ $door=new Door($id_door);
 	<div class="content">
 	<?php
 	echo Form::open('doors/export');
-				echo __('doors.KeyCount :count', array(':count'=>count($enable_card_list))).'<br>';
+				//echo __('doors.KeyCount', array(':count'=>count($enable_card_list))).'<br>';
 				echo Form::hidden('id_door', $door->id ); 
 		
 				//echo Form::submit('savecvs', __('button.savecsv'), array('disabled'=>'disabled'));
@@ -63,11 +64,6 @@ $door=new Door($id_door);
 				echo Form::submit('savepdf', __('button.savepdf'));
 	
 		
-				//echo Form::hidden('doorList', serialize($doorAll)); 
-			//echo Debug::vars('314', $outDoorList);exit;
-				//echo Form::hidden('outDoorList', iconv('CP1251', 'UTF-8', serialize($outDoorList))); 
-				
-				
 			
 			?>
 
@@ -81,7 +77,7 @@ $door=new Door($id_door);
 						-->
 						<?php
 
-						//echo '<th>' . __('npp') . '</th>';
+						echo '<th>' . __('npp') . '</th>';
 						//echo '<th>' . __('id_pep') . '</th>';
 						
 						echo '<th>' . __('contact.name') . '</th>';
@@ -95,6 +91,7 @@ $door=new Door($id_door);
 				<tbody>
 					<?php 
 					$i=1;
+					$t1=microtime(true);
 					foreach ($keys as $key=>$value) 
 					{ 
 					
@@ -104,12 +101,8 @@ $door=new Door($id_door);
 						<tr>
 						
 							<?php 
-							//$door=new Door($device);
-							//echo Debug::vars('78', $device, $door);//exit;
-							//echo '<td align="center">' . Debug::vars('79', $value, $card) . '</td>';
-							//echo '<td align="center">' . $i . '</td>';
-							//echo '<td align="center">' . $contact->id_pep. '</td>';
-							echo '<td align="center">' . HTML::anchor('contacts/edit/'.$contact->id_pep, iconv('windows-1251','UTF-8', $contact->surname.' '.$contact->name.' '.$contact->patronymic)) . '</td>';
+							echo '<td>'.$i++.'</td>';
+							echo '<td align="center">' . HTML::anchor('contacts/edit/'.$contact->id_pep, iconv('windows-1251','UTF-8', $contact->surname.' '.$contact->name.' '.$contact->patronymic)) .' ('.$contact->id_pep.')'. '</td>';
 							echo '<td align="center">' . HTML::anchor('cards/edit/'.Arr::get($value, 'ID_CARD'), $card->id_card_on_screen). '</td>';
 							echo '<td align="center">' . Arr::get($value, 'LOAD_TIME') . '</td>';
 							echo '<td align="center">' . Arr::get($value, 'LOAD_RESULT') . '</td>';
@@ -119,7 +112,7 @@ $door=new Door($id_door);
 						
 							?>
 						</tr>
-					<?php $i++;
+					<?php 
 					} ?>
 				</tbody>
 			</table>
@@ -130,6 +123,7 @@ $door=new Door($id_door);
 			//echo Debug::vars('129',$forsave);exit;
 			echo Form::hidden('forsave', serialize($forsave));
 			echo Form::close();
+			//echo Debug::vars('135', microtime(true)-$t1);
 			?>
 
 	</div>

@@ -90,7 +90,7 @@
 		
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 		//$objWriter->save(str_replace('.php', '.xlsx', __FILE__));
-		$file_name='УРВ_'.iconv('CP1251', 'UTF-8',$pep->surname).'_'.date('Y_m_d').'.xlsx';
+		$file_name='Отчет Список точек доступа _'.iconv('CP1251', 'UTF-8',$pep->surname).'_'.date('Y_m_d').'.xlsx';
 		$objWriter->save($file_name);
 		
 		$content = Model::Factory('ReportDoorList')->send_file($file_name);

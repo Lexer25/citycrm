@@ -1,9 +1,5 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-/**
- * Класс History готовит список id_event для указанного сотрудника в указанном диапазоне дат
- * тут же готовится диапазон дат, в течении которых у сотрудника имеются события
- */
 class History
 {
 	public $dateFrom; //с какой даты сделать выборку событий
@@ -33,7 +29,7 @@ class History
                     p.surname,
                     p.name,
                     p.patronymic,
-                    et.name  AS eventname,
+                    et.name || \' \' || COALESCE(e.note,\'\') AS eventname,
                     e.datetime,
                     COALESCE (e.id_card, e.ESS2) as id_card,
                     d.name AS devicename
@@ -66,7 +62,7 @@ class History
         $query = Arr::flatten(DB::query(Database::SELECT, $sql)
             ->execute(Database::instance('fb'))
             ->as_array());
-       // echo Debug::vars('64',$sql,  $query); exit;
+       // echo Debug::vars('64', $query); exit;
         $this->eventFromDate=Arr::get($query, 'MIN');
         $this->eventToDate=Arr::get($query, 'MAX');
 

@@ -57,7 +57,7 @@
 	</div>
 	<div>
 	<?php
-	 echo __('Lic', array(
+	 /* echo __('Lic', array(
       		'Lic'=> Kohana::$config->load('lic')->sn
       		)).' ';
 	$format_rfid='unset';
@@ -70,7 +70,7 @@
 	if(Kohana::$config->load('system')->get('screenFormatRFID')==1) $regformat_rfid='1 001A';
 	if(Kohana::$config->load('system')->get('screenFormatRFID')==2) $regformat_rfid='2 longDEC';
 	echo __('screenFormatRFID :data', array(':data'=>$regformat_rfid));	
-	echo __(' identifier :data', array(':data'=>Session::instance()->get('identifier', 1)));	
+	echo __(' identifier :data', array(':data'=>Session::instance()->get('identifier', 1)));	 */
 
 	
 	?>

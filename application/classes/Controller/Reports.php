@@ -514,7 +514,7 @@ $dompdf->stream();
 			))
 		;
 		
-		
+			//echo Debug::vars('517', $report); exit;
 			
 			$content = View::factory('report/wt_as_desktop')
 				->bind('id_pep', $id_pep)
@@ -555,37 +555,27 @@ $dompdf->stream();
 				;
 				$reporttype='';
 		if($post->check()){
-			//echo Debug::vars('453', Arr::get($post, 'savecvs'), Arr::get($post, 'savexls'), Arr::get($post, 'savepdf'));
-			//echo Debug::vars('455', Kohana::find_file('classes\Controller\report','reportDoorListCVS'));
+			
 			$huser=Arr::get(Session::instance()->get('auth_user_crm'), 'ID_PEP');
 			$id_pep=Arr::get($post, 'id_pep');
 			
-			//echo Debug::vars('439', Arr::get($post, 'id_pep'), $huser);exit;
+			
 			if(Arr::get($post, 'savecvs')) include Kohana::find_file('classes\Controller\report','reportDoorListCVS') ;
 			if(Arr::get($post, 'savexls')) include Kohana::find_file('classes\Controller\report','reportDoorListXLSX') ;
-			//if(Arr::get($post, 'savepdf')) include Kohana::find_file('classes\Controller\report','reportDoorListPDF') ;
-			//if(Arr::get($post, 'savepdf')) include Kohana::find_file('classes\Controller\report','reportDomPDF') ;
+			
 			if(Arr::get($post, 'savepdf')){
 				$forsave=unserialize(iconv('UTF-8', 'CP1251', Arr::get($post, 'outDoorList')));
 				
 				$id_pep=Arr::get($post, 'id_pep');
 				
-/* 				$dataHeader=View::Factory('report\doorlist\header');
-				$dataReport=View::Factory('\report\doorlist\report')
-					->bind('dataForSave', $forsave);
-				$dataFooter=View::Factory('\report\doorlist\footer');
-				//echo Debug::vars('462', $header, $report, $footer); exit;
-				$content=View::Factory('\report\doorlist\reportPDF')
-					->bind('dataHeader', $dataHeader)//заголово отчета
-					->bind('dataReport', $dataReport)//отчет (таблица или иные данные)
-					->bind('dataFooter', $dataFooter)//нижняя часть отчета */
+ 			
 				;
 				 $content=View::Factory('\report\doorlist\reportdoorlist')
 					->bind('dataForSave', $forsave)
 					->bind('id_pep', $id_pep)
 					->bind('id_admin', $huser)
 					; 
-				//$content=View::Factory('\report\doorlist\west_garden');	
+				
 				//if(false){ // переключатель: true - делать экспорт в pdf, false - выводит отчет на экран браузера
 				if(true){ // переключатель: true - делать экспорт в pdf, false - выводит отчет на экран браузера
 				
@@ -649,4 +639,116 @@ $dompdf->stream();
 		
 		
 	}
+	
+	/**
+	 * 29.05.2024
+	 * Подготовка отчета Журнал событий.
+	 */
+	public function action_saveEvents()
+	{
+	  
+	/*    echo Debug::vars('650', $_POST
+	//        , Session::instance()
+	        , Arr::get($this->session->get('auth_user_crm', '')
+	        , 'ID_PEP')
+	        , Arr::get($this->session->get('auth_user_crm', ''), 'NAME')
+	        ); exit;
+	 */  
+	    
+	    //echo Debug::vars('650', $_POST); exit;
+	    $post=Validation::factory($_POST);
+	    $post->rule('id_pep', 'not_empty')
+	           ->rule('id_pep', 'digit')
+	    ;
+	    $reporttype='';
+	    if($post->check()){
+	        
+	        $huser=Arr::get(Session::instance()->get('auth_user_crm'), 'ID_PEP');
+	        $id_pep=Arr::get($post, 'id_pep');
+	        
+	        //echo Debug::vars('669', $post); exit;
+	        if(Arr::get($post, 'savecvs')) include Kohana::find_file('classes\Controller\report','reportDoorListCVS') ;
+	        if(Arr::get($post, 'savexls')) include Kohana::find_file('classes\Controller\report','reportDoorListXLSX') ;
+	        
+	        if(Arr::get($post, 'savepdf')){
+	            $forsave=unserialize(Arr::get($post, 'forsave'));
+	            $titleTH=unserialize(Arr::get($post, 'titleTH'));
+	            //echo Debug::vars('669', $forsave); exit;
+	            
+	            
+	            $id_pep=Arr::get($post, 'id_pep');
+           $contact=new Contact($id_pep);
+		  
+		   $reportName=__('report.nameEventReport', array(':dateFrom'=> Arr::get($post, 'dateFrom'), ':dateTo'=> Arr::get($post, 'dateTo')));
+	            
+	            $content=View::Factory('\report\template\reportcontacthistory')
+	           
+	            ->bind('reportName', $reportName)
+	            ->bind('dataForSave', $forsave)
+	            ->bind('titleTH', $titleTH)
+	            ->bind('id_pep', $id_pep)
+	            ->bind('id_admin', $huser)
+	            ; 
+	          
+	        
+	           
+	            //if(false){ // переключатель: true - делать экспорт в pdf, false - выводит отчет на экран браузера
+	            if(true){ // переключатель: true - делать экспорт в pdf, false - выводит отчет на экран браузера
+	                
+	                //require_once APPPATH . 'vendor/dompdf/src/Autoloader.php';
+	                require_once APPPATH . 'vendor/dompdf/autoload.inc.php';
+	                //require_once APPPATH . 'vendor/dompdf/src/Dompdf.php';
+	                Dompdf\Autoloader::register();
+	                
+	               	                
+	                $dompdf = new Dompdf\Dompdf();
+	                $dompdf->setPaper("A4");
+	                $dompdf->loadHtml($content, 'UTF-8');
+	                $dompdf->render();
+	                
+	                
+	                $color = array(0, 0, 0);
+	                $font = null;
+	                $size = 8;
+	                $text = "Стр. {PAGE_NUM} из {PAGE_COUNT}";
+	                
+	                $canvas = $dompdf->getCanvas();
+	                $pageWidth = $canvas->get_width();
+	                $pageHeight = $canvas->get_height();
+	                $width=10;
+	                
+	                
+	                $canvas = $dompdf->get_canvas();
+	                $canvas->page_text($pageWidth/2, $pageHeight - 40, $text, $font, $size, $color);
+	                
+	                
+	                $dompdf->stream($reportName.' '.iconv('CP1251', 'UTF-8',$contact->name.' '.$contact->surname.' '.$contact->patronymic));
+	                
+	                
+	                
+	            } else {
+	                
+	                $this->template->content = $content;
+	                
+	                
+	            }
+	        }
+	        
+	        
+	        
+	        return;
+	        
+	        
+	        
+	    }else{
+	        $message=implode(",", $post->errors('reportValidation'));
+	        echo Debug::vars('456 ',  $message); exit;
+	        $this->redirect('errorpage?err=' . urlencode($message));
+	        
+	    }
+	    
+	    
+	    
+	}
+	
 }

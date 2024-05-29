@@ -1890,38 +1890,9 @@ $company_admin=new Company($id_admin->id_org);
 
 
 </table><div style="font-size: 0.8em">
-<table class="signature_table">
 
-  <tr>    
-    <td>Подготовил:</td><td class="written_field" style="width: 38%">&nbsp;</td>
-    <td style="padding-left: 1em">Принял:</td>
-    <td class="written_field" style="width: 39%; text-align: right;">X</td>
-  </tr>
-  <tr>
-    <td colspan="1" style="padding-top: 0em">&nbsp;</td>
-    <td style="text-align: center; padding-top: 0em;">
-              Сидоров В.В.</td>
-	<td colspan="1" style="padding-top: 0em">&nbsp;</td>
-	<td style="text-align: center; padding-top: 0em;">
-              фио</td>
-			  
-  </tr>
-</table>
-<p style="font-size: 0.65em">Комментарии или пояснения к отчету.</p>
 
-<table class="signature_table">
-<tr>
-<td>Еще какой-нибудь признак 1
-<em>параметры признака 1</em>
-</td>
 
-<td style="padding-left: 1em;">Параметр 2<br/><br/>
-Для 
-<em>параметры Параметра 2</em>
-</td>
-</tr>
-
-</table>
 </div>
 
 <script type="text/php">

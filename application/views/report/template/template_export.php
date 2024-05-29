@@ -1794,109 +1794,17 @@ td.field_money {
   font-size: 0.7em;
 }</style>
 </head>
-<body class="page">
-<?php
-$door=new Door($id_door);
+<body>
+	<div class="content_wrapper">
+<?php				
+				echo $content;
+				
+	?>	
+			</div>
 
-
-$id_admin=new Contact($id_admin);
-$company_admin=new Company($id_admin->id_org);
-?>
-
-<table style="width: 100%" class="header">
-<tr>
-<td style="width: 50%; vertical-align: middle;">
-<h1 style="text-align: left">Отчет Перечень сотрудников в точке прохода</h1>
-</td>
-
-<td style="width: 50%; text-align: right;">
-<h1 style="text-align: right">АО "Акрихин"</h1>
-<span style="font-weight: bold; font-size: 0.7em;">Подготовлен: <?php echo date('d.m.Y H:i:s');?></span>
-</td>
-</tr>
-
-</table>
-<table class="detail" style="margin: 0px; border-top: none;">
-
-<tr>
-<td class="label">Точка прохода</td>
-<td class="field"><?php echo iconv('CP1251', 'UTF-8', $door->name);?></td>
-<td class="label">Отчет подготовил</td>
-<td class="field"><?php echo iconv('CP1251', 'UTF-8', $id_admin->surname.' '.$id_admin->name.' '.$id_admin->patronymic);?></td>
-</tr>
-<tr>
-<td class="label">Всего записей</td>
-<td class="field"><?php echo count($dataForSave) ?></td>
-<td class="label">Подразделение:</td>
-<td class="field"><?php echo iconv('CP1251', 'UTF-8', $company_admin->name);?></td>
-</tr>
-
-
-
-</table>
-
-
-
-<table class="list" style="width: 99%; margin-top: 1em;">
-
-<tr class="head">
-<td class="center" style="width: 15%">№ п/п</td>
-<td class="center" style="width: 15%">Фамилия</td>
-<td class="center" style="width: 15%">Имя</td>
-<td class="center" style="width: 15%">Отчество</td>
-
-
-
-
-</tr>
-
-
-<?php
-	// echo Debug::vars('1853', $dataForSave); exit;
-	$countDoor=count($dataForSave);
-	$i=0;
-	foreach ($dataForSave as $key=>$value){
-		echo '<tr class="list_row">';
-			echo '<td class="center">'. ++$i.'</td>';
-			echo '<td class="left">'. Arr::get($value, 'surname').'</td>';
-			echo '<td class="left">'. Arr::get($value, 'name').'</td>';
-			echo '<td class="left">'. Arr::get($value, 'patronymic').'</td>';
-			
-
-			
-
-		echo '</tr>';
+		</div>
 		
-	} 
-	
-	
-?>
+	</div>
 
 
-
-<tr class="foot">
-<td colspan="2" class="left"><strong>Всего точек прохода:</strong></td>
-<td  class="left" colspan="2"><?php echo $countDoor ?></td>
-
-</tr>
-
-
-</table><div style="font-size: 0.8em">
-
-
-</div>
-
-<script type="text/php">
-     <script type='text/php'>
-      if ( isset($dompdf) ) { 
-        $font = Font_Metrics::get_font('helvetica', 'normal');
-        $size = 9;
-        $y = $dompdf->get_height() - 24;
-        $x = $dompdf->get_width() - 15 - Font_Metrics::get_text_width('1/1', $font, $size);
-        $dompdf->page_text($x, $y, '{PAGE_NUM}/{PAGE_COUNT}', $font, $size);
-      } 
-    </script>
-    </script>
-	
-</body>
 </html>

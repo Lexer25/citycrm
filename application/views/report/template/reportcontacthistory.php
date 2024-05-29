@@ -1796,8 +1796,8 @@ td.field_money {
 </head>
 <body class="page">
 <?php
-$door=new Door($id_door);
-
+$pep=new Contact($id_pep);
+$company_pep=new Company($pep->id_org);
 
 $id_admin=new Contact($id_admin);
 $company_admin=new Company($id_admin->id_org);
@@ -1805,11 +1805,11 @@ $company_admin=new Company($id_admin->id_org);
 
 <table style="width: 100%" class="header">
 <tr>
-<td style="width: 50%; vertical-align: middle;">
-<h1 style="text-align: left">Отчет Перечень сотрудников в точке прохода</h1>
+<td style="vertical-align: middle;">
+<h1 style="text-align: left"><?php echo $reportName;?></h1>
 </td>
 
-<td style="width: 50%; text-align: right;">
+<td style="text-align: right;">
 <h1 style="text-align: right">АО "Акрихин"</h1>
 <span style="font-weight: bold; font-size: 0.7em;">Подготовлен: <?php echo date('d.m.Y H:i:s');?></span>
 </td>
@@ -1819,14 +1819,14 @@ $company_admin=new Company($id_admin->id_org);
 <table class="detail" style="margin: 0px; border-top: none;">
 
 <tr>
-<td class="label">Точка прохода</td>
-<td class="field"><?php echo iconv('CP1251', 'UTF-8', $door->name);?></td>
+<td class="label">Сотрудник</td>
+<td class="field"><?php echo iconv('CP1251', 'UTF-8', $pep->surname.' '.$pep->name.' '.$pep->patronymic);?></td>
 <td class="label">Отчет подготовил</td>
 <td class="field"><?php echo iconv('CP1251', 'UTF-8', $id_admin->surname.' '.$id_admin->name.' '.$id_admin->patronymic);?></td>
 </tr>
 <tr>
-<td class="label">Всего записей</td>
-<td class="field"><?php echo count($dataForSave) ?></td>
+<td class="label">Подразделение:</td>
+<td class="field"><?php echo iconv('CP1251', 'UTF-8', $company_pep->name);?></td>
 <td class="label">Подразделение:</td>
 <td class="field"><?php echo iconv('CP1251', 'UTF-8', $company_admin->name);?></td>
 </tr>
@@ -1834,48 +1834,58 @@ $company_admin=new Company($id_admin->id_org);
 
 
 </table>
+<!--
+<table class="detail" style="border-top: none; margin: 0px 0px 1.5em 0px;">
+<tr>
+<td class="label" style="width: 8.25%">№ п/п</td>
+<td class="field" style="width: 16.5%"></td>
+<td class="label" style="width: 8.25%">id точки прохода</td>
+<td class="field" style="width: 16.5%"></td>
+<td class="label" style="width: 8.25%">Название точки прохода</td>
+<td class="field" style="width: 16.5%"></td>
+<td class="label" style="width: 8.25%">Style:</td>
+<td class="field" style="width: 16.5%"></td>
+</tr>
 
+</table>-->
 
 
 <table class="list" style="width: 99%; margin-top: 1em;">
 
 <tr class="head">
-<td class="center" style="width: 15%">№ п/п</td>
-<td class="center" style="width: 15%">Фамилия</td>
-<td class="center" style="width: 15%">Имя</td>
-<td class="center" style="width: 15%">Отчество</td>
 
-
+<?php
+	 //echo Debug::vars('1936', $titleTH); exit;
+	
+	foreach ($titleTH as $key=>$value){
+		
+			echo '<td class="center">'.$value.'</td>';
+			
+		
+	} 
+?>
 
 
 </tr>
 
 
 <?php
-	// echo Debug::vars('1853', $dataForSave); exit;
+	 //echo Debug::vars('1936', $dataForSave); exit;
 	$countDoor=count($dataForSave);
-	$i=0;
 	foreach ($dataForSave as $key=>$value){
 		echo '<tr class="list_row">';
-			echo '<td class="center">'. ++$i.'</td>';
-			echo '<td class="left">'. Arr::get($value, 'surname').'</td>';
-			echo '<td class="left">'. Arr::get($value, 'name').'</td>';
-			echo '<td class="left">'. Arr::get($value, 'patronymic').'</td>';
-			
-
-			
-
+			foreach($value as $key2=>$value2){
+				
+			echo '<td class="center">'.$value2.'</td>';
+			}
 		echo '</tr>';
-		
 	} 
-	
-	
 ?>
 
 
 
 <tr class="foot">
-<td colspan="2" class="left"><strong>Всего точек прохода:</strong></td>
+<td colspan="2" class="left"><strong>Всего событий:</strong></td>
 <td  class="left" colspan="2"><?php echo $countDoor ?></td>
 
 </tr>
@@ -1884,7 +1894,6 @@ $company_admin=new Company($id_admin->id_org);
 </table><div style="font-size: 0.8em">
 
 
-</div>
 
 <script type="text/php">
      <script type='text/php'>

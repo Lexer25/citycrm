@@ -2,7 +2,16 @@
 
 //echo Debug::vars('3', $doors);
 ?>
+<script type="text/javascript">
 
+
+ 
+  	$(function() {		
+  		$("#tablesorter").tablesorter({ headers: { 0:{sorter: false}},  widgets: ['zebra']});
+		
+  	});	
+	
+</script>
 <style>
 .tree{
   --spacing : 1.5rem;
@@ -30,12 +39,8 @@
 <?php } ?>
 <div class="onecolumn">
 	<div class="header">
-		<div id="search">
-			<form action="doors/search" method="post">
-				<input type="text" class="search noshadow" title="<?php echo __('search'); ?>" name="q" id="q" value="<?php if (isset($filter)) echo $filter; ?>" />
-			</form>
-		</div>
-		<span><?php echo __('doors.title'); ?></span>
+
+		<span><?php echo __('doors.list'); ?></span>
 	</div>
 
 	<?php
@@ -45,7 +50,7 @@
 	<br class="clear"/>
 	<div class="content">
 		<form id="form_data" name="form_data" action="" method="post">
-			<table class="data" width="100%" cellpadding="0" cellspacing="0">
+		<table class="data tablesorter-blue" width="100%" cellpadding="0" cellspacing="0" id="tablesorter" >
 				<thead>
 					<tr>
 						<!--
@@ -55,12 +60,12 @@
 						-->
 						<?php
 
-						echo '<th>' . __('npp') . '</th>';
-						echo '<th>' . __('id_dev') . '</th>';
+						echo '<th width="10%">' . __('npp') . '</th>';
+						echo '<th width="10%">' . __('id_dev') . '</th>';
 						
-						echo '<th>' . __('device.name') . '</th>';
+						echo '<th>' . __('door.name') . '</th>';
 					
-						//echo '<th>' . __('device.action') . '</th>';
+						echo '<th>' . __('device.count') . '</th>';
 						?>
 					</tr>
 				</thead>
@@ -77,13 +82,9 @@
 							echo '<td align="center">' . $i . '</td>';
 							echo '<td align="center">' . $door->id. '</td>';
 							echo '<td align="center">' . HTML::anchor('doors/doorInfo/'.$door->id, iconv('windows-1251','UTF-8',$door->name)) . '</td>';
-							//echo '<td>' . HTML::anchor('doors/view/' . Arr::get($device, 'ID_ORG'), HTML::image('images/icon_edit.png', array('title' => __('tip.view'), 'class' => 'help')));
-							if (Auth::instance()->logged_in('admin') || Arr::get($device, 'SUMODELETE') and false) 
-							{ ?>
-								<a href="javascript:" onclick1="if (confirm('<?php echo __('doors.confirmdelete'); ?>')) location.href='<?php //echo URL::base() . 'doors/delete/' . $device['ID_ORG']; ?>';">
-									<?php echo HTML::image('images/icon_delete.png', array('title' => __('tip.delete'), 'class' => 'help')); ?>
-								</a>
-							<?php } ?>
+							echo '<td align="center">' . HTML::anchor('doors/doorcontactlist/'.$door->id, $door->contactCount) . '</td>';
+							
+							?>
 							</td>
 						</tr>
 					<?php $i++;
